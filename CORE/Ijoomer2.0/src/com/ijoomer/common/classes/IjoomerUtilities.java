@@ -259,7 +259,6 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		}
 	}
 
-
 	public static SeekBar getLoadingDialog(final String message) {
 
 		mSmartIphoneActivity.runOnUiThread(new Runnable() {
@@ -1250,9 +1249,6 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		}
 		return list;
 	}
-
-
-	
 
 	public static ArrayList<HashMap<String, String>> getContatctFromDevice(String... args) {
 		Cursor cursor = null;

@@ -271,41 +271,49 @@ public class IjoomerMapAddress extends IjoomerSuperMaster {
 
 	@Override
 	public View setLayoutView() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int setHeaderLayoutId() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public String[] setTabItemNames() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int setTabBarDividerResId() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int setTabItemLayoutId() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int[] setTabItemOnDrawables() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int[] setTabItemOffDrawables() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int[] setTabItemPressDrawables() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

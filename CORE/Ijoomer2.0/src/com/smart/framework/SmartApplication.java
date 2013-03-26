@@ -38,32 +38,32 @@ public class SmartApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 
-		
 		REF_SMART_APPLICATION = this;
 
 		loadConfiguration();
 
 		SmartFrameworkSecurity smartFrameworkSecurity = new SmartFrameworkSecurity(this);
 
-		if (smartFrameworkSecurity.matchKey(securityKey)) {
+		// if (smartFrameworkSecurity.matchKey(securityKey)) {
 
-			if (isSharedPreferenceEnabled) {
-				sharedPreferences = getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE);
-			}
-
-			if (isDBEnabled) {
-				try {
-					dataHelper = new SmartDataHelper(getApplicationContext(), dbName, dbVersion, dbSql, getSmartVersionHandler());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-		} else {
-			Log.e("SmartFrameworkError", "Sorry, the security key did not match!! Please try with appropriate security key.");
-			REF_SMART_APPLICATION = null;
-			this.onTerminate();
+		if (isSharedPreferenceEnabled) {
+			sharedPreferences = getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE);
 		}
+
+		if (isDBEnabled) {
+			try {
+				dataHelper = new SmartDataHelper(getApplicationContext(), dbName, dbVersion, dbSql, getSmartVersionHandler());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// } else {
+		// Log.e("SmartFrameworkError",
+		// "Sorry, the security key did not match!! Please try with appropriate security key.");
+		// REF_SMART_APPLICATION = null;
+		// this.onTerminate();
+		// }
 
 		// ACRA.init(this);
 
