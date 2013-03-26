@@ -1,0 +1,1144 @@
+package com.ijoomer.components.jomsocial;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.net.Uri;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.ProgressBar;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView.BufferType;
+
+import com.androidquery.AQuery;
+import com.ijoomer.common.classes.IJoomerTwitterShareActivity;
+import com.ijoomer.common.classes.IjoomerUtilities;
+import com.ijoomer.common.classes.ViewHolder;
+import com.ijoomer.common.configuration.IjoomerApplicationConfiguration;
+import com.ijoomer.custom.interfaces.ReportListner;
+import com.ijoomer.custom.interfaces.ShareListner;
+import com.ijoomer.customviews.IjoomerButton;
+import com.ijoomer.customviews.IjoomerEditText;
+import com.ijoomer.customviews.IjoomerTextView;
+import com.ijoomer.library.jomsocial.JomGalleryDataProvider;
+import com.ijoomer.media.player.IjoomerMediaPlayer;
+import com.ijoomer.src.R;
+import com.ijoomer.weservice.WebCallListener;
+import com.smart.framework.CustomAlertMagnatic;
+import com.smart.framework.CustomAlertNeutral;
+import com.smart.framework.ItemView;
+import com.smart.framework.SmartListAdapterWithHolder;
+import com.smart.framework.SmartListItem;
+
+public class JomVideoDetailsActivity extends JomMasterActivity {
+
+	private LinearLayout listFooter;
+	private LinearLayout lnrHeader;
+	private LinearLayout lnrCreateVideo;
+	private LinearLayout lnrVideo;
+	private ListView lstVideoComment;
+	private ListView lstTagUser;
+	private IjoomerTextView txtVideoEdit;
+	private IjoomerTextView txtVideoRemove;
+	private IjoomerTextView txtVideoSetAsProfileVideo;
+	private IjoomerTextView txtVideoTitle;
+	private IjoomerTextView txtVideoBy;
+	private IjoomerTextView txtVideoCategorie;
+	private IjoomerTextView txtVideoPriavcy;
+	private IjoomerTextView txtVideoDateLocation;
+	private IjoomerTextView txtVideoLikeCount;
+	private IjoomerTextView txtVideoDislikeCount;
+	private IjoomerTextView txtVideoCommentCount;
+	private IjoomerTextView txtVideoDesciption;
+	private IjoomerTextView txtVideoShare;
+	private IjoomerTextView txtVideoReport;
+	private IjoomerTextView txtVideoTag;
+	private IjoomerEditText edtVideoTitle;
+	private IjoomerEditText edtVideoDescription;
+	private IjoomerEditText edtVideoLocation;
+	private IjoomerEditText edtVideoWriteComment;
+	private ImageView imgVideoAvatar;
+	private ImageView imgTagClose;
+	private Spinner spnVideoCategory;
+	private Spinner spnWhoCanSee;
+	private IjoomerButton btnSend;
+	private IjoomerButton btnCancle;
+	private IjoomerButton btnSave;
+	private PopupWindow dialog;
+	private ProgressBar pbrTag;
+	private ViewGroup videoDetailsHeaderLayout;
+
+	private AQuery androidQuery;
+	private ArrayList<SmartListItem> listData = new ArrayList<SmartListItem>();
+	private ArrayList<SmartListItem> tagListData = new ArrayList<SmartListItem>();
+	private ArrayList<HashMap<String, String>> tagList;
+	private ArrayList<HashMap<String, String>> friendList;
+	private ArrayList<HashMap<String, String>> CATEGORY_LIST;
+	private ArrayList<String> CATEGORY_ARRAY;
+	private HashMap<String, String> IN_VIDEO_DETAILS;
+	private SmartListAdapterWithHolder tagAdapter;
+	private SmartListAdapterWithHolder commentAdapter;
+
+	private JomGalleryDataProvider providerComment;
+	private JomGalleryDataProvider provider;
+	private JomGalleryDataProvider tagDataProvider;
+
+	private String IN_USERID;
+	private String IN_GROUP_ID;
+
+	/**
+	 * Overrides method
+	 */
+
+	@Override
+	public int setLayoutId() {
+		return R.layout.jom_video_details;
+	}
+
+	@Override
+	public void initComponents() {
+
+		videoDetailsHeaderLayout = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.jom_video_detail_header, null);
+		listFooter = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.ijoomer_list_footer, null);
+		lstVideoComment = (ListView) findViewById(R.id.lstVideoComment);
+		lstVideoComment.addHeaderView(videoDetailsHeaderLayout);
+		lstVideoComment.addFooterView(listFooter, null, false);
+		lstVideoComment.setAdapter(null);
+		lnrHeader = (LinearLayout) findViewById(R.id.lnrHeader);
+		lnrCreateVideo = (LinearLayout) videoDetailsHeaderLayout.findViewById(R.id.lnrCreateVideo);
+		lnrVideo = (LinearLayout) videoDetailsHeaderLayout.findViewById(R.id.lnrVideo);
+		txtVideoEdit = (IjoomerTextView) findViewById(R.id.txtVideoEdit);
+		txtVideoRemove = (IjoomerTextView) findViewById(R.id.txtVideoRemove);
+		txtVideoSetAsProfileVideo = (IjoomerTextView) findViewById(R.id.txtVideoSetAsProfileVideo);
+		txtVideoTitle = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoTitle);
+		txtVideoLikeCount = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoLikeCount);
+		txtVideoDislikeCount = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoDislikeCount);
+		txtVideoCommentCount = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoCommentCount);
+		txtVideoBy = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoBy);
+		txtVideoDateLocation = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoDateLocation);
+		txtVideoDesciption = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoDesciption);
+		txtVideoCategorie = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoCategorie);
+		txtVideoPriavcy = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoPriavcy);
+		txtVideoShare = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoShare);
+		txtVideoReport = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoReport);
+		txtVideoTag = (IjoomerTextView) videoDetailsHeaderLayout.findViewById(R.id.txtVideoTag);
+		edtVideoWriteComment = (IjoomerEditText) videoDetailsHeaderLayout.findViewById(R.id.edtVideoWriteComment);
+		edtVideoTitle = (IjoomerEditText) videoDetailsHeaderLayout.findViewById(R.id.edtVideoTitle);
+		edtVideoLocation = (IjoomerEditText) videoDetailsHeaderLayout.findViewById(R.id.edtVideoLocation);
+		edtVideoDescription = (IjoomerEditText) videoDetailsHeaderLayout.findViewById(R.id.edtVideoDescription);
+		imgVideoAvatar = (ImageView) videoDetailsHeaderLayout.findViewById(R.id.imgVideoAvatar);
+		btnCancle = (IjoomerButton) videoDetailsHeaderLayout.findViewById(R.id.btnCancle);
+		btnSave = (IjoomerButton) videoDetailsHeaderLayout.findViewById(R.id.btnSave);
+		btnSend = (IjoomerButton) videoDetailsHeaderLayout.findViewById(R.id.btnSend);
+		spnWhoCanSee = (Spinner) videoDetailsHeaderLayout.findViewById(R.id.spnWhoCanSee);
+		spnVideoCategory = (Spinner) videoDetailsHeaderLayout.findViewById(R.id.spnVideoCategory);
+
+		androidQuery = new AQuery(this);
+		provider = new JomGalleryDataProvider(this);
+		providerComment = new JomGalleryDataProvider(this);
+		tagDataProvider = new JomGalleryDataProvider(this);
+
+		getIntentData();
+		getComment(false);
+	}
+
+	@Override
+	public void prepareViews() {
+
+		CATEGORY_ARRAY = new ArrayList<String>();
+		getVideoCategory();
+		spnWhoCanSee.setAdapter(new IjoomerUtilities.MyCustomAdapter(this, new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.wall_post_type)))));
+
+	}
+
+	@Override
+	public void setActionListeners() {
+
+		lstVideoComment.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if ((firstVisibleItem + visibleItemCount) >= totalItemCount && totalItemCount > 2) {
+
+					if (!providerComment.isCalling() && providerComment.hasNextPage()) {
+						listFooterVisible();
+						providerComment.getVideoCommentList(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+
+							@Override
+							public void onProgressUpdate(int progressCount) {
+
+							}
+
+							@Override
+							public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+								listFooterInvisible();
+								if (responseCode == 200) {
+									updateHeader(providerComment.getNotificationData());
+									prepareList(data1, true);
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+		txtVideoSetAsProfileVideo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				provider.setAsProfileVideo(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+					final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+					@Override
+					public void onProgressUpdate(int progressCount) {
+						proSeekBar.setProgress(progressCount);
+					}
+
+					@Override
+					public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+						if (responseCode == 200) {
+							updateHeader(provider.getNotificationData());
+							IjoomerUtilities.getCustomOkDialog(getString(R.string.video), getString(R.string.photo_set_as_profile_video_successfully), getString(R.string.ok),
+									R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+										@Override
+										public void NeutralMathod() {
+
+										}
+									});
+
+						} else {
+							responseErrorMessageHandler(responseCode, false);
+						}
+					}
+				});
+
+			}
+		});
+
+		imgVideoAvatar.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				if (!IN_VIDEO_DETAILS.get(URL).toString().contains("youtube")) {
+					Intent lVideoIntent = new Intent(null, Uri.parse("mp4://" + IN_VIDEO_DETAILS.get(URL).toString()), JomVideoDetailsActivity.this, IjoomerMediaPlayer.class);
+					startActivity(lVideoIntent);
+
+				} else {
+					Intent lVideoIntent = new Intent(null, Uri.parse("ytv://" + IN_VIDEO_DETAILS.get(URL).toString().split("=")[1] + ""), JomVideoDetailsActivity.this,
+							IjoomerMediaPlayer.class);
+					startActivity(lVideoIntent);
+
+				}
+
+			}
+		});
+
+		btnSave.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				if (edtVideoTitle.getText().toString().trim().length() > 0) {
+					if (isVideoDataChanged()) {
+						final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+						Address address = IjoomerUtilities.getLatLongFromAddress(edtVideoLocation.getText().toString().trim());
+						provider.editVideo(IN_VIDEO_DETAILS.get(ID), IN_GROUP_ID, edtVideoTitle.getText().toString().trim(), edtVideoDescription.getText().toString().trim(),
+								address != null ? address.getLatitude() : 0, address != null ? address.getLongitude() : 0,
+								getCategoryId(spnVideoCategory.getSelectedItemPosition()), getPrivacyCode(spnWhoCanSee.getSelectedItem().toString().trim()).toString(),
+								new WebCallListener() {
+
+									@Override
+									public void onProgressUpdate(int progressCount) {
+										proSeekBar.setProgress(progressCount);
+									}
+
+									@Override
+									public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+
+										if (responseCode == 200) {
+											updateHeader(provider.getNotificationData());
+											IjoomerUtilities.getCustomOkDialog(getString(R.string.video), getString(R.string.video_edited_successfully), getString(R.string.ok),
+													R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+														@Override
+														public void NeutralMathod() {
+															IjoomerApplicationConfiguration.setReloadRequired(true);
+															lnrCreateVideo.setVisibility(View.GONE);
+															lnrVideo.setVisibility(View.VISIBLE);
+															IN_VIDEO_DETAILS.put(CAPTION, edtVideoTitle.getText().toString().trim());
+															IN_VIDEO_DETAILS.put(DESCRIPTION, edtVideoDescription.getText().toString().trim());
+															IN_VIDEO_DETAILS.put(LOCATION, edtVideoLocation.getText().toString().trim());
+															IN_VIDEO_DETAILS.put(PERMISSION, getPrivacyCode(spnWhoCanSee.getSelectedItem().toString().trim()));
+															IN_VIDEO_DETAILS.put(CATEGORYID, getCategoryId(spnVideoCategory.getSelectedItemPosition()));
+
+															setVideoDetails();
+														}
+													});
+
+										} else {
+											IjoomerUtilities.getCustomOkDialog(getString(R.string.video),
+													getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())), getString(R.string.ok),
+													R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+														@Override
+														public void NeutralMathod() {
+															lnrVideo.setVisibility(View.VISIBLE);
+															lnrCreateVideo.setVisibility(View.GONE);
+														}
+													});
+										}
+									}
+
+								});
+
+					} else {
+						lnrCreateVideo.setVisibility(View.GONE);
+						lnrVideo.setVisibility(View.VISIBLE);
+					}
+				} else {
+					edtVideoTitle.setError(getString(R.string.validation_value_required));
+				}
+			}
+		});
+		txtVideoTag.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				showVideoTagOrRemoveDialog();
+			}
+		});
+		txtVideoEdit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				if (lnrCreateVideo.getVisibility() == View.VISIBLE) {
+					lnrVideo.setVisibility(View.VISIBLE);
+					lnrCreateVideo.setVisibility(View.GONE);
+				} else {
+
+					lnrVideo.setVisibility(View.GONE);
+					lnrCreateVideo.setVisibility(View.VISIBLE);
+					setVideoDetailsForEdit();
+				}
+			}
+		});
+
+		btnCancle.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				lnrVideo.setVisibility(View.VISIBLE);
+				lnrCreateVideo.setVisibility(View.GONE);
+			}
+		});
+		txtVideoRemove.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				IjoomerUtilities.getCustomConfirmDialog(getString(R.string.video_title_remove), getString(R.string.are_you_sure), getString(R.string.yes), getString(R.string.no),
+						new CustomAlertMagnatic() {
+
+							@Override
+							public void PositiveMathod() {
+								provider.removeVideo(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+									final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+									@Override
+									public void onProgressUpdate(int progressCount) {
+										proSeekBar.setProgress(progressCount);
+									}
+
+									@Override
+									public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+										if (responseCode == 200) {
+											updateHeader(provider.getNotificationData());
+											IjoomerApplicationConfiguration.setReloadRequired(true);
+											finish();
+										} else {
+											IjoomerUtilities.getCustomOkDialog(getString(R.string.video),
+													getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())), getString(R.string.ok),
+													R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+														@Override
+														public void NeutralMathod() {
+															edtVideoWriteComment.setText(null);
+														}
+													});
+										}
+									}
+								});
+							}
+
+							@Override
+							public void NegativeMathod() {
+
+							}
+						});
+
+			}
+		});
+		btnSend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				hideSoftKeyboard();
+				if (edtVideoWriteComment.getText().toString().trim().length() > 0) {
+					provider.addVideoComment(IN_VIDEO_DETAILS.get(ID).toString(), edtVideoWriteComment.getText().toString().trim(), new WebCallListener() {
+						final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+							proSeekBar.setProgress(progressCount);
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								IjoomerApplicationConfiguration.setReloadRequired(true);
+								edtVideoWriteComment.setText(null);
+								IN_VIDEO_DETAILS.put(COMMENTCOUNT, String.valueOf(Integer.parseInt(IN_VIDEO_DETAILS.get(COMMENTCOUNT).toString()) + 1));
+								txtVideoCommentCount.setText(IN_VIDEO_DETAILS.get(COMMENTCOUNT).toString());
+								getComment(true);
+							} else {
+								IjoomerUtilities.getCustomOkDialog(getString(R.string.video),
+										getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())), getString(R.string.ok),
+										R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+											@Override
+											public void NeutralMathod() {
+												edtVideoWriteComment.setText(null);
+											}
+										});
+							}
+						}
+					});
+				} else {
+					edtVideoWriteComment.setError(getString(R.string.validation_value_required));
+				}
+			}
+		});
+
+		txtVideoLikeCount.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				if (IN_VIDEO_DETAILS.get(LIKED).equals("1")) {
+					provider.unlikeVideo(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								IjoomerApplicationConfiguration.setReloadRequired(true);
+								IN_VIDEO_DETAILS.put(LIKED, "0");
+								IN_VIDEO_DETAILS.put(LIKES, String.valueOf(Integer.parseInt(IN_VIDEO_DETAILS.get(LIKES).toString()) - 1));
+								txtVideoLikeCount.setText(IN_VIDEO_DETAILS.get(LIKES).toString());
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+						}
+					});
+				} else {
+					provider.likeVideo(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								IjoomerApplicationConfiguration.setReloadRequired(true);
+								IN_VIDEO_DETAILS.put(LIKED, "1");
+								IN_VIDEO_DETAILS.put(LIKES, String.valueOf(Integer.parseInt(IN_VIDEO_DETAILS.get(LIKES).toString()) + 1));
+								txtVideoLikeCount.setText(IN_VIDEO_DETAILS.get(LIKES).toString());
+								if (IN_VIDEO_DETAILS.get(DISLIKED).equals("1")) {
+									IN_VIDEO_DETAILS.put(DISLIKES, String.valueOf(Integer.parseInt(IN_VIDEO_DETAILS.get(DISLIKES).toString()) - 1));
+									IN_VIDEO_DETAILS.put(DISLIKED, "0");
+									txtVideoDislikeCount.setText(IN_VIDEO_DETAILS.get(DISLIKES).toString());
+								}
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+						}
+					});
+				}
+			}
+		});
+
+		txtVideoDislikeCount.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				if (IN_VIDEO_DETAILS.get(DISLIKED).equals("1")) {
+					provider.unlikeVideo(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								IjoomerApplicationConfiguration.setReloadRequired(true);
+								IN_VIDEO_DETAILS.put(DISLIKED, "0");
+								IN_VIDEO_DETAILS.put(DISLIKES, String.valueOf(Integer.parseInt(IN_VIDEO_DETAILS.get(DISLIKES).toString()) - 1));
+								txtVideoDislikeCount.setText(IN_VIDEO_DETAILS.get(DISLIKES).toString());
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+						}
+					});
+				} else {
+					provider.dislikeVideo(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								IjoomerApplicationConfiguration.setReloadRequired(true);
+								IN_VIDEO_DETAILS.put(DISLIKED, "1");
+								IN_VIDEO_DETAILS.put(DISLIKES, String.valueOf(Integer.parseInt(IN_VIDEO_DETAILS.get(DISLIKES).toString()) + 1));
+								txtVideoDislikeCount.setText(IN_VIDEO_DETAILS.get(DISLIKES).toString());
+								if (IN_VIDEO_DETAILS.get(LIKED).equals("1")) {
+									IN_VIDEO_DETAILS.put(LIKES, String.valueOf(Integer.parseInt(IN_VIDEO_DETAILS.get(LIKES).toString()) - 1));
+									IN_VIDEO_DETAILS.put(LIKED, "0");
+									txtVideoLikeCount.setText(IN_VIDEO_DETAILS.get(LIKES).toString());
+								}
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+						}
+					});
+				}
+			}
+		});
+
+		txtVideoShare.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				IjoomerUtilities.getShareDialog(new ShareListner() {
+					@Override
+					public void onClick(String shareOn, Object value, String message) {
+						if (shareOn.equals("email")) {
+							String[] to = value.toString().split(",");
+							Intent i = new Intent(Intent.ACTION_SEND);
+							i.setType("text/html");
+							i.putExtra(Intent.EXTRA_EMAIL, to);
+							i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_email_subject));
+							i.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(IjoomerUtilities.prepareEmailBody(message == null ? "" : message, getSmartApplication()
+									.readSharedPreferences().getString(SP_USERNAME, "")
+									+ " "
+									+ getString(R.string.saw_this_story_on_the)
+									+ " "
+									+ getString(R.string.app_name)
+									+ " " + getString(R.string.thought_you_should_see_it), IN_VIDEO_DETAILS.get(CAPTION).toString(), IN_VIDEO_DETAILS.get(DESCRIPTION).toString(),
+									IN_VIDEO_DETAILS.get(SHARELINK).toString(), getString(R.string.try_ijoomeradvance))));
+							try {
+								startActivity(Intent.createChooser(i, "Send mail..."));
+							} catch (android.content.ActivityNotFoundException ex) {
+								ting(getString(R.string.share_email_no_client));
+							}
+						} else if (shareOn.equals("facebook")) {
+							facebookSharing(IN_VIDEO_DETAILS.get(CAPTION).toString(), IN_VIDEO_DETAILS.get(CAPTION).toString(), IN_VIDEO_DETAILS.get(DESCRIPTION).toString(),
+									IN_VIDEO_DETAILS.get(SHARELINK).toString(), IN_VIDEO_DETAILS.get(THUMB).toString(), message == null ? "" : message);
+						} else if (shareOn.equals("twitter")) {
+							try {
+								loadNew(IJoomerTwitterShareActivity.class, JomVideoDetailsActivity.this, false, "IN_TWIT_MESSAGE", message == null ? "" : message + " \n "
+										+ IN_VIDEO_DETAILS.get(SHARELINK), "IN_TWIT_IMAGE", IN_VIDEO_DETAILS.get(THUMB).toString());
+							} catch (Throwable e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				});
+
+			}
+		});
+
+		txtVideoReport.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				IjoomerUtilities.getReportDialog(new ReportListner() {
+
+					@Override
+					public void onClick(String repotType, String message) {
+						provider.reportVideo(IN_USERID, IN_VIDEO_DETAILS.get(ID).toString(), repotType + "  " + message, new WebCallListener() {
+
+							@Override
+							public void onProgressUpdate(int progressCount) {
+
+							}
+
+							@Override
+							public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+								if (responseCode == 200) {
+									updateHeader(provider.getNotificationData());
+									IjoomerUtilities.getCustomOkDialog(getString(R.string.video), getString(R.string.report_successfully), getString(R.string.ok),
+											R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+												@Override
+												public void NeutralMathod() {
+
+												}
+											});
+								} else {
+									responseErrorMessageHandler(responseCode, false);
+								}
+							}
+
+						});
+					}
+				});
+			}
+		});
+
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup arg0, int arg1) {
+
+	}
+
+	/**
+	 * Class method
+	 */
+	
+	private void getVideoCategory(){
+		provider.getVideoCategoryList(new WebCallListener() {
+			final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+			@Override
+			public void onProgressUpdate(int progressCount) {
+				proSeekBar.setProgress(progressCount);
+			}
+
+			@Override
+			public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+				if (responseCode == 200) {
+					updateHeader(provider.getNotificationData());
+					CATEGORY_LIST = data1;
+					for (HashMap<String, String> hashMap : CATEGORY_LIST) {
+						CATEGORY_ARRAY.add(hashMap.get(NAME));
+					}
+					setVideoDetails();
+					spnVideoCategory.setAdapter(new IjoomerUtilities.MyCustomAdapter(JomVideoDetailsActivity.this, CATEGORY_ARRAY));
+				} else {
+					responseErrorMessageHandler(responseCode, true);
+				}
+
+			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	private void getIntentData() {
+		IN_USERID = getIntent().getStringExtra("IN_USERID") == null ? "0" : getIntent().getStringExtra("IN_USERID");
+		IN_VIDEO_DETAILS = (HashMap<String, String>) getIntent().getSerializableExtra("IN_VIDEO_DETAILS") == null ? new HashMap<String, String>()
+				: (HashMap<String, String>) getIntent().getSerializableExtra("IN_VIDEO_DETAILS");
+		IN_GROUP_ID = getIntent().getStringExtra("IN_GROUPID") == null ? "0" : getIntent().getStringExtra("IN_GROUPID");
+
+		if (IN_VIDEO_DETAILS.containsKey(DELETEALLOWED) && IN_VIDEO_DETAILS.get(DELETEALLOWED).equals("1")) {
+			lnrHeader.setVisibility(View.VISIBLE);
+			if (IN_VIDEO_DETAILS.get(USER_ID).equals("0")) {
+				txtVideoSetAsProfileVideo.setVisibility(View.VISIBLE);
+			} else {
+				txtVideoSetAsProfileVideo.setVisibility(View.GONE);
+			}
+		}
+
+		androidQuery.id(imgVideoAvatar).image(IN_VIDEO_DETAILS.get(THUMB), true, true, getDeviceWidth(), 0);
+	}
+
+	private void responseErrorMessageHandler(final int responseCode, final boolean finishActivityOnConnectionProblem) {
+		IjoomerUtilities.getCustomOkDialog(getString(R.string.video), getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())),
+				getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+					@Override
+					public void NeutralMathod() {
+						if (responseCode == 599 && finishActivityOnConnectionProblem) {
+							finish();
+						}
+					}
+				});
+	}
+
+	private void setVideoDetails() {
+		txtVideoTitle.setText(IN_VIDEO_DETAILS.get(CAPTION).toString());
+		txtVideoTitle.setMovementMethod(new ScrollingMovementMethod());
+		txtVideoBy.setText(IN_VIDEO_DETAILS.get(USER_NAME).toString());
+		txtVideoLikeCount.setText(IN_VIDEO_DETAILS.get(LIKES).toString());
+		txtVideoDislikeCount.setText(IN_VIDEO_DETAILS.get(DISLIKES).toString());
+		txtVideoCommentCount.setText(IN_VIDEO_DETAILS.get(COMMENTCOUNT).toString());
+		txtVideoTag.setText(IN_VIDEO_DETAILS.get(TAGS).toString());
+		txtVideoPriavcy.setText(getPrivacyString(IN_VIDEO_DETAILS.get(PERMISSIONS).toString()));
+		int size = CATEGORY_LIST.size();
+		for (int i = 0; i < size; i++) {
+			if (CATEGORY_LIST.get(i).get(ID).equals(IN_VIDEO_DETAILS.get(CATEGORYID).toString())) {
+				txtVideoCategorie.setText(CATEGORY_LIST.get(i).get(NAME));
+				break;
+			}
+		}
+		txtVideoBy.setMovementMethod(LinkMovementMethod.getInstance());
+		txtVideoBy.setText(addClickablePart(Html.fromHtml(IN_VIDEO_DETAILS.get(USER_NAME)), IN_VIDEO_DETAILS), BufferType.SPANNABLE);
+
+		txtVideoDesciption.setText(IN_VIDEO_DETAILS.get(DESCRIPTION).toString());
+
+		if (IN_VIDEO_DETAILS.get(LOCATION).toString().trim().length() <= 0) {
+			txtVideoDateLocation.setText(IN_VIDEO_DETAILS.get(DATE).toString());
+		} else {
+			txtVideoDateLocation.setText(IN_VIDEO_DETAILS.get(DATE).toString() + " @ " + IN_VIDEO_DETAILS.get(LOCATION).toString());
+		}
+
+		if (IN_VIDEO_DETAILS.get(DELETEALLOWED).equals("1")) {
+			lnrHeader.setVisibility(View.VISIBLE);
+		}
+	}
+
+	public void getComment(boolean isNextPage) {
+
+		if (isNextPage) {
+			providerComment.restorePagingSettings();
+		}
+		if (IN_VIDEO_DETAILS.containsKey(COMMENTCOUNT) && Integer.parseInt(IN_VIDEO_DETAILS.get(COMMENTCOUNT).toString()) > 0) {
+			providerComment.getVideoCommentList(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+
+				@Override
+				public void onProgressUpdate(int progressCount) {
+
+				}
+
+				@Override
+				public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+					if (responseCode == 200) {
+						updateHeader(providerComment.getNotificationData());
+						prepareList(data1, false);
+						commentAdapter = getListAdapter();
+						lstVideoComment.setAdapter(commentAdapter);
+					} else {
+						lstVideoComment.setAdapter(null);
+						responseErrorMessageHandler(responseCode, false);
+					}
+
+				}
+			});
+		} else {
+			lstVideoComment.setAdapter(null);
+		}
+	}
+
+	public void listFooterVisible() {
+		listFooter.setVisibility(View.VISIBLE);
+	}
+
+	public void listFooterInvisible() {
+		listFooter.setVisibility(View.GONE);
+	}
+
+	private void setVideoDetailsForEdit() {
+		edtVideoTitle.setText(IN_VIDEO_DETAILS.get(CAPTION).toString());
+		edtVideoDescription.setText(IN_VIDEO_DETAILS.get(DESCRIPTION).toString());
+		edtVideoLocation.setText(IN_VIDEO_DETAILS.get(LOCATION).toString());
+		spnWhoCanSee.setSelection(getPrivacyIndex(IN_VIDEO_DETAILS.get(PERMISSIONS).toString()));
+		int size = CATEGORY_LIST.size();
+		for (int i = 0; i < size; i++) {
+			if (CATEGORY_LIST.get(i).get(ID).equals(IN_VIDEO_DETAILS.get(CATEGORYID))) {
+				spnVideoCategory.setSelection(i);
+				break;
+			}
+		}
+
+	}
+
+	private boolean isVideoDataChanged() {
+		boolean isChanged = false;
+		if (!(edtVideoTitle.getText().toString().equals(IN_VIDEO_DETAILS.get(CAPTION)) && edtVideoDescription.getText().toString().equals(IN_VIDEO_DETAILS.get(DESCRIPTION))
+				&& edtVideoLocation.getText().toString().equals(IN_VIDEO_DETAILS.get(LOCATION))
+				&& getPrivacyCode(spnWhoCanSee.getSelectedItem().toString()).equals(IN_VIDEO_DETAILS.get(PERMISSION)) && getCategoryId(spnVideoCategory.getSelectedItemPosition())
+				.equals(IN_VIDEO_DETAILS.get(CATEGORYID)))) {
+			isChanged = true;
+		}
+		return isChanged;
+	}
+
+	private String getCategoryId(int categoryIndex) {
+
+		return CATEGORY_LIST.get(categoryIndex).get(ID);
+	}
+
+	private void showVideoTagOrRemoveDialog() {
+		try {
+
+			int popupWidth = getWindowManager().getDefaultDisplay().getWidth() - convertSizeToDeviceDependent(50);
+			int popupHeight = getWindowManager().getDefaultDisplay().getHeight() - convertSizeToDeviceDependent(200);
+
+			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View layout = layoutInflater.inflate(R.layout.jom_photo_video_tag_dialog, null);
+
+			dialog = new PopupWindow(this);
+			dialog.setContentView(layout);
+			dialog.setWidth(popupWidth);
+			dialog.setHeight(popupHeight);
+			dialog.setFocusable(true);
+			dialog.setBackgroundDrawable(new BitmapDrawable());
+			dialog.showAtLocation(layout, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+
+			imgTagClose = (ImageView) layout.findViewById(R.id.imgTagClose);
+			lstTagUser = (ListView) layout.findViewById(R.id.lstTagUser);
+			pbrTag = (ProgressBar) layout.findViewById(R.id.pbrTag);
+			lstTagUser.setAdapter(null);
+			imgTagClose.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+			provider.getVideosTages(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+
+				@Override
+				public void onProgressUpdate(int progressCount) {
+
+				}
+
+				@Override
+				public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+					tagList = data1;
+					tagDataProvider.restorePagingSettings();
+					tagDataProvider.getFriendsForTagVideo(IN_VIDEO_DETAILS.get(ID).toString(), new WebCallListener() {
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							friendList = data1;
+							if (responseCode == 200) {
+								updateHeader(tagDataProvider.getNotificationData());
+								IjoomerApplicationConfiguration.setReloadRequired(true);
+								prepareTagList();
+								tagAdapter = getTagListAdapter();
+								lstTagUser.setAdapter(tagAdapter);
+							} else {
+								IjoomerUtilities.getCustomOkDialog(getString(R.string.dialog_title_tag_user),
+										getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())), getString(R.string.ok),
+										R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+											@Override
+											public void NeutralMathod() {
+												dialog.dismiss();
+											}
+										});
+							}
+							pbrTag.setVisibility(View.GONE);
+						}
+					});
+				}
+			});
+
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void prepareTagList() {
+		tagListData.clear();
+
+		if (tagList != null) {
+			for (HashMap<String, String> hashMap : tagList) {
+				SmartListItem item = new SmartListItem();
+				item.setItemLayout(R.layout.jom_photo_video_tag_dialog_item);
+				ArrayList<Object> obj = new ArrayList<Object>();
+				hashMap.put(TAGED, "true");
+				obj.add(hashMap);
+				item.setValues(obj);
+				tagListData.add(item);
+			}
+		}
+		if (friendList != null) {
+			for (HashMap<String, String> hashMap : friendList) {
+				SmartListItem item = new SmartListItem();
+				item.setItemLayout(R.layout.jom_photo_video_tag_dialog_item);
+				ArrayList<Object> obj = new ArrayList<Object>();
+				obj.add(hashMap);
+				item.setValues(obj);
+				tagListData.add(item);
+			}
+		}
+
+	}
+
+	public void prepareList(ArrayList<HashMap<String, String>> data, boolean append) {
+		if (data != null) {
+			if (!append) {
+				listData.clear();
+			}
+			for (HashMap<String, String> hashMap : data) {
+				SmartListItem item = new SmartListItem();
+				item.setItemLayout(R.layout.jom_comment_list_item);
+				ArrayList<Object> obj = new ArrayList<Object>();
+				obj.add(hashMap);
+				item.setValues(obj);
+				if (append) {
+					commentAdapter.add(item);
+				} else {
+					listData.add(item);
+				}
+			}
+		}
+	}
+
+	/**
+	 * List adapter
+	 */
+
+	private SmartListAdapterWithHolder getListAdapter() {
+		SmartListAdapterWithHolder adapterWithHolder = new SmartListAdapterWithHolder(JomVideoDetailsActivity.this, R.layout.jom_comment_list_item, listData, new ItemView() {
+			@Override
+			public View setItemView(final int position, View v, SmartListItem item, ViewHolder holder) {
+				holder.imgCommentUserAvatar = (ImageView) v.findViewById(R.id.imgCommentUserAvatar);
+				holder.txtCommentUserName = (IjoomerTextView) v.findViewById(R.id.txtCommentUserName);
+				holder.txtCommentDate = (IjoomerTextView) v.findViewById(R.id.txtCommentDate);
+				holder.txtCommentTitle = (IjoomerTextView) v.findViewById(R.id.txtCommentTitle);
+				holder.btnCommentRemove = (IjoomerButton) v.findViewById(R.id.btnCommentRemove);
+				holder.btnCommentRemove.setVisibility(View.GONE);
+				@SuppressWarnings("unchecked")
+				final HashMap<String, String> row = (HashMap<String, String>) item.getValues().get(0);
+
+				androidQuery.id(holder.imgCommentUserAvatar).image(row.get(USER_AVATAR), true, true, getDeviceWidth(), 0);
+				holder.txtCommentTitle.setText(row.get(COMMENT));
+				holder.txtCommentUserName.setText(row.get(USER_NAME));
+				holder.txtCommentDate.setText(row.get(DATE));
+				if (row.containsKey(DELETEALLOWED) && row.get(DELETEALLOWED).equals("1")) {
+					holder.btnCommentRemove.setVisibility(View.VISIBLE);
+				}
+
+				holder.btnCommentRemove.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+
+						IjoomerUtilities.getCustomConfirmDialog(getString(R.string.video), getString(R.string.are_you_sure), getString(R.string.yes), getString(R.string.no),
+								new CustomAlertMagnatic() {
+
+									@Override
+									public void PositiveMathod() {
+										provider.removeVideoComment(row.get(ID), new WebCallListener() {
+											final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+											@Override
+											public void onProgressUpdate(int progressCount) {
+												proSeekBar.setProgress(progressCount);
+											}
+
+											@Override
+											public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+												if (responseCode == 200) {
+													updateHeader(provider.getNotificationData());
+													IjoomerApplicationConfiguration.setReloadRequired(true);
+													commentAdapter.remove(commentAdapter.getItem(position));
+													IN_VIDEO_DETAILS.put(COMMENTCOUNT, String.valueOf(Integer.parseInt(IN_VIDEO_DETAILS.get(COMMENTCOUNT).toString()) - 1));
+													txtVideoCommentCount.setText(IN_VIDEO_DETAILS.get(COMMENTCOUNT).toString());
+												} else {
+													responseErrorMessageHandler(responseCode, false);
+												}
+
+											}
+										});
+									}
+
+									@Override
+									public void NegativeMathod() {
+
+									}
+								});
+
+					}
+				});
+
+				holder.imgCommentUserAvatar.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+
+						if (row.get(USER_PROFILE).equals("1")) {
+							gotoProfile(row.get(USER_ID));
+						}
+					}
+				});
+				return v;
+			}
+
+			@Override
+			public View setItemView(int position, View v, SmartListItem item) {
+				return null;
+			}
+		});
+		return adapterWithHolder;
+	}
+
+	private SmartListAdapterWithHolder getTagListAdapter() {
+
+		SmartListAdapterWithHolder adapterWithHolder = new SmartListAdapterWithHolder(this, R.layout.jom_photo_video_tag_dialog_item, tagListData, new ItemView() {
+			@Override
+			public View setItemView(final int position, View v, SmartListItem item, ViewHolder holder) {
+				holder.txtPhotoTagUser = (IjoomerTextView) v.findViewById(R.id.txtPhotoTagUser);
+				holder.btnPhotoTag = (IjoomerButton) v.findViewById(R.id.btnPhotoTag);
+				holder.btnRemovePhotoTag = (IjoomerButton) v.findViewById(R.id.btnRemovePhotoTag);
+
+				final HashMap<String, String> row = (HashMap<String, String>) item.getValues().get(0);
+
+				if (row.containsKey(TAGED) && row.get(DELETEALLOWED).equals("1")) {
+					holder.btnPhotoTag.setVisibility(View.GONE);
+					holder.btnRemovePhotoTag.setVisibility(View.VISIBLE);
+				} else if (!row.containsKey(TAGED)) {
+					holder.btnPhotoTag.setVisibility(View.VISIBLE);
+					holder.btnRemovePhotoTag.setVisibility(View.GONE);
+				}
+				holder.txtPhotoTagUser.setText(row.get(USER_NAME));
+
+				holder.txtPhotoTagUser.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						if (row.get(USER_PROFILE).equals("1")) {
+							gotoProfile(row.get(USER_ID));
+						}
+					}
+				});
+				holder.btnPhotoTag.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						pbrTag.setVisibility(View.VISIBLE);
+						provider.addVideoTag(IN_VIDEO_DETAILS.get(ID).toString(), row.get(USER_ID), null, new WebCallListener() {
+
+							@Override
+							public void onProgressUpdate(int progressCount) {
+
+							}
+
+							@Override
+							public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+								pbrTag.setVisibility(View.GONE);
+								if (responseCode == 200) {
+									updateHeader(provider.getNotificationData());
+									txtVideoTag.setText("" + (Integer.parseInt(txtVideoTag.getText().toString()) + 1));
+									if (dialog != null && dialog.isShowing()) {
+										dialog.dismiss();
+									}
+								} else {
+									IjoomerUtilities.getCustomOkDialog(getString(R.string.dialog_title_tag_user),
+											getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())), getString(R.string.ok),
+											R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+												@Override
+												public void NeutralMathod() {
+													if (dialog != null && dialog.isShowing()) {
+														dialog.dismiss();
+													}
+
+												}
+											});
+								}
+							}
+						});
+					}
+				});
+				holder.btnRemovePhotoTag.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						pbrTag.setVisibility(View.VISIBLE);
+						provider.removeVideoTag(row.get(ID), new WebCallListener() {
+
+							@Override
+							public void onProgressUpdate(int progressCount) {
+
+							}
+
+							@Override
+							public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+								pbrTag.setVisibility(View.GONE);
+								if (responseCode == 200) {
+									updateHeader(provider.getNotificationData());
+									txtVideoTag.setText("" + (Integer.parseInt(txtVideoTag.getText().toString()) - 1));
+									if (dialog != null && dialog.isShowing()) {
+										dialog.dismiss();
+									}
+								} else {
+									IjoomerUtilities.getCustomOkDialog(getString(R.string.dialog_title_tag_user),
+											getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())), getString(R.string.ok),
+											R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+												@Override
+												public void NeutralMathod() {
+													if (dialog != null && dialog.isShowing()) {
+														dialog.dismiss();
+													}
+
+												}
+											});
+								}
+							}
+						});
+					}
+				});
+				return v;
+			}
+
+			@Override
+			public View setItemView(int position, View v, SmartListItem item) {
+				return null;
+			}
+		});
+		return adapterWithHolder;
+	}
+}

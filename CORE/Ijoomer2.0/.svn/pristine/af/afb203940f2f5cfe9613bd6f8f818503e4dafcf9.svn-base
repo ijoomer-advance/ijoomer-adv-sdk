@@ -1,0 +1,1489 @@
+package com.ijoomer.components.jomsocial;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView.BufferType;
+
+import com.androidquery.AQuery;
+import com.ijoomer.common.classes.IjoomerUtilities;
+import com.ijoomer.common.classes.ViewHolder;
+import com.ijoomer.common.configuration.IjoomerApplicationConfiguration;
+import com.ijoomer.common.configuration.IjoomerGlobalConfiguration;
+import com.ijoomer.custom.interfaces.SelectImageDialogListner;
+import com.ijoomer.customviews.IjoomerButton;
+import com.ijoomer.customviews.IjoomerEditText;
+import com.ijoomer.customviews.IjoomerTextView;
+import com.ijoomer.library.jomsocial.JomEventDataProvider;
+import com.ijoomer.library.jomsocial.JomGalleryDataProvider;
+import com.ijoomer.library.jomsocial.JomProfileDataProvider;
+import com.ijoomer.library.jomsocial.JomWallDataProvider;
+import com.ijoomer.media.player.IjoomerMediaPlayer;
+import com.ijoomer.src.R;
+import com.ijoomer.weservice.WebCallListener;
+import com.smart.framework.CustomAlertMagnatic;
+import com.smart.framework.CustomAlertNeutral;
+import com.smart.framework.ItemView;
+import com.smart.framework.SmartListAdapterWithHolder;
+import com.smart.framework.SmartListItem;
+
+public class JomProfileActivity extends JomMasterActivity {
+
+	private LinearLayout lnrUploadPhoto;
+	private ListView lstProfileDetail;
+	private FrameLayout framEditImage;
+	private IjoomerTextView txtLike;
+	private IjoomerTextView txtUnlike;
+	private IjoomerTextView txtUserName;
+	private IjoomerTextView txtUserVideo;
+	private IjoomerTextView txtUserStatus;
+	private IjoomerTextView txtRecentActivities;
+	private IjoomerTextView txtUploadPhoto;
+	private IjoomerTextView txtUploadVideo;
+	private IjoomerTextView txtCreateEvent;
+	private IjoomerTextView txtViewers;
+	private IjoomerTextView txtAbout;
+	private IjoomerTextView txtFriend;
+	private IjoomerTextView txtPhoto;
+	private IjoomerTextView txtVideo;
+	private IjoomerTextView txtMap;
+	private IjoomerTextView txtWritePost;
+	private IjoomerEditText editUserName;
+	private IjoomerEditText editWritePost;
+	private IjoomerEditText editPhotoCaption;
+	private ImageView imgUserImage;
+	private ImageView imgEditPicture;
+	private ImageView imgAddEditCover;
+	private ImageView imgAddEditCoverPhoto;
+	private ImageView imgUploadPhoto;
+	private ImageView imgViewers;
+	private ImageView imgAbout;
+	private ImageView imgFriend;
+	private ImageView imgPhoto;
+	private ImageView imgVideo;
+	private ImageView imgMap;
+	private IjoomerButton btnAddFriend;
+	private IjoomerButton btnMessage;
+	private IjoomerButton btnPost;
+	private IjoomerButton btnEdit;
+	private Spinner spnPostType;
+	private View listHeader;
+	private View listFooter;
+	private SeekBar proSeekBar;
+
+	private AQuery androidQuery;
+	private ArrayList<HashMap<String, String>> PROFILE = new ArrayList<HashMap<String, String>>();
+	private ArrayList<SmartListItem> listData = new ArrayList<SmartListItem>();
+	private SmartListAdapterWithHolder listAdapterWithHolder;
+
+	private JomProfileDataProvider provider;
+	private JomWallDataProvider wallDataProvider;
+
+	final private int PICK_IMAGE_USER_AVATAR = 1;
+	final private int CAPTURE_IMAGE_USER_AVATAR = 2;
+	final private int PICK_IMAGE_UPLOAD_PHOTO = 3;
+	final private int CAPTURE_IMAGE_UPLOAD_PHOTO = 4;
+	private String selectedImagePathUserAvatar;
+	private String selectedImagePathPhotoUpload;
+	private String IN_USERID;
+	private boolean isSetProfileCoverPage = false;
+
+	/**
+	 * Overrides method
+	 */
+
+	@Override
+	public int setLayoutId() {
+		return R.layout.jom_profile_detail;
+	}
+
+	@Override
+	public void initComponents() {
+
+		lstProfileDetail = (ListView) findViewById(R.id.lstProfileDetail);
+		listHeader = LayoutInflater.from(this).inflate(R.layout.jom_profile_header, null);
+		listFooter = LayoutInflater.from(this).inflate(R.layout.ijoomer_list_footer, null);
+		lstProfileDetail.addHeaderView(listHeader, null, false);
+		lstProfileDetail.addFooterView(listFooter, null, false);
+		lstProfileDetail.setAdapter(null);
+		lnrUploadPhoto = (LinearLayout) listHeader.findViewById(R.id.lnrUploadPhoto);
+		framEditImage = (FrameLayout) listHeader.findViewById(R.id.framEditImage);
+		txtWritePost = (IjoomerTextView) listHeader.findViewById(R.id.txtWritePost);
+		txtUserName = (IjoomerTextView) listHeader.findViewById(R.id.txtUserName);
+		txtUserVideo = (IjoomerTextView) listHeader.findViewById(R.id.txtUserVideo);
+		txtUserStatus = (IjoomerTextView) listHeader.findViewById(R.id.txtUserStatus);
+		txtRecentActivities = (IjoomerTextView) listHeader.findViewById(R.id.txtRecentActivities);
+		txtUploadPhoto = (IjoomerTextView) listHeader.findViewById(R.id.txtUploadPhoto);
+		txtUploadVideo = (IjoomerTextView) listHeader.findViewById(R.id.txtUploadVideo);
+		txtCreateEvent = (IjoomerTextView) listHeader.findViewById(R.id.txtCreateEvent);
+		txtLike = (IjoomerTextView) listHeader.findViewById(R.id.txtLike);
+		txtUnlike = (IjoomerTextView) listHeader.findViewById(R.id.txtUnlike);
+		txtViewers = (IjoomerTextView) listHeader.findViewById(R.id.txtViewers);
+		txtAbout = (IjoomerTextView) listHeader.findViewById(R.id.txtAbout);
+		txtFriend = (IjoomerTextView) listHeader.findViewById(R.id.txtFriend);
+		txtPhoto = (IjoomerTextView) listHeader.findViewById(R.id.txtPhoto);
+		txtVideo = (IjoomerTextView) listHeader.findViewById(R.id.txtVideo);
+		txtMap = (IjoomerTextView) listHeader.findViewById(R.id.txtMap);
+		editPhotoCaption = (IjoomerEditText) listHeader.findViewById(R.id.editPhotoCaption);
+		editWritePost = (IjoomerEditText) listHeader.findViewById(R.id.editWritePost);
+		editUserName = (IjoomerEditText) listHeader.findViewById(R.id.editUserName);
+		imgUploadPhoto = (ImageView) listHeader.findViewById(R.id.imgUploadPhoto);
+		imgAddEditCover = (ImageView) listHeader.findViewById(R.id.imgAddEditCover);
+		imgAddEditCoverPhoto = (ImageView) listHeader.findViewById(R.id.imgAddEditCoverPhoto);
+		imgUserImage = (ImageView) listHeader.findViewById(R.id.imgUserImage);
+		imgEditPicture = (ImageView) listHeader.findViewById(R.id.imgEditPicture);
+		imgViewers = (ImageView) listHeader.findViewById(R.id.imgViewers);
+		imgAbout = (ImageView) listHeader.findViewById(R.id.imgAbout);
+		imgFriend = (ImageView) listHeader.findViewById(R.id.imgFriend);
+		imgPhoto = (ImageView) listHeader.findViewById(R.id.imgPhoto);
+		imgVideo = (ImageView) listHeader.findViewById(R.id.imgVideo);
+		imgMap = (ImageView) listHeader.findViewById(R.id.imgMap);
+		btnEdit = (IjoomerButton) listHeader.findViewById(R.id.btnEdit);
+		btnPost = (IjoomerButton) listHeader.findViewById(R.id.btnPost);
+		btnAddFriend = (IjoomerButton) listHeader.findViewById(R.id.btnAddFriend);
+		btnMessage = (IjoomerButton) listHeader.findViewById(R.id.btnMessage);
+		spnPostType = (Spinner) listHeader.findViewById(R.id.spnPostType);
+
+		androidQuery = new AQuery(this);
+		provider = new JomProfileDataProvider(this);
+		wallDataProvider = new JomWallDataProvider(this);
+		getIntentData();
+	}
+
+	@Override
+	public void prepareViews() {
+		try {
+			if ((IN_USERID.equals("0")) && !provider.getNotificationData().getString(MESSAGENOTIFICATION).equals("0")) {
+				btnMessage.setText(getString(R.string.message) + "  ( " + provider.getNotificationData().getString(MESSAGENOTIFICATION) + " )");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		getProfile();
+		getWall();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (isSetProfileCoverPage) {
+			isSetProfileCoverPage = false;
+			getProfile();
+		}
+		if (IjoomerApplicationConfiguration.isReloadRequired()) {
+			IjoomerApplicationConfiguration.setReloadRequired(false);
+			getWall();
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == PICK_IMAGE_USER_AVATAR) {
+				selectedImagePathUserAvatar = getAbsolutePath(data.getData());
+				imgUserImage.setImageBitmap(decodeFile(selectedImagePathUserAvatar));
+			} else if (requestCode == CAPTURE_IMAGE_USER_AVATAR) {
+				selectedImagePathUserAvatar = getImagePath();
+				imgUserImage.setImageBitmap(decodeFile(selectedImagePathUserAvatar));
+			} else if (requestCode == PICK_IMAGE_UPLOAD_PHOTO) {
+				selectedImagePathPhotoUpload = getAbsolutePath(data.getData());
+				lnrUploadPhoto.setVisibility(View.VISIBLE);
+				editWritePost.setVisibility(View.GONE);
+				imgUploadPhoto.setImageBitmap(decodeFile(selectedImagePathPhotoUpload));
+			} else if (requestCode == CAPTURE_IMAGE_UPLOAD_PHOTO) {
+				lnrUploadPhoto.setVisibility(View.VISIBLE);
+				editWritePost.setVisibility(View.GONE);
+				selectedImagePathPhotoUpload = getImagePath();
+				imgUploadPhoto.setImageBitmap(decodeFile(selectedImagePathPhotoUpload));
+			} else {
+				super.onActivityResult(requestCode, resultCode, data);
+			}
+		}
+
+	}
+
+	@Override
+	public void setActionListeners() {
+
+		txtUserStatus.setMovementMethod(new ScrollingMovementMethod());
+		txtUserVideo.setMovementMethod(new ScrollingMovementMethod());
+
+		imgAddEditCoverPhoto.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				isSetProfileCoverPage = true;
+				try {
+					loadNew(JomAlbumsActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID, "IN_PROFILE_COVER", "1");
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		txtWritePost.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				editWritePost.setVisibility(View.VISIBLE);
+				lnrUploadPhoto.setVisibility(View.GONE);
+			}
+		});
+
+		txtCreateEvent.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				final JomEventDataProvider eventprovider = new JomEventDataProvider(JomProfileActivity.this);
+
+				eventprovider.addOrEditEventFieldList("0", "0", new WebCallListener() {
+					final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+					@Override
+					public void onProgressUpdate(int progressCount) {
+						proSeekBar.setProgress(progressCount);
+					}
+
+					@Override
+					public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+						if (responseCode == 200) {
+							updateHeader(provider.getNotificationData());
+							try {
+								loadNew(JomEventCreateActivity.class, JomProfileActivity.this, false, "IN_FIELD_LIST", data1, "IN_EVENT_ID", "0", "IN_GROUP_ID", "0");
+							} catch (Throwable e) {
+								e.printStackTrace();
+							}
+						} else {
+							responseErrorMessageHandler(responseCode, false);
+						}
+					}
+				});
+
+			}
+		});
+		txtUploadVideo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				try {
+					loadNew(JomVideoActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID, "IN_PROFILE", "1");
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		txtUploadPhoto.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				IjoomerUtilities.selectImageDialog(new SelectImageDialogListner() {
+
+					@Override
+					public void onPhoneGallery() {
+						Intent intent = new Intent();
+						intent.setType("image/*");
+						intent.setAction(Intent.ACTION_GET_CONTENT);
+						startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE_UPLOAD_PHOTO);
+					}
+
+					@Override
+					public void onCapture() {
+						final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, setImageUri());
+						startActivityForResult(intent, CAPTURE_IMAGE_UPLOAD_PHOTO);
+					}
+				});
+			}
+		});
+
+		txtUserVideo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				try {
+					if (!new JSONObject(PROFILE.get(0).get(PROFILE_VIDEO)).getString(URL).toString().contains(YOUTUBE)) {
+						Intent lVideoIntent = new Intent(null, Uri.parse("mp4://" + new JSONObject(PROFILE.get(0).get(PROFILE_VIDEO)).getString(URL)), JomProfileActivity.this,
+								IjoomerMediaPlayer.class);
+						startActivity(lVideoIntent);
+
+					} else {
+						Intent lVideoIntent = new Intent(null,
+								Uri.parse("ytv://" + new JSONObject(PROFILE.get(0).get(PROFILE_VIDEO)).getString(URL).toString().split("=")[1] + ""), JomProfileActivity.this,
+								IjoomerMediaPlayer.class);
+						startActivity(lVideoIntent);
+
+					}
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		lstProfileDetail.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView arg0, int arg1) {
+
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if ((firstVisibleItem + visibleItemCount) >= totalItemCount && totalItemCount > 2) {
+					if (!wallDataProvider.isCalling() && wallDataProvider.hasNextPage()) {
+						listFooterVisible();
+						wallDataProvider.getWallList(IN_USERID, "wall", new WebCallListener() {
+
+							@Override
+							public void onProgressUpdate(int progressCount) {
+							}
+
+							@Override
+							public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+								listFooterInvisible();
+								if (responseCode == 200) {
+									updateHeader(wallDataProvider.getNotificationData());
+									prepareList(data1, true);
+								} else {
+									responseErrorMessageHandler(responseCode, false);
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+
+		txtLike.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				if (PROFILE.get(0).containsKey(LIKED) && PROFILE.get(0).get(LIKED).equals("1")) {
+					provider.unlikeUserProfile(IN_USERID, new WebCallListener() {
+						final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+							proSeekBar.setProgress(progressCount);
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								PROFILE.get(0).put(LIKED, "0");
+								PROFILE.get(0).put(LIKES, String.valueOf(Integer.parseInt(PROFILE.get(0).get(LIKES)) - 1));
+								setLikeDislike();
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+
+						}
+					});
+
+				} else {
+					provider.likeUserProfile(IN_USERID, new WebCallListener() {
+						final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+							proSeekBar.setProgress(progressCount);
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								PROFILE.get(0).put(LIKED, "1");
+								if (PROFILE.get(0).containsKey(DISLIKED) && PROFILE.get(0).get(DISLIKED).equals("1")) {
+									PROFILE.get(0).put(DISLIKES, String.valueOf(Integer.parseInt(PROFILE.get(0).get(DISLIKES)) - 1));
+									PROFILE.get(0).put(DISLIKED, "0");
+								}
+								PROFILE.get(0).put(LIKES, String.valueOf(Integer.parseInt(PROFILE.get(0).get(LIKES)) + 1));
+								setLikeDislike();
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+
+						}
+					});
+				}
+			}
+		});
+
+		txtUnlike.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				if (PROFILE.get(0).containsKey(DISLIKED) && PROFILE.get(0).get(DISLIKED).equals("1")) {
+					provider.unlikeUserProfile(IN_USERID, new WebCallListener() {
+						final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+							proSeekBar.setProgress(progressCount);
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								PROFILE.get(0).put(DISLIKED, "0");
+								PROFILE.get(0).put(DISLIKES, String.valueOf(Integer.parseInt(PROFILE.get(0).get(DISLIKES)) - 1));
+								setLikeDislike();
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+
+						}
+					});
+
+				} else {
+					provider.dislikeUserProfile(IN_USERID, new WebCallListener() {
+						final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+							proSeekBar.setProgress(progressCount);
+
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								PROFILE.get(0).put(DISLIKED, "1");
+								if (PROFILE.get(0).containsKey(LIKED) && PROFILE.get(0).get(LIKED).equals("1")) {
+									PROFILE.get(0).put(LIKES, String.valueOf(Integer.parseInt(PROFILE.get(0).get(LIKES)) - 1));
+									PROFILE.get(0).put(LIKED, "0");
+								}
+								PROFILE.get(0).put(DISLIKES, String.valueOf(Integer.parseInt(PROFILE.get(0).get(DISLIKES)) + 1));
+								setLikeDislike();
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+
+						}
+					});
+				}
+
+			}
+		});
+
+		imgEditPicture.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				IjoomerUtilities.selectImageDialog(new SelectImageDialogListner() {
+
+					@Override
+					public void onPhoneGallery() {
+						Intent intent = new Intent();
+						intent.setType("image/*");
+						intent.setAction(Intent.ACTION_GET_CONTENT);
+						startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE_USER_AVATAR);
+					}
+
+					@Override
+					public void onCapture() {
+						final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, setImageUri());
+						startActivityForResult(intent, CAPTURE_IMAGE_USER_AVATAR);
+					}
+				});
+			}
+		});
+
+		btnEdit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(final View v) {
+				if (((IjoomerButton) v).getText().toString().equalsIgnoreCase(getString(R.string.save))) {
+					hideSoftKeyboard();
+
+					if (editUserName.getText().toString().trim().length() <= 0) {
+						editUserName.setError(getString(R.string.validation_value_required));
+					} else {
+						if (selectedImagePathUserAvatar != null || !editUserName.getText().toString().trim().equals(txtUserName.getText().toString().trim())) {
+
+							provider.updateUserProfile(selectedImagePathUserAvatar, editUserName.getText().toString().trim().equals(txtUserName.getText().toString().trim()) ? null
+									: editUserName.getText().toString().trim(), new WebCallListener() {
+								final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+								@Override
+								public void onProgressUpdate(int progressCount) {
+									proSeekBar.setProgress(progressCount);
+								}
+
+								@Override
+								public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+									if (responseCode == 200) {
+										updateHeader(provider.getNotificationData());
+										selectedImagePathUserAvatar = null;
+										txtUserName.setText(editUserName.getText());
+									} else {
+										responseErrorMessageHandler(responseCode, false);
+									}
+
+									((IjoomerButton) v).setText(getString(R.string.edit));
+									framEditImage.setVisibility(View.GONE);
+									txtUserName.setVisibility(View.VISIBLE);
+									editUserName.setVisibility(View.GONE);
+								}
+							});
+						} else {
+							((IjoomerButton) v).setText(getString(R.string.edit));
+							framEditImage.setVisibility(View.GONE);
+							txtUserName.setVisibility(View.VISIBLE);
+							editUserName.setVisibility(View.GONE);
+						}
+					}
+				} else {
+					((IjoomerButton) v).setText(getString(R.string.save));
+
+					framEditImage.setVisibility(View.VISIBLE);
+					txtUserName.setVisibility(View.GONE);
+					editUserName.setVisibility(View.VISIBLE);
+					editUserName.setText(txtUserName.getText());
+					editUserName.requestFocus();
+				}
+			}
+		});
+
+		btnAddFriend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				if (PROFILE.get(0).get(ISFRIEND).equalsIgnoreCase("1")) {
+					IjoomerUtilities.getCustomConfirmDialog(getString(R.string.friend_title_remove), getString(R.string.are_you_sure), getString(R.string.yes),
+							getString(R.string.no), new CustomAlertMagnatic() {
+
+								@Override
+								public void PositiveMathod() {
+									provider.removeFriend(IN_USERID, new WebCallListener() {
+										final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+										@Override
+										public void onProgressUpdate(int progressCount) {
+											proSeekBar.setProgress(progressCount);
+										}
+
+										@Override
+										public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+
+											if (responseCode == 200) {
+												IjoomerApplicationConfiguration.setReloadRequired(true);
+												updateHeader(provider.getNotificationData());
+												finish();
+											} else {
+												responseErrorMessageHandler(responseCode, false);
+											}
+										}
+									});
+								}
+
+								@Override
+								public void NegativeMathod() {
+
+								}
+							});
+				} else if (PROFILE.get(0).containsKey(ISFRIENDREQBY) && PROFILE.get(0).get(ISFRIENDREQBY).equals("1")) {
+					IjoomerUtilities.getCustomOkDialog(getString(R.string.add_friend), getString(R.string.friend_request_by), getString(R.string.ok), R.layout.ijoomer_ok_dialog,
+							new CustomAlertNeutral() {
+
+								@Override
+								public void NeutralMathod() {
+
+								}
+							});
+				} else if (PROFILE.get(0).containsKey(ISFRIENDREQTO) && PROFILE.get(0).get(ISFRIENDREQTO).equals("1")) {
+					IjoomerUtilities.getCustomOkDialog(getString(R.string.add_friend), getString(R.string.friend_request_to), getString(R.string.ok), R.layout.ijoomer_ok_dialog,
+							new CustomAlertNeutral() {
+
+								@Override
+								public void NeutralMathod() {
+
+								}
+							});
+				} else {
+					showAddFriendDialog();
+				}
+
+			}
+		});
+
+		btnMessage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				if (!IN_USERID.equals("0")) {
+					try {
+						loadNew(JomMessageComposeActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID, "IN_USERNAME", PROFILE.get(0).get(USER_NAME));
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						loadNew(JomMessageActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID);
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		btnPost.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				hideSoftKeyboard();
+
+				if (lnrUploadPhoto.getVisibility() == View.VISIBLE && selectedImagePathPhotoUpload != null && selectedImagePathPhotoUpload.length() > 0) {
+					uploadPhoto(selectedImagePathPhotoUpload, editPhotoCaption.getText().toString());
+				} else {
+					if (editWritePost.getText().toString().trim().length() > 0) {
+						if (!editWritePost.getText().toString().trim().equalsIgnoreCase(txtUserStatus.getText().toString().trim())) {
+
+							final JomWallDataProvider provider = new JomWallDataProvider(JomProfileActivity.this);
+							provider.addOrPostOnWall(IN_USERID, editWritePost.getText().toString().trim(), getPrivacyCode(spnPostType.getSelectedItem().toString()),
+									new WebCallListener() {
+										final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+										@Override
+										public void onProgressUpdate(int progressCount) {
+											proSeekBar.setProgress(progressCount);
+										}
+
+										@Override
+										public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+											if (responseCode == 200) {
+												updateHeader(provider.getNotificationData());
+												if (IN_USERID.equals("0")) {
+													txtUserStatus.setText(editWritePost.getText());
+												}
+												editWritePost.setText(null);
+												getWall();
+											} else {
+												responseErrorMessageHandler(responseCode, false);
+											}
+
+										}
+									});
+
+						} else {
+							editWritePost.setText(null);
+						}
+					} else {
+						editWritePost.setError(getString(R.string.validation_value_required));
+					}
+				}
+			}
+		});
+
+		imgAbout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				new JomProfileDataProvider(JomProfileActivity.this).getUserDetails(IN_USERID, new WebCallListener() {
+					final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+					@Override
+					public void onProgressUpdate(int progressCount) {
+						proSeekBar.setProgress(progressCount);
+					}
+
+					@Override
+					public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+						if (responseCode == 200) {
+							try {
+								loadNew(JomProfileDetailsActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID);
+							} catch (Throwable e) {
+								e.printStackTrace();
+							}
+						} else {
+							responseErrorMessageHandler(responseCode, false);
+						}
+
+					}
+				});
+
+			}
+		});
+		imgPhoto.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				try {
+					loadNew(JomAlbumsActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		imgVideo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				try {
+					loadNew(JomVideoActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		imgMap.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				try {
+					loadNew(JomMapActivity.class, JomProfileActivity.this, false, "IN_MAPLIST", PROFILE, "IS_SHOW_BUBBLE", false);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		imgFriend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				try {
+					loadNew(JomFriendListActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		imgVideo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				try {
+					loadNew(JomVideoActivity.class, JomProfileActivity.this, false, "IN_USERID", IN_USERID);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup arg0, int arg1) {
+	}
+
+	/**
+	 * Class method
+	 */
+
+	private void getIntentData() {
+		IN_USERID = getIntent().getStringExtra("IN_USERID") == null ? "0" : getIntent().getStringExtra("IN_USERID");
+	}
+
+	private void responseErrorMessageHandler(final int responseCode, final boolean finishActivityOnConnectionProblem) {
+		IjoomerUtilities.getCustomOkDialog(getString(R.string.dialog_loading_profile), getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())),
+				getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+					@Override
+					public void NeutralMathod() {
+						if (responseCode == 599 && finishActivityOnConnectionProblem) {
+							finish();
+						}
+					}
+				});
+	}
+
+	private void getProfile() {
+		proSeekBar = null;
+		if (!provider.isUserProfileExists() || !IN_USERID.equals("0")) {
+			proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+		}
+		provider.getUserProfile(IN_USERID, new WebCallListener() {
+
+			@Override
+			public void onProgressUpdate(int progressCount) {
+				if (proSeekBar != null) {
+					proSeekBar.setProgress(progressCount);
+				}
+			}
+
+			@Override
+			public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+				if (responseCode == 200) {
+					if (data1 != null) {
+						PROFILE = data1;
+						setProfileDetail();
+					}
+				} else {
+					responseErrorMessageHandler(responseCode, proSeekBar != null ? true : false);
+				}
+			}
+
+		});
+
+	}
+
+	private void getWall() {
+		listFooterVisible();
+		wallDataProvider.restorePagingSettings();
+		wallDataProvider.getWallList(IN_USERID, "wall", new WebCallListener() {
+
+			@Override
+			public void onProgressUpdate(int progressCount) {
+			}
+
+			@Override
+			public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+				listFooterInvisible();
+				if (responseCode == 200) {
+					if (data1 != null) {
+						updateHeader(wallDataProvider.getNotificationData());
+						prepareList(data1, false);
+						listAdapterWithHolder = getListAdapter();
+						lstProfileDetail.setAdapter(listAdapterWithHolder);
+					}
+				} else {
+					if (responseCode == 204) {
+						txtRecentActivities.setText(getString(R.string.no_recent_activities));
+					} else {
+						responseErrorMessageHandler(responseCode, false);
+					}
+				}
+			}
+		});
+	}
+
+	public void listFooterVisible() {
+		listFooter.setVisibility(View.VISIBLE);
+	}
+
+	public void listFooterInvisible() {
+		listFooter.setVisibility(View.GONE);
+	}
+
+	private void uploadPhoto(String path, String caption) {
+		final JomGalleryDataProvider provider = new JomGalleryDataProvider(this);
+		provider.uploadPhotoDefaultAlbum(path, caption, new WebCallListener() {
+			final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+			@Override
+			public void onProgressUpdate(int progressCount) {
+				proSeekBar.setProgress(progressCount);
+			}
+
+			@Override
+			public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+				lnrUploadPhoto.setVisibility(View.GONE);
+				editWritePost.setVisibility(View.VISIBLE);
+				selectedImagePathPhotoUpload = null;
+				if (responseCode == 200) {
+					IjoomerUtilities.getCustomOkDialog(getString(R.string.dialog_loading_profile), getString(R.string.photo_upload_successfully), getString(R.string.ok),
+							R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+								@Override
+								public void NeutralMathod() {
+									getWall();
+								}
+							});
+				} else {
+					responseErrorMessageHandler(responseCode, false);
+				}
+			}
+		});
+
+	}
+
+	public void setProfileDetail() {
+
+		spnPostType.setAdapter(new IjoomerUtilities.MyCustomAdapter(this, new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.wall_post_type)))));
+
+		txtUserName.setText(PROFILE.get(0).get(USER_NAME));
+		PROFILE.get(0).put(USER_STATUS, PROFILE.get(0).get(USER_STATUS).replace("\n", " "));
+		txtUserStatus.setText(PROFILE.get(0).get(USER_STATUS));
+		if (PROFILE.get(0).containsKey(PROFILE_VIDEO)) {
+			try {
+				txtUserVideo.setText(new JSONObject(PROFILE.get(0).get(PROFILE_VIDEO)).getString(TITLE));
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+			txtUserVideo.setVisibility(View.VISIBLE);
+		}
+		if (PROFILE.get(0).containsKey("coverpic") && PROFILE.get(0).get("coverpic").toString().length() > 0) {
+			androidQuery.id(imgAddEditCover).image(PROFILE.get(0).get("coverpic"), true, true, getDeviceWidth(), 0);
+		}
+
+		if (IN_USERID == null || IN_USERID.equals("0")) {
+			imgAddEditCoverPhoto.setVisibility(View.VISIBLE);
+			btnEdit.setVisibility(View.VISIBLE);
+			txtUploadPhoto.setVisibility(View.VISIBLE);
+			txtUploadVideo.setVisibility(View.VISIBLE);
+			txtCreateEvent.setVisibility(View.VISIBLE);
+			if (!IjoomerGlobalConfiguration.isEventCreate()) {
+				txtCreateEvent.setVisibility(View.GONE);
+			}
+			if (!IjoomerGlobalConfiguration.isPhotoUpload()) {
+				txtUploadPhoto.setVisibility(View.GONE);
+			}
+
+		}
+		txtLike.setText(PROFILE.get(0).get(LIKES));
+		txtUnlike.setText(PROFILE.get(0).get(DISLIKES));
+		if (PROFILE.get(0).get(ISPROFILELIKE).equalsIgnoreCase("0")) {
+			txtLike.setEnabled(false);
+			txtUnlike.setEnabled(false);
+		}
+		if (PROFILE.get(0).get(ISFRIEND).equalsIgnoreCase("1") || IN_USERID.equals("0")) {
+			btnAddFriend.setText(getString(R.string.already_friend));
+			if (IN_USERID.equals("0")) {
+				btnAddFriend.setVisibility(View.GONE);
+			}
+		}
+		txtFriend.setText(PROFILE.get(0).get(TOTALFRIENDS));
+		txtPhoto.setText(PROFILE.get(0).get(TOTALPHOTOS));
+		txtViewers.setText(PROFILE.get(0).get(VIEWCOUNT));
+		txtVideo.setText(PROFILE.get(0).get(TOTALVIDEOS));
+
+		androidQuery.id(imgUserImage).image(PROFILE.get(0).get(USER_AVATAR), true, true, getDeviceWidth(), 0);
+
+	}
+
+	private void showAddFriendDialog() {
+		final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
+		dialog.setContentView(R.layout.jom_add_new_friend_dialog);
+		final IjoomerEditText edtMessage = (IjoomerEditText) dialog.findViewById(R.id.edtMessage);
+		IjoomerButton btnCancel = (IjoomerButton) dialog.findViewById(R.id.btnCancel);
+		IjoomerButton btnSend = (IjoomerButton) dialog.findViewById(R.id.btnSend);
+		btnSend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				if (edtMessage.getText().toString().trim().length() <= 0) {
+					edtMessage.setError(getString(R.string.validation_value_required));
+				} else {
+					final SeekBar progressBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+					provider.addFriend(IN_USERID, edtMessage.getText().toString().trim(), new WebCallListener() {
+
+						@Override
+						public void onProgressUpdate(int progressCount) {
+							progressBar.setProgress(progressCount);
+						}
+
+						@Override
+						public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+							if (responseCode == 200) {
+								updateHeader(provider.getNotificationData());
+								PROFILE.get(0).put(ISFRIENDREQTO, "1");
+								dialog.dismiss();
+							} else {
+								responseErrorMessageHandler(responseCode, false);
+							}
+						}
+					});
+				}
+			}
+		});
+		btnCancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+
+	private void setLikeDislike() {
+		txtLike.setText(PROFILE.get(0).get(LIKES));
+		txtUnlike.setText(PROFILE.get(0).get(DISLIKES));
+
+	}
+
+	private void preparePhotoList(LinearLayout lnrScrollable, final HashMap<String, String> data) {
+		JSONArray jsonArray;
+		int length = 0;
+		try {
+			jsonArray = new JSONArray(data.get("image_data"));
+			length = jsonArray.length() > 5 ? 5 : jsonArray.length();
+		} catch (Throwable e1) {
+			e1.printStackTrace();
+			jsonArray = new JSONArray();
+		}
+
+		lnrScrollable.removeAllViews();
+		for (int i = 0; i < length; i++) {
+			LinearLayout lnrGuest = new LinearLayout(this);
+			lnrGuest.setTag(i);
+			lnrGuest.setOrientation(LinearLayout.VERTICAL);
+			lnrGuest.setBackgroundColor(Color.parseColor(getString(R.color.bg_color)));
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+			params.setMargins(5, 5, 5, 5);
+			lnrGuest.setPadding(2, 2, 2, 2);
+
+			ImageView imgUser = new ImageView(this);
+			imgUser.setScaleType(ScaleType.FIT_XY);
+			imgUser.setClickable(false);
+			LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(convertSizeToDeviceDependent(50), convertSizeToDeviceDependent(50));
+			imgParams.gravity = Gravity.CENTER;
+
+			try {
+				androidQuery.id(imgUser).image(jsonArray.getJSONObject(i).getString(THUMB), true, true, getDeviceWidth(), 0);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			lnrGuest.addView(imgUser, imgParams);
+
+			lnrScrollable.addView(lnrGuest, params);
+			lnrGuest.setTag(i);
+
+			lnrGuest.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					ArrayList<HashMap<String, String>> photoData = new ArrayList<HashMap<String, String>>();
+					JSONArray jsonArray = null;
+					try {
+						jsonArray = new JSONArray(data.get("image_data"));
+					} catch (JSONException e1) {
+						e1.printStackTrace();
+					}
+					int size = jsonArray.length();
+					for (int j = 0; j < size; j++) {
+						try {
+							photoData.add(new HashMap<String, String>(jsonToMap(jsonArray.getJSONObject(j))));
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+
+					HashMap<String, String> IN_ALBUM = null;
+					try {
+						IN_ALBUM = (HashMap<String, String>) jsonToMap(new JSONObject(data.get(CONTENT_DATA)));
+					} catch (JSONException e1) {
+						e1.printStackTrace();
+					}
+					HashMap<String, String> usrData = new HashMap<String, String>(data);
+					usrData.remove(ID);
+					IN_ALBUM.putAll(usrData);
+					try {
+						loadNew(JomPhotoDetailsActivity.class, JomProfileActivity.this, false, "IN_PHOTO_LIST", photoData, "IN_SELECTED_INDEX", ((Integer) v.getTag()).intValue(),
+								"IN_TOTAL_COUNT", Integer.parseInt(IN_ALBUM.get(COUNT)), "IN_USERID", IN_USERID, "IN_ALBUM", IN_ALBUM);
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
+		}
+	}
+
+	public void prepareList(ArrayList<HashMap<String, String>> data, boolean append) {
+		if (data != null) {
+			if (!append) {
+				listData.clear();
+			}
+			for (HashMap<String, String> hashMap : data) {
+				SmartListItem item = new SmartListItem();
+				item.setItemLayout(R.layout.jom_wall_activity_list_item);
+				ArrayList<Object> obj = new ArrayList<Object>();
+				obj.add(hashMap);
+				item.setValues(obj);
+				if (append) {
+					listAdapterWithHolder.add(item);
+				} else {
+					listData.add(item);
+				}
+			}
+
+		}
+	}
+
+	/**
+	 * List adapter
+	 */
+	private SmartListAdapterWithHolder getListAdapter() {
+		SmartListAdapterWithHolder adapterWithHolder = new SmartListAdapterWithHolder(this, R.layout.jom_wall_activity_list_item, listData, new ItemView() {
+
+			@Override
+			public View setItemView(final int position, View v, final SmartListItem item, final ViewHolder holder) {
+
+				holder.imgWallOrActvityUserAvatar = (ImageView) v.findViewById(R.id.imgWallOrActvityUserAvatar);
+				holder.txtWallOrActvityUserName = (IjoomerTextView) v.findViewById(R.id.txtWallOrActvityUserName);
+				holder.txtWallOrActvityDate = (IjoomerTextView) v.findViewById(R.id.txtWallOrActvityDate);
+				holder.txtWallOrActvityTitle = (IjoomerTextView) v.findViewById(R.id.txtWallOrActvityTitle);
+				holder.txtWallOrActivityLike = (IjoomerTextView) v.findViewById(R.id.txtWallOrActivityLike);
+				holder.txtWallOrActvityContent = (IjoomerTextView) v.findViewById(R.id.txtWallOrActvityContent);
+				holder.txtWallOrActivityComment = (IjoomerTextView) v.findViewById(R.id.txtWallOrActivityComment);
+				holder.txtWallOrActivityLikeCount = (IjoomerTextView) v.findViewById(R.id.txtWallOrActivityLikeCount);
+				holder.txtWallOrActivityCommentCount = (IjoomerTextView) v.findViewById(R.id.txtWallOrActivityCommentCount);
+				holder.lnrWallOrActivityContentImage = (LinearLayout) v.findViewById(R.id.lnrWallOrActivityContentImage);
+				holder.lnrWallOrActivityContentVideo = (LinearLayout) v.findViewById(R.id.lnrWallOrActivityContentVideo);
+				holder.lnrContentImageScrollable = (LinearLayout) v.findViewById(R.id.lnrContentImageScrollable);
+
+				holder.imgWallOrActvityContentVideoImage = (ImageView) v.findViewById(R.id.imgWallOrActvityContentVideoImage);
+				holder.lnrWallOrActivityWriteComment = (LinearLayout) v.findViewById(R.id.lnrWallOrActivityWriteComment);
+				holder.edtWallOrActivityWriteComment = (IjoomerEditText) v.findViewById(R.id.edtWallOrActivityWriteComment);
+				holder.btnWallOrActivityWriteCommentSend = (IjoomerButton) v.findViewById(R.id.btnWallOrActivityWriteCommentSend);
+				holder.lnrWallOrActivityWriteComment.setVisibility(View.GONE);
+				holder.lnrWallOrActivityContentImage.setVisibility(View.GONE);
+				holder.lnrWallOrActivityContentVideo.setVisibility(View.GONE);
+				holder.txtWallOrActvityContent.setVisibility(View.GONE);
+				holder.lnrWallOrActivityLikeCommnet = (LinearLayout) v.findViewById(R.id.lnrWallOrActivityLikeCommnet);
+				holder.btnWallOrActivityRemove = (IjoomerButton) v.findViewById(R.id.btnWallOrActivityRemove);
+				@SuppressWarnings("unchecked")
+				final HashMap<String, String> row = (HashMap<String, String>) item.getValues().get(0);
+
+				androidQuery.id(holder.imgWallOrActvityUserAvatar).image(row.get(USER_AVATAR), true, true, getDeviceWidth(), 0);
+				holder.txtWallOrActvityTitle.setMovementMethod(LinkMovementMethod.getInstance());
+				holder.txtWallOrActvityTitle.setText(addClickablePart(Html.fromHtml(row.get(TITLETAG).replace("\u25ba", "\u25b6")), row, row.get(TYPE), IN_USERID),
+						BufferType.SPANNABLE);
+				holder.txtWallOrActvityUserName.setText(row.get(USER_NAME));
+				holder.txtWallOrActvityDate.setText(row.get(DATE));
+				if (row.get(CONTENT).toString().trim().length() > 0) {
+					holder.txtWallOrActvityContent.setVisibility(View.VISIBLE);
+					holder.txtWallOrActvityContent.setMovementMethod(LinkMovementMethod.getInstance());
+					row.put(CONTENT, row.get(CONTENT).replace("\n", " "));
+					row.put(CONTENT, row.get(CONTENT).replace("\t", " "));
+					row.put(CONTENT, row.get(CONTENT).replace("\r", " "));
+
+					holder.txtWallOrActvityContent.setText(addClickablePart(Html.fromHtml(row.get(CONTENT)), row, row.get(TYPE), IN_USERID), BufferType.SPANNABLE);
+				}
+
+				if (row.get(TYPE).toString().trim().equals(PHOTOS)) {
+					holder.lnrWallOrActivityContentImage.setVisibility(View.VISIBLE);
+					preparePhotoList(holder.lnrContentImageScrollable, row);
+				}
+				if (row.get(TYPE).toString().trim().equals(VIDEOS)) {
+					holder.lnrWallOrActivityContentVideo.setVisibility(View.VISIBLE);
+
+					try {
+						androidQuery.id(holder.imgWallOrActvityContentVideoImage).image(new JSONObject(row.get(CONTENT_DATA)).getString(THUMB), true, true, getDeviceWidth(), 0);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+
+				if (row.containsKey(DELETEALLOWED) && row.get(DELETEALLOWED).toString().trim().equals("0")) {
+					holder.btnWallOrActivityRemove.setVisibility(View.GONE);
+				} else {
+					holder.btnWallOrActivityRemove.setVisibility(View.VISIBLE);
+				}
+				if (row.containsKey(LIKECOUNT)) {
+					holder.txtWallOrActivityLikeCount.setText(row.get(LIKECOUNT));
+				} else {
+					holder.txtWallOrActivityLikeCount.setText("0");
+				}
+				if (row.containsKey(COMMENTCOUNT)) {
+					holder.txtWallOrActivityCommentCount.setText(row.get(COMMENTCOUNT));
+				} else {
+					holder.txtWallOrActivityCommentCount.setText("0");
+				}
+
+				if (row.get(LIKEALLOWED).toString().trim().equals("0")) {
+					holder.txtWallOrActivityLike.setVisibility(View.GONE);
+				} else {
+					holder.txtWallOrActivityLike.setVisibility(View.VISIBLE);
+				}
+				if (row.get(COMMENTALLOWED).toString().trim().equals("0")) {
+					holder.txtWallOrActivityComment.setVisibility(View.GONE);
+				} else {
+					holder.txtWallOrActivityComment.setVisibility(View.VISIBLE);
+				}
+
+				if (row.get(LIKED).toString().trim().equals("0")) {
+					holder.txtWallOrActivityLike.setText(getString(R.string.like));
+				} else {
+					holder.txtWallOrActivityLike.setText(getString(R.string.unlike));
+				}
+
+				holder.txtWallOrActvityUserName.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						gotoProfile(row.get(USER_ID));
+					}
+
+				});
+				holder.imgWallOrActvityUserAvatar.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						gotoProfile(row.get(USER_ID));
+					}
+
+				});
+				holder.txtWallOrActivityLikeCount.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						if (!row.get(LIKECOUNT).toString().equals("0")) {
+							try {
+								ArrayList<HashMap<String, String>> IN_WALL_DETAILS = new ArrayList<HashMap<String, String>>();
+								IN_WALL_DETAILS.add(row);
+								loadNew(JomWallOrActivityDetailActivity.class, JomProfileActivity.this, false, "IN_WALL_DETAILS", IN_WALL_DETAILS, "IN_WALL_DETAILS_LIST_TYPE",
+										LIKES, "IN_USERID", IN_USERID);
+							} catch (Throwable e) {
+								e.printStackTrace();
+							}
+						}
+					}
+
+				});
+				holder.txtWallOrActivityCommentCount.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						if (!row.get(COMMENTCOUNT).toString().equals("0")) {
+							try {
+								ArrayList<HashMap<String, String>> IN_WALL_DETAILS = new ArrayList<HashMap<String, String>>();
+								IN_WALL_DETAILS.add(row);
+								loadNew(JomWallOrActivityDetailActivity.class, JomProfileActivity.this, false, "IN_WALL_DETAILS", IN_WALL_DETAILS, "IN_WALL_DETAILS_LIST_TYPE",
+										COMMENTS, "IN_USERID", IN_USERID);
+							} catch (Throwable e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				});
+
+				holder.txtWallOrActivityLike.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(final View v) {
+						String likeID = "0";
+						if (row.get(LIKETYPE).toString().trim().equals(VIDEOS)) {
+							try {
+								likeID = new JSONObject(row.get(CONTENT_DATA)).getString(ID);
+							} catch (JSONException e) {
+								e.printStackTrace();
+								likeID = "0";
+							}
+						} else {
+							likeID = row.get(ID);
+						}
+						if (row.get(LIKED).toString().trim().equals("1")) {
+							wallDataProvider.unlikeWall(likeID, row.get(LIKETYPE).toString().trim(), new WebCallListener() {
+								SeekBar skBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+								@Override
+								public void onProgressUpdate(int progressCount) {
+									skBar.setProgress(progressCount);
+								}
+
+								@Override
+								public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+									if (responseCode == 200) {
+										try {
+											if (row.get(LIKETYPE).equals(VIDEOS)) {
+												JSONObject likes = new JSONObject(row.get(CONTENT_DATA));
+												likes.put(LIKES, "" + (Integer.parseInt(holder.txtWallOrActivityLikeCount.getText().toString()) - 1));
+												likes.put(LIKED, "0");
+
+												row.put(CONTENT_DATA, likes.toString());
+												holder.txtWallOrActvityTitle.setText(
+														addClickablePart(Html.fromHtml(row.get(TITLETAG).replace("\u25ba", "\u25b6")), row, row.get(TYPE), IN_USERID),
+														BufferType.SPANNABLE);
+												holder.txtWallOrActvityContent.setText(addClickablePart(Html.fromHtml(row.get(CONTENT)), row, row.get(TYPE), IN_USERID),
+														BufferType.SPANNABLE);
+											}
+										} catch (Exception e) {
+										}
+										((IjoomerTextView) v).setText(getString(R.string.like));
+										holder.txtWallOrActivityLikeCount.setText("" + (Integer.parseInt(holder.txtWallOrActivityLikeCount.getText().toString()) - 1));
+										row.put(LIKED, "0");
+										row.put(LIKECOUNT, holder.txtWallOrActivityLikeCount.getText().toString());
+									} else {
+										responseErrorMessageHandler(responseCode, false);
+									}
+								}
+							});
+						} else {
+							wallDataProvider.likeWall(likeID, row.get(LIKETYPE).toString().trim(), new WebCallListener() {
+								SeekBar skBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+								@Override
+								public void onProgressUpdate(int progressCount) {
+									skBar.setProgress(progressCount);
+								}
+
+								@Override
+								public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+									if (responseCode == 200) {
+										try {
+											if (row.get(LIKETYPE).equals(VIDEOS)) {
+												JSONObject likes = new JSONObject(row.get(CONTENT_DATA));
+												likes.put(LIKES, "" + (Integer.parseInt(holder.txtWallOrActivityLikeCount.getText().toString()) + 1));
+												likes.put(LIKED, "1");
+
+												row.put(CONTENT_DATA, likes.toString());
+												holder.txtWallOrActvityTitle.setText(
+														addClickablePart(Html.fromHtml(row.get(TITLETAG).replace("\u25ba", "\u25b6")), row, row.get(TYPE), IN_USERID),
+														BufferType.SPANNABLE);
+												holder.txtWallOrActvityContent.setText(addClickablePart(Html.fromHtml(row.get(CONTENT)), row, row.get(TYPE), IN_USERID),
+														BufferType.SPANNABLE);
+											}
+										} catch (Exception e) {
+										}
+										((IjoomerTextView) v).setText(getString(R.string.unlike));
+										holder.txtWallOrActivityLikeCount.setText("" + (Integer.parseInt(holder.txtWallOrActivityLikeCount.getText().toString()) + 1));
+										row.put(LIKED, "1");
+										row.put(LIKECOUNT, holder.txtWallOrActivityLikeCount.getText().toString());
+									} else {
+										responseErrorMessageHandler(responseCode, false);
+									}
+								}
+							});
+						}
+					}
+				});
+
+				holder.btnWallOrActivityRemove.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						IjoomerUtilities.getCustomConfirmDialog(getString(R.string.wall_remove), getString(R.string.are_you_sure), getString(R.string.yes), getString(R.string.no),
+								new CustomAlertMagnatic() {
+
+									@Override
+									public void PositiveMathod() {
+										wallDataProvider.removeWall(row.get(ID), new WebCallListener() {
+
+											@Override
+											public void onProgressUpdate(int progressCount) {
+
+											}
+
+											@Override
+											public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+												if (responseCode == 200) {
+													listAdapterWithHolder.remove(listAdapterWithHolder.getItem(position));
+												} else {
+													responseErrorMessageHandler(responseCode, false);
+												}
+											}
+										});
+									}
+
+									@Override
+									public void NegativeMathod() {
+
+									}
+								});
+
+					}
+				});
+
+				holder.txtWallOrActivityComment.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						try {
+							ArrayList<HashMap<String, String>> IN_WALL_DETAILS = new ArrayList<HashMap<String, String>>();
+							IN_WALL_DETAILS.add(row);
+							loadNew(JomWallOrActivityDetailActivity.class, JomProfileActivity.this, false, "IN_WALL_DETAILS", IN_WALL_DETAILS, "IN_WALL_DETAILS_LIST_TYPE",
+									COMMENTS, "IN_USERID", IN_USERID);
+						} catch (Throwable e) {
+							e.printStackTrace();
+						}
+					}
+				});
+
+				holder.imgWallOrActvityContentVideoImage.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						try {
+							String url = new JSONObject(row.get(CONTENT_DATA)).getString(URL);
+							if (!url.contains("youtube")) {
+								Intent lVideoIntent = new Intent(null, Uri.parse("mp4://" + url), JomProfileActivity.this, IjoomerMediaPlayer.class);
+								startActivity(lVideoIntent);
+							} else {
+								Intent lVideoIntent = new Intent(null, Uri.parse("ytv://" + url.toString().split("=")[1] + ""), JomProfileActivity.this, IjoomerMediaPlayer.class);
+								startActivity(lVideoIntent);
+
+							}
+						} catch (Exception e) {
+						}
+					}
+				});
+
+				holder.btnWallOrActivityWriteCommentSend.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						hideSoftKeyboard();
+						if (holder.edtWallOrActivityWriteComment.getText().toString().trim().length() > 0) {
+							wallDataProvider.writeComment(row.get(ID), holder.edtWallOrActivityWriteComment.getText().toString().trim(), new WebCallListener() {
+
+								@Override
+								public void onProgressUpdate(int progressCount) {
+
+								}
+
+								@Override
+								public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+									if (responseCode == 200) {
+										holder.lnrWallOrActivityWriteComment.setVisibility(View.GONE);
+										holder.txtWallOrActivityCommentCount.setText("" + (Integer.parseInt(holder.txtWallOrActivityCommentCount.getText().toString()) + 1));
+										row.put(COMMENTCOUNT, holder.txtWallOrActivityCommentCount.getText().toString());
+										holder.edtWallOrActivityWriteComment.setText(null);
+									} else {
+										responseErrorMessageHandler(responseCode, false);
+									}
+								}
+							});
+						} else {
+							holder.edtWallOrActivityWriteComment.setError(getString(R.string.validation_value_required));
+						}
+					}
+				});
+
+				return v;
+			}
+
+			@Override
+			public View setItemView(int position, View v, SmartListItem item) {
+				return null;
+			}
+
+		});
+		return adapterWithHolder;
+	}
+
+}

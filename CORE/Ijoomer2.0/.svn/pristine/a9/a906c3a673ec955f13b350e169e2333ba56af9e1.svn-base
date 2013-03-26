@@ -1,0 +1,227 @@
+package com.ijoomer.components.jomsocial;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.RadioGroup;
+
+import com.ijoomer.common.classes.IjoomerUtilities;
+import com.ijoomer.customviews.IjoomerViewPager;
+import com.ijoomer.library.jomsocial.JomGalleryDataProvider;
+import com.ijoomer.src.R;
+import com.ijoomer.weservice.WebCallListener;
+import com.smart.framework.CustomAlertNeutral;
+
+public class JomPhotoTagActivity extends JomMasterActivity {
+
+	public static IjoomerViewPager viewPager;
+	private ProgressBar pbrPhotoViewPager;
+
+	private ArrayList<HashMap<String, String>> IN_PHOTO_LIST;
+	private HashMap<String, String> IN_ALBUM;
+	private PageAdapter adapter;
+
+	private JomGalleryDataProvider provider;
+
+	public static int IN_TOTAL_COUNT;
+	private String IN_USERID;
+	private int IN_SELECTED_INDEX;
+
+	/**
+	 * Overrides method
+	 */
+
+	@Override
+	public int setLayoutId() {
+		return R.layout.jom_photo_tag;
+	}
+
+	@Override
+	public void initComponents() {
+
+		viewPager = (IjoomerViewPager) findViewById(R.id.viewPager);
+		pbrPhotoViewPager = (ProgressBar) findViewById(R.id.pbrPhotoViewPager);
+
+		provider = new JomGalleryDataProvider(this);
+
+		IN_TOTAL_COUNT = 0;
+
+		getIntentData();
+	}
+
+	@Override
+	public void prepareViews() {
+		if (IN_TOTAL_COUNT != IN_PHOTO_LIST.size() && (IN_PHOTO_LIST.size() - IN_SELECTED_INDEX) <= 3) {
+			provider.restorePagingSettings();
+			provider.setPageNo(getPageNoCall());
+			provider.setPageLimit(12);
+			pbrPhotoViewPager.setVisibility(View.VISIBLE);
+			provider.getPhotoList(IN_ALBUM.get(ID), IN_USERID, new WebCallListener() {
+
+				@Override
+				public void onProgressUpdate(int progressCount) {
+
+				}
+
+				@Override
+				public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+					if (responseCode == 200) {
+						IN_PHOTO_LIST.addAll(data1);
+						adapter = new PageAdapter(getSupportFragmentManager());
+						viewPager.setAdapter(adapter);
+						viewPager.setCurrentItem(IN_SELECTED_INDEX, true);
+						pbrPhotoViewPager.setVisibility(View.GONE);
+					} else {
+						IjoomerUtilities.getCustomOkDialog(getString(R.string.photo), getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())),
+								getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+									@Override
+									public void NeutralMathod() {
+
+									}
+								});
+					}
+				}
+			});
+		} else {
+			adapter = new PageAdapter(getSupportFragmentManager());
+			viewPager.setAdapter(adapter);
+			viewPager.setCurrentItem(IN_SELECTED_INDEX, true);
+		}
+
+	}
+
+	@Override
+	public void setActionListeners() {
+
+		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int pos) {
+
+				IN_SELECTED_INDEX = pos;
+
+				if (IN_PHOTO_LIST.size() < IN_TOTAL_COUNT) {
+					loadPhotoList();
+				}
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+
+			}
+		});
+
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup arg0, int arg1) {
+	}
+
+	@Override
+	public void loadHeaderComponents() {
+	}
+
+	@Override
+	public int setHeaderLayoutId() {
+		return 0;
+	}
+
+	@Override
+	public int setFooterLayoutId() {
+		return 0;
+	}
+
+	/**
+	 * Class method
+	 */
+
+	@SuppressWarnings("unchecked")
+	private void getIntentData() {
+		IN_PHOTO_LIST = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("IN_PHOTO_LIST") == null ? new ArrayList<HashMap<String, String>>()
+				: (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("IN_PHOTO_LIST");
+		IN_ALBUM = (HashMap<String, String>) getIntent().getSerializableExtra("IN_ALBUM") == null ? new HashMap<String, String>() : (HashMap<String, String>) getIntent()
+				.getSerializableExtra("IN_ALBUM");
+		IN_USERID = getIntent().getStringExtra("IN_USERID") == null ? "0" : getIntent().getStringExtra("IN_USERID");
+		IN_SELECTED_INDEX = getIntent().getIntExtra("IN_SELECTED_INDEX", 0);
+		IN_TOTAL_COUNT = getIntent().getIntExtra("IN_TOTAL_COUNT", 0);
+
+	}
+
+	public int getPageNoCall() {
+		if (IN_TOTAL_COUNT > IN_PHOTO_LIST.size()) {
+			return IN_PHOTO_LIST.size() / 12 + 1;
+		}
+		return 0;
+	}
+
+	private void loadPhotoList() {
+		if (!provider.isCalling()) {
+			provider.restorePagingSettings();
+			provider.setPageNo(getPageNoCall());
+			provider.setPageLimit(12);
+			provider.getPhotoList(IN_ALBUM.get(ID), IN_USERID, new WebCallListener() {
+
+				@Override
+				public void onProgressUpdate(int progressCount) {
+
+				}
+
+				@Override
+				public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+					if (responseCode == 200) {
+						IN_PHOTO_LIST.addAll(data1);
+					} else {
+						IjoomerUtilities.getCustomOkDialog(getString(R.string.photo), getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())),
+								getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+									@Override
+									public void NeutralMathod() {
+
+									}
+								});
+					}
+				}
+			});
+		}
+	}
+
+	/**
+	 * Custom class
+	 */
+
+	private class PageAdapter extends FragmentStatePagerAdapter {
+
+		public PageAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+
+		@Override
+		public Fragment getItem(int pos) {
+			System.gc();
+			JomPhotoTagDetailFragment fragment = new JomPhotoTagDetailFragment(IN_PHOTO_LIST.get(pos));
+			return fragment;
+		}
+
+		@Override
+		public int getCount() {
+			return IN_TOTAL_COUNT;
+		}
+
+	}
+}

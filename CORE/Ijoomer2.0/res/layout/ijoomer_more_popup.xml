@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ijoomer_more_menu_background"
+    android:orientation="horizontal" >
+
+    <ListView
+        android:id="@+id/lstMore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000"
+        android:divider="@android:color/black"
+        android:dividerHeight="2dip" />
+
+</LinearLayout>

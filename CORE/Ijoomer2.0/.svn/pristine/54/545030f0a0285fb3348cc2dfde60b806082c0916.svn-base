@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    style="?background"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:id="@+id/lnrEventHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jom_album_detail_header_bg"
+        android:gravity="center" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventEdit"
+            style="?textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone"
+            android:drawableRight="@drawable/jom_album_detail_header_divider"
+            android:text="@string/edit" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventRemove"
+            style="?textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:drawableRight="@drawable/jom_album_detail_header_divider"
+            android:gravity="center"
+            android:text="@string/remove" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventSendEmail"
+            style="?textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/event_send_mail" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lstEventComment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/blue"
+        android:dividerHeight="0dp"
+        android:smoothScrollbar="true"
+        android:visibility="visible"/>
+
+</LinearLayout>

@@ -1,0 +1,152 @@
+package com.ijoomer.components.jomsocial;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.location.Address;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.RadioGroup;
+
+import com.androidquery.AQuery;
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.ijoomer.common.classes.IjoomerUtilities;
+import com.ijoomer.customviews.IjoomerButton;
+import com.ijoomer.customviews.IjoomerTextView;
+import com.ijoomer.map.IJoomerItemizedOverlay;
+import com.ijoomer.map.IJoomerMapManager;
+import com.ijoomer.map.IjoomerMapPinListener;
+import com.ijoomer.src.R;
+
+public class JomMapActivity extends JomMasterActivity {
+
+	private MapView mapview;
+	
+	private AQuery androidQuery;
+	private ArrayList<HashMap<String, String>> IN_MAPLIST;
+	private MapController mapController;
+	private IJoomerItemizedOverlay mapOverlay;
+
+	private boolean IN_SHOW_BUBBLE;
+
+	
+	/**
+	 * Overrides method 
+	 */
+	
+	@Override
+	public int setLayoutId() {
+		return R.layout.jom_map;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void initComponents() {
+		IN_MAPLIST = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("IN_MAPLIST");
+		IN_SHOW_BUBBLE = getIntent().getBooleanExtra("IS_SHOW_BUBBLE", true);
+		mapview = getMapView();
+		mapview.setBuiltInZoomControls(true);
+		mapController = mapview.getController();
+		mapController.setZoom(7);
+		androidQuery = new AQuery(this);
+
+	}
+
+	@Override
+	public void prepareViews() {
+		try {
+			Address address = IjoomerUtilities.getAddressFromLatLong(0, 0);
+			mapview.getController().animateTo(new GeoPoint((int) (address.getLatitude() * 1E6), (int) (address.getLongitude() * 1E6)));
+		} catch (Exception e) {
+		}
+		populateMap();
+
+	}
+
+	@Override
+	public void setActionListeners() {
+	}
+	
+	@Override
+	public void onCheckedChanged(RadioGroup arg0, int arg1) {
+
+	}
+
+	
+	/**
+	 * Class method
+	 */
+
+	private void populateMap() {
+
+		if (IN_MAPLIST != null) {
+
+			if (!IN_SHOW_BUBBLE) {
+				if (IN_MAPLIST.get(0).get(LAT) != null && IN_MAPLIST.get(0).get(LAT).toString().trim().length() > 0 && IN_MAPLIST.get(0).get(LONG) != null
+						&& IN_MAPLIST.get(0).get(LONG).toString().trim().length() > 0) {
+					if (mapOverlay == null) {
+						mapOverlay = IJoomerMapManager.getMapOverlay(getResources().getDrawable(R.drawable.jom_map_pin), mapview);
+					}
+					mapOverlay.putPin(IJoomerMapManager.getGeopoint(IN_MAPLIST.get(0).get(LAT), IN_MAPLIST.get(0).get(LONG)), IN_MAPLIST.get(0));
+				}
+			} else {
+				for (HashMap<String, String> mapItem : IN_MAPLIST) {
+					if (mapItem.get(USER_LAT) != null && mapItem.get(USER_LAT).toString().trim().length() > 0 && mapItem.get(USER_LONG) != null
+							&& mapItem.get(USER_LONG).toString().trim().length() > 0) {
+
+						if (IJoomerMapManager.getGeopoint(mapItem.get(USER_LAT), mapItem.get(USER_LONG)) != null) {
+							if (mapOverlay == null) {
+								mapOverlay = IJoomerMapManager.getMapOverlay(getResources().getDrawable(R.drawable.jom_map_pin), mapview);
+							}
+							mapOverlay.putPin(IJoomerMapManager.getGeopoint(mapItem.get(USER_LAT), mapItem.get(USER_LONG)), mapItem);
+						}
+					}
+				}
+			}
+
+			if (IN_SHOW_BUBBLE && mapOverlay != null) {
+
+				mapOverlay.setMapBubbleView(LayoutInflater.from(this).inflate(R.layout.jom_map_bubble, null));
+				mapOverlay.setOnPinListener(new IjoomerMapPinListener() {
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public void onPinClick(int i, View v, final Object data) {
+
+						System.out.println("on pin tap position:" + i);
+						System.out.println("on pin Data :" + (HashMap<String, String>) data);
+						ImageView imgMapUserAvatar = (ImageView) v.findViewById(R.id.imgMapUserAvatar);
+						IjoomerTextView txtMapUserName = (IjoomerTextView) v.findViewById(R.id.txtMapUserName);
+						IjoomerTextView txtMapContent = (IjoomerTextView) v.findViewById(R.id.txtMapContent);
+
+						imgMapUserAvatar.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								gotoProfile(((HashMap<String, String>) data).get(USER_ID));
+							}
+						});
+
+						androidQuery.id(imgMapUserAvatar).image(((HashMap<String, String>) data).get(USER_AVATAR), true, true,getDeviceWidth(),0);
+						txtMapUserName.setText(((HashMap<String, String>) data).get(USER_NAME));
+						txtMapContent.setVisibility(View.GONE);
+						((IjoomerButton) v.findViewById(R.id.btnClose)).setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View paramView) {
+								mapOverlay.hideBubble();
+							}
+						});
+
+					}
+
+				});
+			}
+
+		}
+	}
+}

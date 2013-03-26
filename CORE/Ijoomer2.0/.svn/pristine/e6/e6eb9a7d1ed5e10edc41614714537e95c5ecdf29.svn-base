@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:id="@+id/lnrDiscussionDetails"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/jom_wall_activity_topbox"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical" >
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" >
+
+                                <ImageView
+                                    android:id="@+id/imgDiscussionDetailsAvatar"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:adjustViewBounds="true"
+                                    android:background="@android:color/transparent"
+                                    android:scaleType="fitXY" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="2dp" >
+
+                            <com.ijoomer.customviews.IjoomerTextView
+                                android:id="@+id/txtDiscussionDetailsTitle"
+                                style="?textview_h3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <com.ijoomer.customviews.IjoomerTextView
+                                android:id="@+id/txtDiscussionDetailsCreated"
+                                style="?textview_h2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="5dp" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtDiscussionDetailsDescription"
+                        style="?textview_h2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="2" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/jom_wall_activity_bottombox"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:visibility="visible" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtDiscussionDetailsFiles"
+                        style="?textview_h2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:layout_weight="1"
+                        android:text="@string/file" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtDiscussionDetailsReport"
+                        style="?textview_h2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:drawableLeft="@drawable/jom_report"
+                        android:drawablePadding="2dp"
+                        android:text="@string/report" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtDiscussionDetailsShare"
+                        style="?textview_h2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:drawableLeft="@drawable/jom_share"
+                        android:drawablePadding="2dp"
+                        android:text="@string/share" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrDiscussionReplies"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" >
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtDiscussionDetailsReplies"
+                style="?edittext_h2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:layout_weight="1"
+                android:gravity="top|left"
+                android:hint="@string/replies"
+                android:lines="3"
+                android:maxLines="3" />
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnSend"
+                style="?button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/send" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrDiscussionRepliesLocked"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="5dp"
+            android:visibility="gone" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/group_discussion_locked"
+                android:textColor="@color/red" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
