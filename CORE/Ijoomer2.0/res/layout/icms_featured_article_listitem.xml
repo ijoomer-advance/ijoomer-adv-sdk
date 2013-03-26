@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/icmsLrnArtListItem"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:background="@drawable/icms_article_bg"
+    android:padding="5dp" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp" >
+
+        <ImageView
+            android:id="@+id/icmsImageThumb"
+            android:layout_width="fill_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/icmsTxtTitle"
+            style="?textview_blue_h3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="#cfffffff"
+            android:gravity="center_vertical"
+            android:textStyle="bold" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/icmsTxtIntro"
+            style="?textview_blue_h2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#cfffffff"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:shadowColor="@color/text_shadow"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2" />
+    </FrameLayout>
+
+</LinearLayout>

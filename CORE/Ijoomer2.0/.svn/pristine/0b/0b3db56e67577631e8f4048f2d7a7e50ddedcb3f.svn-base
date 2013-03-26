@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="?background"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtWelcome"
+                style="?textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/facebook_welcome" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?textview_blue_h4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/facebook_currently"
+                android:textStyle="bold" />
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnNewUser"
+                style="@style/ijoomer_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="@string/facebook_new_user" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="@string/facebook_signup_details_info" />
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnMemberOfSite"
+                style="@style/ijoomer_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="@string/facebook_existing_user" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="@string/facebook_signup_details_existing_info" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="@string/facebook_signup_alert"
+                android:textColor="#F71D15" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

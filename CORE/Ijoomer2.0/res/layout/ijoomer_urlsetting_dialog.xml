@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lnr_welcome_second"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ijoomer_welcome_screen_test_connection"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?textview_white_h4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp"
+                android:text="Please enter the URL of your website."
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/ijoomer_welcome_content_box"
+                android:orientation="vertical"
+                android:paddingTop="20dp" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtDomain"
+                    style="?edittext_h2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="www.xyz.com/abc/" />
+
+                <com.ijoomer.customviews.IjoomerCheckBox
+                    android:id="@+id/chkSsl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:button="@drawable/checkbox_selector"
+                    android:text="Enable SSL"
+                    android:textColor="@color/blue" />
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnTestConnection"
+                    style="?button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="Test Connection" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/ijoomer_welcome_line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/ijoomer_welcome_content_box"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Tip 1: "
+                        android:textColor="#ff0000" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        style="?textview_blue_h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="If you have some sub-domain(eg. subdomain.yourdomain.com [1]) or sub-directory(eg. www.yourdomain.com/staging/ [2] ) where Joomla resides, enter accordingly." />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Tip 2: "
+                        android:textColor="#ff0000" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        style="?textview_blue_h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="No need to have http://" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnr_welcome_first"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ijoomer_welcome_screen_first"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="230dp"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?textview_white_h4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="Want to test this app work with your own Joomla installation?" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" >
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnYes"
+                    style="?button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/yes" />
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnNo"
+                    style="?button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:text="@string/no" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

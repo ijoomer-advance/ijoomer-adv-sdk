@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?background"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jom_album_detail_header_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtGroupAll"
+            style="?textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/all" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtGroupMy"
+            style="?textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/jom_album_detail_header_divider"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="@string/my" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtGroupPending"
+            style="?textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/jom_album_detail_header_divider"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="@string/pending" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrGroupSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" >
+
+        <com.ijoomer.customviews.IjoomerEditText
+            android:id="@+id/editGroupSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/jom_friend_member_search"
+            android:singleLine="true" />
+
+        <ImageView
+            android:id="@+id/imgSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/jom_search_icon" />
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnGroupCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            style="?button"
+            android:padding="5dp"
+            android:text="@string/create"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lstGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/blue"
+        android:dividerHeight="0dp"
+        android:smoothScrollbar="true" />
+
+</LinearLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="3dp"
+        android:background="@color/sidemenu"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp" >
+
+        <ImageView
+            android:id="@+id/imgMenuItemicon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtMenuItemCaption"
+            style="?textview_white_h2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

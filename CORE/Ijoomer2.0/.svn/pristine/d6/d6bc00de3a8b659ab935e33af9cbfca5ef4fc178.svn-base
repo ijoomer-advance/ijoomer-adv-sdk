@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   android:background="@android:color/transparent"
+    android:padding="7dp"
+     >
+
+    <ImageView
+        android:id="@+id/imgMenuItemicon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY" 
+        />
+
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/txtMenuItemCaption"
+        style="?textview_white_h2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="Logout"
+        android:textStyle="bold"
+        />
+
+</LinearLayout>

@@ -1,0 +1,450 @@
+package com.ijoomer.components.jomsocial;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
+
+import com.androidquery.AQuery;
+import com.ijoomer.common.classes.IjoomerUtilities;
+import com.ijoomer.common.classes.ViewHolder;
+import com.ijoomer.common.configuration.IjoomerApplicationConfiguration;
+import com.ijoomer.customviews.IjoomerButton;
+import com.ijoomer.customviews.IjoomerCheckBox;
+import com.ijoomer.customviews.IjoomerEditText;
+import com.ijoomer.customviews.IjoomerRadioButton;
+import com.ijoomer.customviews.IjoomerTextView;
+import com.ijoomer.library.jomsocial.JomFriendsDataProvider;
+import com.ijoomer.library.jomsocial.JomMessageDataProvider;
+import com.ijoomer.src.R;
+import com.ijoomer.weservice.WebCallListener;
+import com.smart.framework.CustomAlertNeutral;
+import com.smart.framework.ItemView;
+import com.smart.framework.SmartListAdapterWithHolder;
+import com.smart.framework.SmartListItem;
+
+public class JomMessageComposeActivity extends JomMasterActivity {
+
+	private LinearLayout listFooter;
+	private IjoomerEditText editAddFriend;
+	private IjoomerEditText editSubject;
+	private IjoomerEditText editMessage;
+	private IjoomerButton btnSend;
+	private IjoomerButton btnBack;
+	private PopupWindow popup;
+
+	private AQuery androidQuery;
+	private ArrayList<SmartListItem> listData = new ArrayList<SmartListItem>();
+	private HashMap<String, String> selectedFriends = new HashMap<String, String>();
+	private SmartListAdapterWithHolder listAdapterWithHolder;
+
+	private JomFriendsDataProvider providerFriend;
+	private JomMessageDataProvider provider;
+
+	private String IN_USERID;
+	private String IN_USERNAME;
+
+	/**
+	 * Overrides method
+	 */
+
+	@Override
+	public int setLayoutId() {
+		return R.layout.jom_message_compose;
+	}
+
+	@Override
+	public void initComponents() {
+
+		editAddFriend = (IjoomerEditText) findViewById(R.id.editAddFriend);
+		editSubject = (IjoomerEditText) findViewById(R.id.editSubject);
+		editMessage = (IjoomerEditText) findViewById(R.id.editMessage);
+		btnSend = (IjoomerButton) findViewById(R.id.btnSend);
+		btnBack = (IjoomerButton) findViewById(R.id.btnBack);
+
+		androidQuery = new AQuery(this);
+		provider = new JomMessageDataProvider(this);
+
+		getIntentData();
+	}
+
+	@Override
+	public void prepareViews() {
+
+		if (!IN_USERID.equals("0")) {
+			editAddFriend.setClickable(false);
+			editAddFriend.setTag(IN_USERID);
+			editAddFriend.setEnabled(false);
+			editAddFriend.setText(IN_USERNAME);
+		}
+
+	}
+
+	@Override
+	public void setActionListeners() {
+
+		btnSend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				hideSoftKeyboard();
+				boolean validationFlag = true;
+
+				if (editAddFriend.getText().toString().trim().length() <= 0) {
+					validationFlag = false;
+					editAddFriend.setError(getString(R.string.validation_value_required));
+				}
+				if (editMessage.getText().toString().trim().length() <= 0) {
+					validationFlag = false;
+					editMessage.setError(getString(R.string.validation_value_required));
+				}
+				if (editSubject.getText().toString().trim().length() <= 0) {
+					validationFlag = false;
+					editSubject.setError(getString(R.string.validation_value_required));
+				}
+
+				if (validationFlag) {
+
+					provider.sendMessage(editAddFriend.getTag().toString().trim(), editMessage.getText().toString().trim(), editSubject.getText().toString().trim(),
+							new WebCallListener() {
+								final SeekBar proSeekBar = IjoomerUtilities.getLoadingDialog(getString(R.string.dialog_loading_sending_request));
+
+								@Override
+								public void onProgressUpdate(int progressCount) {
+									proSeekBar.setProgress(progressCount);
+								}
+
+								@Override
+								public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+									if (responseCode == 200) {
+										updateHeader(provider.getNotificationData());
+										IjoomerApplicationConfiguration.setReloadRequired(true);
+										IjoomerUtilities.getCustomOkDialog(getString(R.string.message), getString(R.string.message_send_successfully), getString(R.string.ok),
+												R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+													@Override
+													public void NeutralMathod() {
+														finish();
+													}
+												});
+									} else {
+										responseErrorMessageHandler(responseCode, true);
+									}
+								}
+							});
+				}
+			}
+		});
+		editAddFriend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				showPopup();
+			}
+		});
+
+		btnBack.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+
+	}
+
+	/**
+	 * Class method
+	 */
+
+	private void getIntentData() {
+		IN_USERID = getIntent().getStringExtra("IN_USERID") == null ? "0" : getIntent().getStringExtra("IN_USERID");
+		IN_USERNAME = getIntent().getStringExtra("IN_USERNAME") == null ? "0" : getIntent().getStringExtra("IN_USERNAME");
+	}
+
+	private void responseErrorMessageHandler(final int responseCode, final boolean finishActivityOnConnectionProblem) {
+		IjoomerUtilities.getCustomOkDialog(getString(R.string.message), getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())),
+				getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+					@Override
+					public void NeutralMathod() {
+						if (responseCode == 599 && finishActivityOnConnectionProblem) {
+							finish();
+						}
+					}
+				});
+	}
+
+	@SuppressWarnings("static-access")
+	private void showPopup() {
+		int popupWidth = getWindowManager().getDefaultDisplay().getWidth() - convertSizeToDeviceDependent(20);
+		int popupHeight = getWindowManager().getDefaultDisplay().getHeight() - convertSizeToDeviceDependent(110);
+
+		LinearLayout viewGroup = (LinearLayout) findViewById(R.id.popup);
+		LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = layoutInflater.inflate(R.layout.jom_frienlist_popup, viewGroup);
+
+		popup = new PopupWindow(this);
+		popup.setContentView(layout);
+		popup.setWidth(popupWidth);
+		popup.setHeight(popupHeight);
+		popup.setFocusable(true);
+		popup.setBackgroundDrawable(new BitmapDrawable());
+		popup.showAtLocation(layout, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+
+		IjoomerButton btnCancel = (IjoomerButton) layout.findViewById(R.id.btnCancel);
+		final IjoomerRadioButton rdbSelectAll = (IjoomerRadioButton) layout.findViewById(R.id.rdbSelectAll);
+		final IjoomerRadioButton rdbSelectNone = (IjoomerRadioButton) layout.findViewById(R.id.rdbSelectNone);
+		IjoomerButton btnDone = (IjoomerButton) layout.findViewById(R.id.btnDone);
+
+		final ProgressBar pbrPopup = (ProgressBar) layout.findViewById(R.id.pbrPopup);
+		final ListView listView = (ListView) layout.findViewById(R.id.listView);
+		listView.setChoiceMode(listView.CHOICE_MODE_SINGLE);
+		listFooter = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.ijoomer_list_footer, null);
+		listView.addFooterView(listFooter);
+
+		if (listData == null || listData.size() <= 0) {
+			providerFriend = new JomFriendsDataProvider(this);
+			providerFriend.getFriendsList(IN_USERID, new WebCallListener() {
+
+				@Override
+				public void onProgressUpdate(int progressCount) {
+
+				}
+
+				@Override
+				public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+					pbrPopup.setVisibility(View.GONE);
+					if (responseCode == 200) {
+						updateHeader(providerFriend.getNotificationData());
+						for (HashMap<String, String> hashMap : data1) {
+							hashMap.put("isChecked", "false");
+						}
+						prepareList(data1, false);
+						listAdapterWithHolder = getFriendListAdapter(listData);
+						listView.setAdapter(listAdapterWithHolder);
+						if (selectedFriends.size() == listData.size()) {
+							rdbSelectAll.setChecked(true);
+							rdbSelectNone.setChecked(false);
+						} else if (selectedFriends.size() == 0) {
+							rdbSelectNone.setChecked(true);
+							rdbSelectAll.setChecked(false);
+						}
+
+					} else {
+						responseErrorMessageHandler(responseCode, false);
+					}
+				}
+			});
+		} else {
+			listAdapterWithHolder = getFriendListAdapter(listData);
+			listView.setAdapter(listAdapterWithHolder);
+			pbrPopup.setVisibility(View.GONE);
+			if (selectedFriends.size() == listData.size()) {
+				rdbSelectAll.setChecked(true);
+				rdbSelectNone.setChecked(false);
+			} else if (selectedFriends.size() == 0) {
+				rdbSelectNone.setChecked(true);
+				rdbSelectAll.setChecked(false);
+			}
+
+		}
+		btnCancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				popup.dismiss();
+			}
+		});
+
+		rdbSelectAll.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				rdbSelectNone.setChecked(false);
+				int size = listAdapterWithHolder.getCount();
+				for (int i = 0; i < size; i++) {
+					((HashMap<String, String>) ((SmartListItem) listAdapterWithHolder.getItem(i)).getValues().get(0)).put("isChecked", "true");
+				}
+				listAdapterWithHolder.notifyDataSetChanged();
+			}
+		});
+		rdbSelectNone.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				rdbSelectAll.setChecked(false);
+				int size = listAdapterWithHolder.getCount();
+				for (int i = 0; i < size; i++) {
+					((HashMap<String, String>) ((SmartListItem) listAdapterWithHolder.getItem(i)).getValues().get(0)).put("isChecked", "false");
+				}
+				listAdapterWithHolder.notifyDataSetChanged();
+			}
+		});
+
+		btnDone.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String selectedFriends = "";
+				String selectedFriendIDS = "";
+
+				for (Iterator<String> iterator = JomMessageComposeActivity.this.selectedFriends.keySet().iterator(); iterator.hasNext();) {
+					String type = iterator.next();
+
+					if (iterator.hasNext()) {
+						selectedFriends += JomMessageComposeActivity.this.selectedFriends.get(type) + ",";
+						selectedFriendIDS += type + ",";
+					} else {
+						selectedFriends += JomMessageComposeActivity.this.selectedFriends.get(type);
+						selectedFriendIDS += type;
+					}
+
+				}
+				editAddFriend.setText(selectedFriends);
+				editAddFriend.setTag(selectedFriendIDS);
+				System.out.println("SelectedFriend: " + selectedFriends);
+				popup.dismiss();
+			}
+		});
+
+		listView.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView arg0, int arg1) {
+
+			}
+
+			@Override
+			public void onScroll(AbsListView arg0, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if ((firstVisibleItem + visibleItemCount) >= totalItemCount && totalItemCount > 1) {
+					if (!providerFriend.isCalling() && providerFriend.hasNextPage()) {
+						listFooterVisible();
+						providerFriend.getFriendsList(IN_USERID, new WebCallListener() {
+
+							@Override
+							public void onProgressUpdate(int progressCount) {
+							}
+
+							@Override
+							public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+								listFooterInvisible();
+								if (responseCode == 200) {
+									updateHeader(providerFriend.getNotificationData());
+									for (HashMap<String, String> hashMap : data1) {
+										hashMap.put("isChecked", "false");
+									}
+									prepareList(data1, true);
+								} else {
+									responseErrorMessageHandler(responseCode, false);
+								}
+
+							}
+						});
+					}
+				}
+			}
+		});
+
+	}
+
+	public void listFooterVisible() {
+		listFooter.setVisibility(View.VISIBLE);
+	}
+
+	public void listFooterInvisible() {
+		listFooter.setVisibility(View.GONE);
+	}
+
+	public void prepareList(ArrayList<HashMap<String, String>> data, boolean append) {
+		if (data != null) {
+			if (!append) {
+				listData.clear();
+			}
+			for (HashMap<String, String> hashMap : data) {
+				SmartListItem item = new SmartListItem();
+				item.setItemLayout(R.layout.jom_friend_list_item);
+				ArrayList<Object> obj = new ArrayList<Object>();
+				obj.add(hashMap);
+				item.setValues(obj);
+				if (append) {
+					listAdapterWithHolder.add(item);
+				} else {
+					listData.add(item);
+				}
+			}
+
+		}
+	}
+
+	/**
+	 * List adapter
+	 */
+
+	private SmartListAdapterWithHolder getFriendListAdapter(ArrayList<SmartListItem> data) {
+		SmartListAdapterWithHolder adapterWithHolder = new SmartListAdapterWithHolder(this, R.layout.jom_friend_list_item, listData, new ItemView() {
+
+			@Override
+			public View setItemView(int position, View v, SmartListItem item, ViewHolder holder) {
+
+				holder.friendmembertxtName = (IjoomerTextView) v.findViewById(R.id.txtName);
+				holder.friendmemberImage = (ImageView) v.findViewById(R.id.imgFriend);
+				holder.friendmemberimgOnlineStatus = (ImageView) v.findViewById(R.id.imgOnlineStatus);
+				holder.chkSelectFriend = (IjoomerCheckBox) v.findViewById(R.id.chkSelectFriend);
+				holder.chkSelectFriend.setVisibility(View.VISIBLE);
+				holder.friendmemberimgOnlineStatus.setVisibility(View.GONE);
+				@SuppressWarnings("unchecked")
+				final HashMap<String, String> friend = (HashMap<String, String>) item.getValues().get(0);
+
+				holder.chkSelectFriend.setChecked(Boolean.parseBoolean(friend.get("isChecked").toString()));
+
+				holder.chkSelectFriend.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton IjoomerButtonView, boolean isChecked) {
+						if (isChecked) {
+							selectedFriends.put(friend.get(USER_ID), friend.get(USER_NAME));
+						} else {
+							selectedFriends.remove(friend.get(USER_ID));
+						}
+						friend.put("isChecked", "" + isChecked);
+					}
+				});
+
+				holder.friendmembertxtName.setText(friend.get(USER_NAME));
+				androidQuery.id(holder.friendmemberImage).image(friend.get(USER_AVATAR), true, true, getDeviceWidth(), 0);
+				if (friend.get(USER_ONLINE).equalsIgnoreCase("1")) {
+					holder.friendmemberimgOnlineStatus.setImageResource(R.drawable.jom_friend_member_online);
+				} else {
+					holder.friendmemberimgOnlineStatus.setImageResource(R.drawable.jom_friend_member_offline);
+				}
+
+				return v;
+			}
+
+			@Override
+			public View setItemView(int position, View v, SmartListItem item) {
+				return null;
+			}
+
+		});
+		return adapterWithHolder;
+	}
+
+}
