@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Jom Social General Strings -->
+    <string name="count_braket">( %s )</string>
+    <string name="by">By %s</string>
+    <string name="authenticating_user">Authenticating User …</string>
+    <string name="invite_friends">Invite Friends</string>
+    <string name="invited">invited</string>
+    <string name="select_all">Select All</string>
+    <string name="none">None</string>
+    <string name="ends">Ends</string>
+
+    <!-- Profile Details -->
+    <string name="friend_title_remove">Remove Friend</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="friend_request_to">You already requested to him.</string>
+    <string name="friend_request_by">You already requested by him.</string>
+    <string name="add_friend_message_hint">Hi, I\'d like to add you as friend.</string>
+    <string name="message">Message</string>
+    <string name="about">About</string>
+    <string name="online">Online</string>
+    <string name="viewers">Viewers</string>
+    <string name="friend">Friends</string>
+    <string name="already_friend">Already friends</string>
+    <string name="member">Members</string>
+    <string name="map">Map</string>
+    <string name="group">Group</string>
+    <string name="options">Options</string>
+    <string name="photo">Photo</string>
+    <string name="write_post">Write post</string>
+    <string name="share">Share</string>
+    <string name="page_of">Page %1$d of %1$d</string>
+    <string name="search_keyword">Search keyword</string>
+    <string name="select_friends">Select friends</string>
+    <string name="recent_activities">Recent activities</string>
+    <string name="no_recent_activities">No recent activities</string>
+    <string name="profile_updated_successfully">Profile updated successfully …</string>
+    <string name="registration_successfully">Registration successfully activaction link send to your mail …</string>
+    <string name="private_approval_request">%1$d Request for approval</string>
+    <string name="private_group_approval_awaiting"> Your request is awaiting approval from the group administrator.</string>
+    <string name="private_event_approval_awaiting"> Your request is awaiting approval from the event administrator.</string>
+
+    <!-- Wall -->
+    <string name="like">Like</string>
+    <string name="unlike">Unlike</string>
+    <string name="comment">Comment</string>
+    <string name="wall_details">Wall details</string>
+    <string name="wall_remove">Wall remove</string>
+
+    <string-array name="wall_post_type">
+        <item>Public</item>
+        <item>Site Members</item>
+        <item>Friends</item>
+        <item>Only me</item>
+    </string-array>
+    <string-array name="report_type">
+        <item>Spamming / Advertisement</item>
+        <item>Profanity / Inappropriate content</item>
+        <item>Abusive</item>
+    </string-array>
+
+    <!-- Wall Details -->
+    <string name="activities">Activities</string>
+    <string name="write_comment">Write a comment …</string>
+    <string name="whatsinyourmind">What\'s In Your Mind …</string>
+    <string name="like_count"> %1$d People like this.</string>
+    <string name="comment_count"> %1$d People comment on this.</string>
+
+    <!-- Photos -->
+    <string name="all_phots">All Photos</string>
+    <string name="my_phots">My Photos</string>
+    <string name="add_album">Add Album</string>
+    <string name="who_can_see">Who can see</string>
+    <string name="album_name">Album name</string>
+    <string name="album">Album</string>
+    <string name="upload_photo">Upload photo</string>
+    <string name="album_title_remove">Remove album</string>
+    <string name="description">Description</string>
+    <string name="say_about_video">Say about video</string>
+    <string name="locaton">Location</string>
+    <string name="ticket_unlimited">Put 0 (zero) for unlimited seats.</string>
+    <string name="set_as_cover_page">Set as cover page</string>
+    <string name="tap_photo_to_set_profile_cover">Tap photo to set as profile cover</string>
+    <string name="set_as_profile_picture">Set as profile picture</string>
+    <string name="photo_upload_successfully">Photo uploaded successfully …</string>
+    <string name="photo_select_size_limit_exceeded">Selected photo size exceeded upload limit </string>
+      <string name="add_photo_permissin_disable">Add photo permission is disable</string>
+    <string name="photo_of"> of </string>
+    <string name="tag"> Tag </string>
+    <string name="show_tag">Show Tag</string>
+    <string name="add_tag">Add Tag</string>
+    <string name="add_tag_manual">Tag Manual</string>
+    <string name="remove_tag">Remove Tag</string>
+    <string name="done_tag">Done Tagging</string>
+    <string name="select_tag_user">Select User</string>
+
+    <!-- Videos -->
+    <string name="all_videos">All Videos</string>
+    <string name="my_videos">My Videos</string>
+    <string name="videos_title">Video title</string>
+    <string name="set_as_profile_video">Set as profile video</string>
+    <string name="video">Video</string>
+    <string name="video_upload_successfully">Video uploaded successfully …</string>
+    <string name="video_edited_successfully">Video edited successfully …</string>
+    <string name="videos_select_file">video file (Max %1$d MB)</string>
+    <string name="video_select_size_limit_exceeded">Selected video size exceeded upload limit plz choose another one</string>
+    <string name="videos_link_url">Video link url</string>
+    <string name="add_video">Add video</string>
+    <string name="uplod_video">Upload video</string>
+    <string name="link_video">Link Video</string>
+    <string name="video_title_remove">Remove Video</string>
+
+    <!-- Message -->
+    <string name="subject">Subject</string>
+    <string name="message_add_freind_hint">Tap here to add friend</string>
+    <string name="message_inbox">Inbox</string>
+    <string name="message_outbox">Outbox</string>
+    <string name="message_compose">Compose</string>
+    <string name="message_title_remove">Remove message</string>
+    <string name="message_send_successfully">Message Send successfully …</string>
+
+    <!-- Privacy Setting -->
+    <string name="header_privacy_setting">Privacy setting</string>
+
+    <!-- Event -->
+    <string name="all">All</string>
+    <string name="my">My</string>
+    <string name="past">Past</string>
+    <string name="event_guest_attending_count">%s guest is attending this event</string>
+    <string name="event">Event</string>
+    <string name="ongoing">ONGOING</string>
+    <string name="attending">Attending</string>
+    <string name="request_private_event_invitation">Request invitation</string>
+    <string name="where">Where</string>
+    <string name="when">When</string>
+    <string name="summary">Summary</string>
+    <string name="event_seats">Available seats</string>
+    <string name="event_unlimited_seats">Unlimited seats</string>
+    <string name="event_send_mail">Send mail</string>
+    <string name="title">Title</string>
+    <string name="event_send_mail_successfully">Mail sended successfully …</string>
+    <string name="event_ignore_successfully">Ignored successfully …</string>
+    <string name="event_confirmed_guests">Confirmed Guests</string>
+    <string name="event_waiting_list">Waiting List</string>
+    <string name="event_title_remove">Remove event</string>
+    <string name="event_set_as_admin">Set as Admin</string>
+    <string name="event_set_as_member">Set as Member</string>
+    <string name="event_block_guest">Also block guest</string>
+    <string name="event_response_resvp">Kindly please response your RSVP</string>
+       <string name="event_private">This is private event</string>
+
+    <!-- Group -->
+
+    <string name="group_discussion">Discussion</string>
+    <string name="group_discussion_locked">This discussion has been locked</string>
+    <string name="group_announcement">Announcement</string>
+    <string name="group_activities">Activities</string>
+    <string name="group_member">Group Member</string>
+    <string name="all_member">All member</string>
+    <string name="ban_list">Ban list</string>
+    <string name="upload_file">Upload file</string>
+    <string name="group_set_as_admin">Set as Admin</string>
+    <string name="group_set_as_user">Set as User</string>
+    <string name="group_ban_member">Also ban member</string>
+    <string name="file">File</string>
+    <string name="files">Files</string>
+    <string name="replies">Replies</string>
+    <string name="wall_post">Wall post</string>
+    <string name="lock">lock</string>
+    <string name="unlock">Unlock</string>
+    <string name="unpublish">Unpublish</string>
+    <string name="ban">Ban</string>
+    <string name="unban">Unban</string>
+    <string name="group_title_remove">Remove group</string>
+    <string name="group_title_announcement_remove">Remove announcement</string>
+    <string name="leave">Leave</string>
+    <string name="group_allow_member_upload_file">Allow member to upload file</string>
+    <string name="group_discussion_startedby">Started by : %s</string>
+    <string name="group_files">View / Download Files.</string>
+    <string name="file_removed_successfully">File removed successfully</string>
+    <string name="group_create_announcement">Create anouncement</string>
+    <string name="group_create_discussion">Create discussion</string>
+    <string name="hits">Hits</string>
+    <string name="size">Size</string>
+    <string name="group_no_discussion_yet">No discussion yet</string>
+    <string name="group_no_announcement_yet">No announcement yet</string>
+    <string name="group_no_activities_yet">No group activities yet</string>
+    <string name="group_private">This is private group</string>
+
+    <!-- Notification Friend Request -->
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="join">Join</string>
+    <string name="friend_request">Friend requests</string>
+    <string name="unread_msg">Unread messages</string>
+    <string name="global_notification">Global notification</string>
+
+    <!-- Custom Dialog  String -->
+    <string name="dialog_loading_profile">Profile</string>
+    <string name="dialog_loading_friend">Friend</string>
+    <string name="dialog_loading_member">Member</string>
+    <string name="dialog_loading_search">Search</string>
+    <string name="dialog_title_add_friend">New friend request</string>
+    <string name="dialog_title_tag_user">Add / Remove tag user</string>
+    <string name="dialog_title_report">Report this</string>
+    <string name="dialog_loading_profile_detail">Profile details …</string>
+    <string name="dialog_photo_tag_error">Selected area is already tagged …</string>
+    <string name="report_message_hint">Reportmessage</string>
+    <string name="report_successfully">Reported successfully  …</string>
+    <string name="group_joined_successfully">Group joined successfully  …</string>
+    <string name="group_discussion_lock_successfully">Discussion locked successfully  …</string>
+    <string name="group_discussion_unlock_successfully">Discussion unlocked successfully  …</string>
+    <string name="group_leaveded_successfully">Group leaved successfully  …</string>
+    <string name="group_unpublish_successfully">Group unpublish successfully  …</string>
+    <string name="group_announcement_added_successfully">Announcement Added successfully  …</string>
+    <string name="group_discussion_added_successfully">Discussion Added successfully  …</string>
+    <string name="photo_set_as_cover_page_successfully">Photo set as cover page successfully …</string>
+    <string name="photo_set_as_profile_cover_successfully">Photo set as profile cover successfully …</string>
+    <string name="photo_set_as_profile_avatar_successfully">Photo set as Profile Avatar successfully …</string>
+    <string name="photo_set_as_profile_video_successfully">Video set as Profile Video successfully …</string>
+
+</resources>

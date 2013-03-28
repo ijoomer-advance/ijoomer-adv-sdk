@@ -1,0 +1,91 @@
+						Ijoomer Advance account info
+=====================================================================================================================================
+		*** Important Note Sign Apk ***
+		
+		step 1 : export unsigned apk from eclipse
+		step 2 : run below command in terminal 
+		step 3 : now run zipalign command for signed application to use resource more effiecently
+		step 4 : check size of unsignedapk and signedapk and signedapkwithzipalign are must equals.
+		
+		eg.
+		step 2
+		jarsigner -keystore KeystoreName -storepass KeystorePasword -keypass KeystorePassword ExportedUnsignedApkName KeystoreAlias
+		
+		step 3
+		before run this command copy zipalign file from (sdk/tools)
+		./zipalign  -v 4  signedapkname  newsignedapkname
+		
+		
+		IjoomerAdvance : 
+		step 3: jarsigner -keystore IjoomerAdvance -storepass tasolglobal -keypass tasolglobal Ijoomer2.0.apk Ijoomeradvance
+		step 4: ./zipalign  -v 4  Ijoomer2.0.apk  IjoomerAdvance.apk
+---------------------------------------------------------------------------------------------------------------------------------------
+1)		Gmail
+		User name : ijoomeradvance@gmail.com
+		password  : tasolglobal
+		
+--------------------------------------------------
+
+2)		Facebook 
+		User name : ijoomeradvance@gmail.com
+		password  : tasolglobal
+
+		App Id      - 431844313570473
+		App secret  - 5170a9d9d4676d45f2b1e29108ad13cf
+		
+		keytool -exportcert -alias Ijoomeradvance -keystore ~/IjoomerAdvance | openssl sha1 -binary | openssl base64
+		IjoomerAdvance : A9jvBQTPBoYVGvHTsRhG9d9cH6E=
+------------------------------------------------------
+
+3)		Twitter 
+		User name :Ijoomeradvance
+		password  :tasolglobal
+
+		Consumer key     - ACGuGZRQI4rASvX4uHgDw
+		Consumer secret  - n2zv5dXGbvav3FCb63sk3rIYH8zz74is69dUkINlsgg
+-----------------------------------------------------------------------
+
+4)		ASF Production Key
+		IjoomerAdvacnce : 1001e01d524213588a7b4d0579cdf
+		NOTE : To generate production key 
+		step 1 : signed ASFKeyGenerator with your keystore 
+		step 2 : install that apk 
+		step 3 : run and copy displayed Security key
+		step 4 : put that key in ApplicationConfiguration class
+		
+		eg. 
+		
+		@Override
+		public String SecurityKey() {
+			return "Security key";
+		}
+-------------------------------------
+
+5)		Google MAP Key
+		keytool -list -alias Ijoomeradvance -keystore IjoomerAdvance -storepass tasolglobal -keypass tasolglobal
+		
+		D3:CA:6D:F4:5E:B6:E1:48:F1:D6:DB:C4:67:F5:C3:B2
+		
+		0KS1kwFBfB8F3AO6y8O8a2cfNHnmBNlfi03h12Q
+-----------------------------------------------
+
+6)		Keystore info
+		id                  : IjoomerAdvance
+		alias               : Ijoomeradvance
+		password            : tasolglobal
+		validity            : 50 yrs
+		First and Last name : TailoredSolution
+		Organization unit   : TailoredSolution
+		Organization        : TailoredSolution
+		City                : Ahmedabad
+		State               : Gujarat
+		Country code        : 91
+-------------------------------------------------
+
+7)		Google analytics
+		
+		User name  : ijoomeradvance@gmail.com
+		password   : tasolglobal
+		
+		ID :  UA-39331614-1
+-------------------------------------------------

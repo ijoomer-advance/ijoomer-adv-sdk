@@ -1,0 +1,9 @@
+@font-face { 
+font-family: 'ijoomer'; 
+src: url('file:///android_asset/fonts/Helvetica_LT_55_Roman_0.ttf'); /* but this does */
+}
+
+body {
+font-family: 'ijoomer';
+}
+
