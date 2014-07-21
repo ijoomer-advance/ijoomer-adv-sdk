@@ -18,6 +18,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+
+/**
+ * This Class Contains All Method Related To TwitterOAuthView.
+ * 
+ * @author tasol
+ * 
+ */
 public class TwitterOAuthView extends WebView {
 	/**
 	 * Tag for logging.
@@ -206,6 +213,12 @@ public class TwitterOAuthView extends WebView {
 		new TwitterOAuthTask().execute(consumerKey, consumerSecret, callbackUrl, dummy, listener);
 	}
 
+	
+	/**
+	 * Inner class
+	 * @author tasol
+	 *
+	 */
 	private class TwitterOAuthTask extends AsyncTask<Object, Void, Result> {
 		private String callbackUrl;
 		private boolean dummyCallbackUrl;
@@ -371,6 +384,11 @@ public class TwitterOAuthView extends WebView {
 			}
 		}
 
+		/**
+		 * Inner class
+		 * @author tasol
+		 *
+		 */
 		private class LocalWebViewClient extends WebViewClient {
 
 			@Override

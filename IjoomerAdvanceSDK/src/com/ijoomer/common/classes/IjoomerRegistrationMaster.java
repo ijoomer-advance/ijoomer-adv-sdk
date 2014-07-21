@@ -5,10 +5,25 @@ import android.widget.RadioGroup;
 
 import com.ijoomer.src.R;
 
+/**
+ * This Class Contains All Method Related To IjoomerRegistrationMaster.
+ * 
+ * @author tasol
+ * 
+ */
 public abstract class IjoomerRegistrationMaster extends IjoomerSuperMaster {
 
 	public IjoomerRegistrationMaster() {
 		setOptionMenu(0);
+	}
+
+	/**
+	 * Overrides methods
+	 */
+
+	@Override
+	public int setHeaderLayoutId() {
+		return R.layout.ijoomer_header;
 	}
 
 	@Override
@@ -49,11 +64,6 @@ public abstract class IjoomerRegistrationMaster extends IjoomerSuperMaster {
 	@Override
 	public int setFooterLayoutId() {
 		return 0;
-	}
-
-	@Override
-	public int setHeaderLayoutId() {
-		return R.layout.ijoomer_header;
 	}
 
 	@Override

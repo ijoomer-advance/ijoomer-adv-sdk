@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/icmsLnrCatListItem"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/category_bg_color"
+        android:background="@color/icms_category_bg_color"
         android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp" >
 
@@ -21,20 +21,19 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginRight="7dp"
-                android:background="@color/white"
+                android:background="@color/icms_white"
                 android:padding="1dp"
-                android:scaleType="fitXY"
-                 />
+                android:scaleType="fitXY" />
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical" >
 
                 <com.ijoomer.customviews.IjoomerTextView
                     android:id="@+id/icmsCatTxtTitle"
-                    style="?textview_lightgray_h2"
-                    android:layout_width="fill_parent"
+                    style="?icms_textview_lightgray_h2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingLeft="5dp"
@@ -43,7 +42,7 @@
 
                 <com.ijoomer.customviews.IjoomerTextView
                     android:id="@+id/icmsCatTxtArticlesCountlbl"
-                    style="?textview_h2"
+                    style="?icms_textview_h2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="5dp"
@@ -53,7 +52,7 @@
 
                 <com.ijoomer.customviews.IjoomerTextView
                     android:id="@+id/icmsCatTxtArticlesCount"
-                    style="?textview_lightgray_h2"
+                    style="?icms_textview_lightgray_h2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(100)"
@@ -63,7 +62,7 @@
 
         <ImageView
             android:id="@+id/icmsCatDivider"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
             android:src="@drawable/icms_categorylist_separator_line" />
@@ -71,13 +70,13 @@
 
     <LinearLayout
         android:id="@+id/icmsLnrBlogListItem"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="5dip"
@@ -85,8 +84,8 @@
 
             <com.ijoomer.customviews.IjoomerTextView
                 android:id="@+id/icmsTxtTitle"
-                style="?textview_blue_h3"
-                android:layout_width="fill_parent"
+                style="?icms_textview_blue_h3"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="1"
@@ -94,18 +93,28 @@
 
             <com.ijoomer.customviews.IjoomerTextView
                 android:id="@+id/icmsTxtIntro"
-                style="?textview_h3"
-                android:layout_width="fill_parent"
+                style="?icms_textview_h2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white" />
+                android:background="@color/icms_white"
+                android:padding="5dp" />
         </LinearLayout>
 
         <ImageView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="5dp"
             android:scaleType="fitXY"
             android:src="@drawable/icms_articlelist_separator_line" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/icmsCatArticleSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/icms_cat_shadow"
+        android:visibility="gone" />
 
 </LinearLayout>

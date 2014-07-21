@@ -63,6 +63,7 @@ public class LinePageIndicator extends View implements PageIndicator {
 		this(context, attrs, R.attr.vpiLinePageIndicatorStyle);
 	}
 
+	@SuppressWarnings("deprecation")
 	public LinePageIndicator(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		if (isInEditMode())
@@ -428,7 +429,6 @@ public class LinePageIndicator extends View implements PageIndicator {
 			dest.writeInt(currentPage);
 		}
 
-		@SuppressWarnings("UnusedDeclaration")
 		public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
 			public SavedState createFromParcel(Parcel in) {
 				return new SavedState(in);

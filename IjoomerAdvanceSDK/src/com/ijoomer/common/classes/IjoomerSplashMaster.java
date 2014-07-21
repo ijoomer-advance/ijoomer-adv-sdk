@@ -3,12 +3,22 @@ package com.ijoomer.common.classes;
 import android.view.View;
 import android.widget.RadioGroup;
 
+/**
+ * This Class Contains All Method Related To IjoomerSplashMaster.
+ * 
+ * @author tasol
+ * 
+ */
 public abstract class IjoomerSplashMaster extends IjoomerSuperMaster {
 
 	public IjoomerSplashMaster() {
 		super();
 	}
 
+	
+	/**
+	 * Overrides methods
+	 */
 	@Override
 	public int setTabBarDividerResId() {
 		return 0;

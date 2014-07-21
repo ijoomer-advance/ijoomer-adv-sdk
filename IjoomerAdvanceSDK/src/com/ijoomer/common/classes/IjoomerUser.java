@@ -1,5 +1,11 @@
 package com.ijoomer.common.classes;
 
+/**
+ * This Class Contains All Method Related To IjoomerUser.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerUser {
 
 	private static IjoomerUser userObject;

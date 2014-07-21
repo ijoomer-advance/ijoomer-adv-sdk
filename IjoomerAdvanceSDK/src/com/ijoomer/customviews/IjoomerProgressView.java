@@ -6,81 +6,93 @@ import android.widget.SeekBar;
 
 import com.ijoomer.src.R;
 
+/**
+ * This Class Contains All Method Related To IjoomerProgressView.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerProgressView {
+
+	IjoomerTextView txtMessage;
+	IjoomerTextView txtProgrss;
+	Dialog dialog;
+	SeekBar skProgress;
+
+	Activity activity;
 
 	String title;
 	String message;
 	int progress;
-	Dialog dialog;
-	Activity activity;
-	SeekBar skProgress;
-	IjoomerTextView txtMessage;
-	IjoomerTextView txtProgrss;
 
 	public IjoomerProgressView(Activity mActivity) {
-
 		this.activity = mActivity;
-
 		dialog = new Dialog(activity, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 		dialog.setContentView(R.layout.ijoomer_loading_dialog2);
-		// final IjoomerTextView txtMessage = (IjoomerTextView)
-		// dialog.findViewById(R.id.txtMessage);
-		// final IjoomerTextView txtProgrss = (IjoomerTextView)
-		// dialog.findViewById(R.id.txtProgrss);
-		// skProgress = (SeekBar) dialog.findViewById(R.id.skProgress);
-		//
-		// txtMessage.setText(message);
-		// txtProgrss.setText("0 %");
-		// skProgress.setMax(100);
-		// skProgress.setProgress(0);
-		// skProgress.setOnTouchListener(new OnTouchListener() {
-		//
-		// @Override
-		// public boolean onTouch(View arg0, MotionEvent arg1) {
-		// return true;
-		// }
-		// });
-
 	}
 
+	/**
+	 * This method used to show ijoomer loading dialog. 
+	 */
 	public void showIjLoding() {
 		dialog.show();
 	}
 
+	/**
+	 * This method used to hide ijoomer loading dialog.
+	 */
 	public void hideIjDilog() {
 		if (dialog != null && dialog.isShowing()) {
 			dialog.dismiss();
 		}
 	}
 
+	/**
+	 * This method used to get dialog title.
+	 * @return
+	 */
 	public String getTitle() {
 		return title;
 	}
 
+	/**
+	 * This method used to set dialog title.
+	 * @param title represented title
+	 */
 	public void setTitle(String title) {
 		this.title = title;
-		// txtProgrss.setText(title);
 	}
 
+	/**
+	 * This method used to get dialog message.
+	 * @return
+	 */
 	public String getMessage() {
 		return message;
 	}
 
+	/**
+	 * This method used to set dialog message.
+	 * @param message represented message
+	 */
 	public void setMessage(String message) {
 		this.message = message;
-		// txtMessage.setText(message);
 	}
 
+	
+	/**
+	 * This method used to get dialog progress.
+	 * @return represented {@link Integer}
+	 */
 	public int getProgress() {
 		return progress;
 	}
 
+	/**
+	 * This method used to set dialog progress.
+	 * @param progress represented progress
+	 */
 	public void setProgress(int progress) {
 		this.progress = progress;
-		// skProgress.setProgress(progress);
-		// if (progress == 100) {
-		// hideIjDilog();
-		// }
 	}
-
 }

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnrEntryHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/imgEntry"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/sobipro_entry_default" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtCarTitle"
+                style="?sobipro_textview_white_h4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:maxLines="1"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imgEntry"
+            android:layout_marginBottom="5dp" >
+
+            <ImageView
+                android:id="@+id/imgShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/sobipro_cartheme_detail_share_icon" />
+
+            <ImageView
+                android:id="@+id/imgEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="7dp"
+                android:layout_toLeftOf="@+id/imgShare"
+                android:scaleType="fitXY"
+                android:src="@drawable/sobipro_cartheme_detail_email_icon"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imgPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="7dp"
+                android:layout_toLeftOf="@+id/imgEmail"
+                android:scaleType="fitXY"
+                android:src="@drawable/sobipro_cartheme_detail_call_icon"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.60"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/lblMake"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="0.40" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtMake"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.60" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/lblYear"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="0.40" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtYear"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.60" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/lblMileage"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="0.40" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtMileage"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.60" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/lblPower"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="0.40" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtPower"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.60" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/lblDoors"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="0.40" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtDoors"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.60" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.40"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtPrice"
+                    style="?sobipro_textview_white_h6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="7dp"
+                    android:layout_weight="1"
+                    android:gravity="right" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/lblGearBox"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.55" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtGearBox"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="0.45" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/lblAirBages"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.55" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtAirBages"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="0.45" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/lblSeats"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.55" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtSeats"
+                    style="?sobipro_textview_white_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="0.45" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtDescription"
+            style="?sobipro_textview_white_h2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

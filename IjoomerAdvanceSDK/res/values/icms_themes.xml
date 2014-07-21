@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="icms_theme" parent="ijoomer_theme">
+        <item name="icms_textview_h0">@style/icms_textview_h0</item>
+        <item name="icms_textview_h1">@style/icms_textview_h1</item>
+        <item name="icms_textview_h2">@style/icms_textview_h2</item>
+        <item name="icms_textview_h3">@style/icms_textview_h3</item>
+        <item name="icms_textview_white_h4">@style/icms_textview_white_h4</item>
+        <item name="icms_textview_lightgray_h2">@style/icms_textview_lightgray_h2</item>
+        <item name="icms_textview_blue_h1">@style/icms_textview_blue_h1</item>
+        <item name="icms_textview_blue_h2">@style/icms_textview_blue_h2</item>
+        <item name="icms_textview_blue_h3">@style/icms_textview_blue_h3</item>
+        <item name="icms_background">@style/icms_background</item>
+        <item name="icms_header">@style/icms_header</item>
+    </style>
+
+</resources>

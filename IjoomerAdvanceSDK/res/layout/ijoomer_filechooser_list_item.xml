@@ -2,7 +2,7 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
+  android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="horizontal">
   <ImageView
@@ -16,7 +16,7 @@
 	  android:scaleType="centerCrop"/>
   <com.ijoomer.customviews.IjoomerTextView
   	  android:id="@+id/file_picker_text"
-  	  android:layout_width="fill_parent"
+  	  android:layout_width="match_parent"
 	  android:layout_height="wrap_content"
 	  android:layout_weight="1"
 	  android:layout_gravity="left|center_vertical"

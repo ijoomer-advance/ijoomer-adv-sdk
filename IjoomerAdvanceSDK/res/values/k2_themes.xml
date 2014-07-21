@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="k2_theme" parent="ijoomer_theme">
+        <item name="k2_button">@style/k2_button</item>
+        <item name="k2_background">@style/k2_background</item>
+        <item name="k2_header">@style/k2_header</item>
+        <item name="k2_footer">@style/k2_footer</item>
+
+        <item name="k2_textview_h4">@style/k2_textview_h4</item>
+        <item name="k2_textview_h2">@style/k2_textview_h2</item>
+        <item name="k2_textview_h3">@style/k2_textview_h3</item>
+
+        <item name="k2_textview_white_h3">@style/k2_textview_white_h3</item>
+        <item name="k2_textview_white_h4">@style/k2_textview_white_h4</item>
+
+        <item name="k2_textview_orange_h2">@style/k2_textview_orange_h2</item>
+        <item name="k2_textview_orange_h3">@style/k2_textview_orange_h3</item>
+
+        <item name="edittext_h2">@style/k2_edittext_h2</item>
+
+    </style>
+
+</resources>

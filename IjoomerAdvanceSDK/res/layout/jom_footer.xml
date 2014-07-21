@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    style="?jom_footer"
+    android:orientation="vertical" >
+
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/txtHeader"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center|center_vertical"
+        android:layout_weight="1"
+        style="?jom_textview_white_h3"
+        android:gravity="center|center_vertical"
+        android:textStyle="bold" />
+
+</LinearLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/popup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/jom_notification_popup_bg"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/textNotificationHeader"
+                style="?jom_textview_white_h4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_weight="1"
+                android:text="Popup" />
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_horizontal|center_vertical"
+                android:background="@drawable/com_facebook_close"
+                android:padding="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/jom_bg_color"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/lstNotificationData"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:cacheColorHint="#00000000"
+                android:divider="@color/jom_blue"
+                android:dividerHeight="1dp"
+                android:padding="3dp"
+                android:smoothScrollbar="true" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbrPopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/textnocontent"
+        style="?jom_textview_blue_h3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="gone" />
+
+</RelativeLayout>

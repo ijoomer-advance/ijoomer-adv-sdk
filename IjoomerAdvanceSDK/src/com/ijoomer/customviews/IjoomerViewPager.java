@@ -5,26 +5,19 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+/**
+ * This Class Contains All Method Related To IjoomerViewPager.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerViewPager extends ViewPager {
 
 	private boolean scrollable = true;
 
-	public boolean isScrollable() {
-		return scrollable;
-	}
-
-	public void setScrollable(boolean scrollable) {
-		this.scrollable = scrollable;
-	}
-
-	public IjoomerViewPager(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public IjoomerViewPager(Context context) {
-		super(context);
-	}
-
+	/**
+	 * Overrides methods
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (this.scrollable) {
@@ -42,4 +35,30 @@ public class IjoomerViewPager extends ViewPager {
 
 		return false;
 	}
+
+	public IjoomerViewPager(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+	
+	public IjoomerViewPager(Context context) {
+		super(context);
+	}
+	
+	/**
+	 * This method used to check is scrollable.
+	 * @return represented {@link Boolean}
+	 */
+	public boolean isScrollable() {
+		return scrollable;
+	}
+
+	/**
+	 * This method used to set is scrollable.
+	 * @param scrollable represented scrollable
+	 */
+	public void setScrollable(boolean scrollable) {
+		this.scrollable = scrollable;
+	}
+
+
 }

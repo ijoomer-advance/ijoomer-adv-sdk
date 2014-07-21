@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="k2_no_items">No items available</string>
+    <string name="k2_no_brand">No Brand available</string>
+    <string name="k2_no_comment">No Comment available</string>
+    <string name="k2_no_description">No Description available</string>
+    <string name="k2_be_the_first_to_comment">Be the first to comment</string>
+    <string name="k2_enter_comment">Enter your comment</string>
+    <string name="k2_enter_name">Enter your name</string>
+    <string name="k2_enter_email">Enter your email </string>
+    <string name="k2_enter_site_url">Enter your site url</string>
+    <string name="k2_submit_comment">Submit comment</string>
+    <string name="k2_rating_vote">(%1$d vote)</string>
+    <string name="k2_rating_votes">(%1$d votes)</string>
+    <string name="k2_checkout">Check out:</string>
+    <string name="k2_small_size">S</string>
+    <string name="k2_medium_size">M</string>
+    <string name="k2_large_size">L</string>
+    <string name="k2_xtra_large_size">XL</string>
+    <string name="k2_douable_xtra_large_size">XXL</string>
+    <string name="k2_reviews">Reviews</string>
+    <string name="k2_brand">Brand</string>
+    <string name="k2_description">Description</string>
+
+    <!-- Custom Dialog String -->
+    <string name="dialog_k2_item_details">Item Details</string>
+    <string name="dialog_k2_catalog">K2 Catalog</string>
+    <string name="dialog_k2_news">K2 News</string>
+    <string name="dialog_k2_single_category">K2 Single Category</string>
+    <string name="dialog_k2_directories">K2 Directories</string>
+    <string name="dialog_k2_scrolling_grid">K2 Scrolling Grid</string>
+    <string name="dialog_k2_simple_list">K2 Simple List</string>
+
+</resources>

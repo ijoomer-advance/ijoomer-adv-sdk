@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    style="?k2_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="3dp" >
+
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/txtItemTitle"
+        style="?k2_textview_h4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center" />
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="150dp"
+            android:orientation="vertical" >
+
+        <ImageView
+                android:id="@+id/imgItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/k2_default" />
+
+        <ProgressBar
+                android:id="@+id/pbrImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtItemCreatedBy"
+            style="?k2_textview_h3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.ijoomer.customviews.IjoomerRatingBar
+            android:id="@+id/rtbItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="2dp"
+            app:isEditable="true"
+            app:star_empty="@drawable/k2_rating_empty"
+            app:star_filled="@drawable/k2_rating"
+            app:star_half="@drawable/k2_rating_half"
+            app:star_size="25" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtItemRatingVote"
+            style="?k2_textview_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/imgSubmitRating"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/k2_right"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imgCancelRating"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/k2_wrong"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/txtItemDescription"
+        style="?k2_textview_h2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/k2_orange" >
+
+        <RadioGroup
+            android:id="@+id/rdgShareComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/k2_bg_color"
+            android:orientation="horizontal" >
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                android:id="@+id/rdbtItemShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/k2_radio_selector_background"
+                android:button="@null"
+                android:checked="true"
+                android:padding="1dp"
+                android:text="@string/share"
+                android:textColor="@drawable/k2_radio_selector_color" />
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                android:id="@+id/rdbItemComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/k2_radio_selector_background"
+                android:button="@null"
+                android:padding="1dp"
+                android:text="@string/comment"
+                android:textColor="@drawable/k2_radio_selector_color" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@color/k2_bg_color" >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:background="@color/k2_orange" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="@color/k2_orange" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/k2_orange"
+        android:orientation="vertical"
+        android:paddingLeft="1dp"
+        android:paddingBottom="1dp"
+        android:paddingRight="1dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/k2_white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible" >
+
+            <LinearLayout
+                android:id="@+id/lnrItemShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp" >
+
+                <ImageView
+                    android:id="@+id/imgItemShareFacebook"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/k2_facebook_square_img" />
+
+                <ImageView
+                    android:id="@+id/imgItemShareTwitter"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/k2_twitter_square_img" />
+
+                <ImageView
+                    android:id="@+id/imgItemShareGoogleplus"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/k2_gplus_square_img" />
+
+                <ImageView
+                    android:id="@+id/imgItemShareMail"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/k2_mail_square_img" />
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtItemNoComment"
+                style="?k2_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/k2_be_the_first_to_comment"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrWriteComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/k2_bg_color"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="gone" >
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtCommentMessage"
+                style="?k2_textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:gravity="top|left"
+                android:hint="@string/k2_enter_comment"
+                android:lines="5" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtCommentUserName"
+                style="?k2_textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:hint="@string/k2_enter_name"
+                android:singleLine="true" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtCommentEmail"
+                style="?k2_textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:hint="@string/k2_enter_email"
+                android:singleLine="true" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtCommentSiteUrl"
+                style="?k2_textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:gravity="top|left"
+                android:hint="@string/k2_enter_site_url"
+                android:singleLine="true" />
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnCommentSubmit"
+                style="?k2_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="3dp"
+                android:text="@string/k2_submit_comment" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

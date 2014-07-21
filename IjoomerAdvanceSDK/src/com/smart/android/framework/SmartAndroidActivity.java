@@ -18,13 +18,6 @@ public abstract class SmartAndroidActivity extends SmartActivity implements OnCh
 	private int tabBarDividerResId, tabItemLayoutId;
 	private KillReceiver clearActivityStack;
 
-	private static final int[] CHECKED_STATE_SET = { android.R.attr.state_checked };
-	private static final int[] CHECKED_PRESSED_STATE_SET = { android.R.attr.state_pressed };
-
-	private int[] tabItemOnDrawables;
-	private int[] tabItemOffDrawables;
-	private int[] tabItemPressDrawables;
-
 	public abstract String[] setTabItemNames();
 
 	public abstract int setTabBarDividerResId();

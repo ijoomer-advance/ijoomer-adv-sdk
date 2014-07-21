@@ -1,9 +1,15 @@
 package com.ijoomer.common.classes;
 
-import java.util.ArrayList;
-
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
+
+/**
+ * This Class Contains All Method Related To FilterItem.
+ * 
+ * @author tasol
+ * NOTE : currently this class not used,future development
+ */
 public class FilterItem {
 	private String itemCaption;
 	private Drawable itemIconNormal;

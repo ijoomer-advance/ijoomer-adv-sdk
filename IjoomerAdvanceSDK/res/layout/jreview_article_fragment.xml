@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?jreview_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/jreview_imgtag"
+        android:scaleType="fitXY"
+        android:src="@drawable/jreview_article_title_bar_top" />
+
+    <com.ijoomer.customviews.IjoomerEditText
+        android:id="@+id/jreviewarticleSearch"
+        style="?jreview_search_edittext_h2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:hint="@string/jreview_search"
+        android:singleLine="true"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/jreviewListArticle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@android:color/transparent"
+        android:cacheColorHint="@null"
+        android:divider="@null"
+        android:smoothScrollbar="true" >
+    </ListView>
+
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp" >
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/sobipro_entry_default" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/sobipro_transparent_black"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtTitle"
+                style="?sobipro_textview_white_h4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:maxWidth="150dp" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtDeal"
+                style="?sobipro_textview_white_h2"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:maxWidth="150dp" />
+        </LinearLayout>
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtDealOfTheDay"
+            style="?sobipro_textview_white_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:paddingLeft="2dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/sobipro_deal_of_the_day"
+            android:text="@string/sobipro_deal_of_the_day" />
+    </RelativeLayout>
+
+</LinearLayout>

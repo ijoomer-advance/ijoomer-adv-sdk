@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <attr name="k2_background" format="reference" />
+    <attr name="k2_header" format="reference" />
+    <attr name="k2_footer" format="reference" />
+    <attr name="k2_button" format="reference" />
+
+    <attr name="k2_textview_h4" format="reference" />
+    <attr name="k2_textview_h2" format="reference" />
+    <attr name="k2_textview_h3" format="reference" />
+
+    <attr name="k2_textview_white_h3" format="reference" />
+    <attr name="k2_textview_white_h4" format="reference" />
+
+    <attr name="k2_textview_orange_h2" format="reference" />
+    <attr name="k2_textview_orange_h3" format="reference" />
+
+    <attr name="k2_edittext_h2" format="reference" />
+
+</resources>

@@ -21,15 +21,18 @@ class IcsLinearLayout extends LinearLayout {
 //        /* 2 */ android.R.attr.dividerPadding,
     };
     private static final int LL_DIVIDER = 0;
-    private static final int LL_SHOW_DIVIDER = 1;
+//    private static final int LL_SHOW_DIVIDER = 1;
     private static final int LL_DIVIDER_PADDING = 2;
 
     private Drawable mDivider;
     private int mDividerWidth;
     private int mDividerHeight;
-    private int mShowDividers;
+//    private int mShowDividers;
     private int mDividerPadding;
 
+    public IcsLinearLayout(Context context) {
+    	super(context);
+	}
 
     public IcsLinearLayout(Context context, int themeAttr) {
         super(context);

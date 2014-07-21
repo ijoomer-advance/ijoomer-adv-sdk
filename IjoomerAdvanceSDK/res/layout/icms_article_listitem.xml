@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/icmsLrnArtListItem"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="5dp" >
 
@@ -19,8 +19,8 @@
 
             <com.ijoomer.customviews.IjoomerTextView
                 android:id="@+id/icmsTxtTitle"
-                style="?textview_h2"
-                android:layout_width="fill_parent"
+                style="?icms_textview_h2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="2"
@@ -29,8 +29,8 @@
 
             <com.ijoomer.customviews.IjoomerTextView
                 android:id="@+id/icmsTxtIntro"
-                style="?textview_h1"
-                android:layout_width="fill_parent"
+                style="?icms_textview_h1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1px"
                 android:maxLines="3"
@@ -45,16 +45,16 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginTop="10dp"
-            android:background="@color/white"
+            android:background="@color/icms_white"
             android:padding="1dp"
             android:scaleType="fitXY" />
-        </LinearLayout>
-
-        <com.ijoomer.customviews.IjoomerButton
-            android:id="@+id/icmsBtnArticleRemove"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:background="@drawable/wall_remove"
-            android:visibility="gone"
-             />
     </LinearLayout>
+
+    <com.ijoomer.customviews.IjoomerButton
+        android:id="@+id/icmsBtnArticleRemove"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/wall_remove"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -1,5 +1,21 @@
 package com.ijoomer.media.player;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -11,22 +27,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.FactoryConfigurationError;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class YouTubeUtility {
 
@@ -130,7 +130,8 @@ public class YouTubeUtility {
             String[] lArgValStrArr = lArgs[i].split("=");
             if (lArgValStrArr != null) {
                 if (lArgValStrArr.length >= 2) {
-                    lArgMap.put(lArgValStrArr[0], URLDecoder.decode(lArgValStrArr[1]));
+//                    lArgMap.put(lArgValStrArr[0], URLDecoder.decode(lArgValStrArr[1]));
+                	lArgMap.put(lArgValStrArr[0], URLDecoder.decode(lArgValStrArr[1], "UTF-8"));
                 }
             }
         }
@@ -138,7 +139,8 @@ public class YouTubeUtility {
         //Find out the URI string from the parameters
 
         //Populate the list of formats for the video
-        String lFmtList = URLDecoder.decode(lArgMap.get("fmt_list"));
+//        String lFmtList = URLDecoder.decode(lArgMap.get("fmt_list"));
+        String lFmtList = URLDecoder.decode(lArgMap.get("fmt_list"), "UTF-8");
         ArrayList<Format> lFormats = new ArrayList<Format>();
         if (null != lFmtList) {
             String lFormatStrs[] = lFmtList.split(",");

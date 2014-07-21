@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue"
+        android:orientation="vertical"
+        android:padding="2dip" >
+
+        <LinearLayout
+            style="?background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:background="@color/blue"
+                    android:orientation="horizontal" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        style="?alert_header_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:text="@string/dialog_title_share"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/imgShareClose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/com_facebook_close"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp" >
+
+                    <RadioGroup
+                        android:id="@+id/rdgShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginTop="1dp"
+                        android:orientation="horizontal" >
+
+                        <com.ijoomer.customviews.IjoomerRadioButton
+                            android:id="@+id/rdbFacebookShare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/ijoomer_share_selector_facebook"
+                            android:button="@null"
+                            android:checked="true"
+                            android:padding="2dp" />
+
+                        <com.ijoomer.customviews.IjoomerRadioButton
+                            android:id="@+id/rdbTwitterShare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/ijoomer_share_selector_twitter"
+                            android:button="@null"
+                            android:padding="2dp" />
+
+                        <com.ijoomer.customviews.IjoomerRadioButton
+                            android:id="@+id/rdbGooglePlusShare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/ijoomer_share_selector_google_plus"
+                            android:button="@null"
+                            android:padding="2dp" />
+
+                        <com.ijoomer.customviews.IjoomerRadioButton
+                            android:id="@+id/rdbEmailShare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/ijoomer_share_selector_email"
+                            android:button="@null"
+                            android:padding="2dp" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnrSayAboutStory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@color/blue"
+                    android:padding="1dp" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_color"
+                        android:orientation="vertical"
+                        android:padding="5dp" >
+
+                        <com.ijoomer.customviews.IjoomerEditText
+                            android:id="@+id/edtStory"
+                            style="?edittext_h2"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left|top"
+                            android:hint="@string/sayabout_story" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:gravity="right|center_vertical" >
+
+                            <com.ijoomer.customviews.IjoomerButton
+                                android:id="@+id/btnShareStory"
+                                style="?button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:padding="5dp"
+                                android:text="@string/share" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnrEmailShare"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@color/blue"
+                    android:orientation="vertical"
+                    android:padding="1dp"
+                    android:visibility="gone" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/bg_color"
+                        android:orientation="vertical"
+                        android:padding="5dp" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical" >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal" >
+
+                                <com.ijoomer.customviews.IjoomerEditText
+                                    android:id="@+id/edtShareEmail"
+                                    style="?edittext_h2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:hint="@string/email"
+                                    android:lines="2" />
+
+                                <ImageView
+                                    android:id="@+id/imgShareAddEmail"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="5dp"
+                                    android:src="@drawable/ijoomer_contact_mail" />
+                            </LinearLayout>
+
+                            <com.ijoomer.customviews.IjoomerEditText
+                                android:id="@+id/edtShareEmailMessage"
+                                style="?edittext_h2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="5dp"
+                                android:gravity="left|top"
+                                android:hint="@string/dialog_share_write_message_hint" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center" >
+
+                            <com.ijoomer.customviews.IjoomerButton
+                                android:id="@+id/btnCancel"
+                                style="?button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="1"
+                                android:text="@string/cancel" />
+
+                            <com.ijoomer.customviews.IjoomerButton
+                                android:id="@+id/btnSend"
+                                style="?button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/send" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

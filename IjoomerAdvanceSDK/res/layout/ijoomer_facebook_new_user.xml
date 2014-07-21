@@ -67,7 +67,7 @@
                     <com.ijoomer.customviews.IjoomerTextView
                         android:id="@+id/txtEmail"
                         style="?textview_h2"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
@@ -78,11 +78,35 @@
                 <com.ijoomer.customviews.IjoomerTextView
                     style="?textview_h2"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:layout_weight="1"
                     android:padding="5dp"
                     android:text="@string/facebook_signup_details_info" />
+                
+                 <LinearLayout
+                    android:id="@+id/lnrTermsNCondition"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="bottom"
+                    android:gravity="center_vertical"
+                    android:visibility="gone" >
+
+                    <com.ijoomer.customviews.IjoomerCheckBox
+                        android:id="@+id/chkTermsNCondition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/checkbox_selector" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtTermsNCondition"
+                        style="?textview_h2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="3dp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

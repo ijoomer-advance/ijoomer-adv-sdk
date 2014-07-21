@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?jreview_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1" >
+
+        <fragment
+            android:id="@+id/maps"
+            android:name="pl.mg6.android.maps.extensions.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp" >
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="80" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?jreview_textview_dark_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="3dp"
+                android:text="@string/jreview_result_within" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edit_miles"
+                style="?jreview_edittext_h2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:padding="3dip" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/text_unit"
+                style="?jreview_textview_dark_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="3dp"
+                android:text="@string/jreview_miles" />
+        </LinearLayout>
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btn_go"
+            style="?jreview_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="20"
+            android:text="@string/jreview_btnGo" />
+    </LinearLayout>
+
+</LinearLayout>

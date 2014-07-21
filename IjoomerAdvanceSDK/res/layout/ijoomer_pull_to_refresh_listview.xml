@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relPullToRefresh"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:paddingBottom="15dip"
+    android:paddingTop="10dip" >
+
+    <ProgressBar
+        android:id="@+id/pbrLoading"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="20dp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imgPullToRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:visibility="visible" />
+
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/txtPullToRefresh"
+        style="?textview_blue_h3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="5dip" />
+
+</RelativeLayout>

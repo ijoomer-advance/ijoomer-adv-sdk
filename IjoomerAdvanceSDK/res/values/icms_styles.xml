@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="icms_textview_h0">
+        <item name="android:textColor">@color/icms_txt_color</item>
+        <item name="android:textSize">8sp</item>
+    </style>
+
+    <style name="icms_textview_h1">
+        <item name="android:textColor">@color/icms_txt_color</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="icms_textview_h2">
+        <item name="android:textColor">@color/icms_txt_color</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="icms_textview_h3">
+        <item name="android:textColor">@color/icms_txt_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="icms_textview_white_h4">
+        <item name="android:textColor">@color/icms_white</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="icms_textview_lightgray_h2">
+        <item name="android:textColor">@color/icms_lightgray</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="icms_textview_blue_h1">
+        <item name="android:textColor">@color/icms_blue</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="icms_textview_blue_h2">
+        <item name="android:textColor">@color/icms_blue</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="icms_textview_blue_h3">
+        <item name="android:textColor">@color/icms_blue</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="icms_background">
+        <item name="android:background">@drawable/ijoomer_background</item>
+    </style>
+
+    <style name="icms_header">
+        <item name="android:background">@drawable/ijoomer_top_bar</item>
+    </style>
+
+</resources>

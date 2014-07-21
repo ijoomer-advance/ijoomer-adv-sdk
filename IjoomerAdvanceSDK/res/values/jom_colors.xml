@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="jom_bg_color">#ebe9e3</color>
+    <color name="jom_brown">#925219</color>
+    <color name="jom_blue">#725850</color>
+    <color name="jom_white">#ffffff</color>
+    <color name="jom_lightgray">#eee3d1</color>
+    <color name="jom_red">#FF0000</color>
+    <color name="jom_txt_color">#797979</color>
+    <color name="jom_edit_color">#797979</color>
+    <color name="jom_sidemenu">#342826</color>
+    <color name="jom_sidemenu_background">#4e3e39</color>
+    <color name="jom_text_shadow">#FFFFFF</color>
+    <color name="jom_category_bg_color">#5e4e4f</color>
+    <color name="jom_profile_cover_bg_color">#e6dcce</color>
+    <color name="jom_transparent_bg">#cbffffff</color>
+    <color name="jom_transparent_dark_bg">#ca000000</color>
+    <color name="jom_voice_messager_bg">#d2cab4</color>
+    <color name="jom_radio_check_bg">#ba998b</color>
+
+</resources>

@@ -15,14 +15,18 @@ import java.io.StringWriter;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.json.JSONObject;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
@@ -42,9 +46,11 @@ import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,23 +58,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.CookieSyncManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.androidquery.util.AQUtility;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.analytics.tracking.android.Tracker;
-import com.google.android.maps.MapView;
+import com.ijoomer.common.classes.IjoomerSuperMaster;
+import com.ijoomer.common.configuration.IjoomerGlobalConfiguration;
+import com.ijoomer.components.jbolochat.JBoloChatManager;
 import com.ijoomer.custom.interfaces.IjoomerSharedPreferences;
 import com.ijoomer.customviews.IjoomerButton;
-import com.ijoomer.customviews.IjoomerHorizontalScroll;
 import com.ijoomer.customviews.IjoomerTextView;
-import com.ijoomer.map.IjoomerActivityHostFragment;
+import com.ijoomer.menubuilder.MenuDrawer;
 import com.ijoomer.src.IjoomerLoginActivity;
 import com.ijoomer.src.R;
+import com.ijoomer.theme.ThemeManager;
 import com.ijoomer.weservice.IjoomerWebService;
 import com.smart.exception.InvalidKeyFormatException;
 import com.smart.exception.NullDataException;
@@ -84,6 +93,8 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 	public static final int SCREEN_ORIENTATION_SENSOR = 4;
 	public static final int SCREEN_ORIENTATION_NOSENSOR = 5;
 	public static int CURRENTORIENTATION = SCREEN_ORIENTATION_UNSPECIFIED;
+
+	public MenuDrawer mMenuDrawer;
 
 	private Tracker mTracker;
 	private SmartApplication application = null;
@@ -117,13 +128,6 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 
 	private int screenRootViewResId = 0;
 
-	private LinearLayout grandParent;
-
-	private LinearLayout sideMenu;
-
-	private LinearLayout topView;
-	private IjoomerHorizontalScroll hScrollView;
-
 	private LinearLayout topAdvertiseView;
 	private LinearLayout bottomAdvertiseView;
 
@@ -132,10 +136,37 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 	private static String latitude;
 	public static String longitude;
 
+	private Location currentLocation;
+	private boolean keyboardHideOnOutsideTouch = true;
+
+	public abstract void showTabBar();
+
+	public abstract void initTheme();
+
+	public abstract SmartListAdapterWithHolder getMoreMenuListAdapter(ArrayList<SmartListItem> moreListData);
+
+	public boolean isKeyboardHideOnOutsideTouch() {
+		return keyboardHideOnOutsideTouch;
+	}
+
+	public void setKeyboardHideOnOutsideTouch(boolean keyboardHideOnOutsideTouch) {
+		this.keyboardHideOnOutsideTouch = keyboardHideOnOutsideTouch;
+	}
+
+	public Location getCurrentLocation() {
+		return currentLocation;
+	}
+
+	public void setCurrentLocation(Location currentLocation) {
+		this.currentLocation = currentLocation;
+	}
+
+	@SuppressWarnings("deprecation")
 	public int getDeviceWidth() {
 		return getWindowManager().getDefaultDisplay().getWidth();
 	}
 
+	@SuppressWarnings("deprecation")
 	public int getDeviceHeight() {
 		return getWindowManager().getDefaultDisplay().getHeight();
 	}
@@ -148,83 +179,89 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 		return bottomAdvertiseView;
 	}
 
-	/** Called when the activity is first created. */
+	/**
+	 * Called when the activity is first created.
+	 */
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		System.gc();
-		hScrollView.post(new Runnable() {
-
-			@Override
-			public void run() {
-				hScrollView.fullScroll(ScrollView.FOCUS_RIGHT);
-			}
-		});
 
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		ThemeManager.getInstance().setTheme(this);
 		super.onCreate(savedInstanceState);
 		System.gc();
+		CookieSyncManager.createInstance(this);
 		this.application = SmartApplication.REF_SMART_APPLICATION;
 
-		if (getClass().getName().toLowerCase().contains("jom") && getSmartApplication().readSharedPreferences().getString(SP_LOGIN_REQ_OBJECT, "").length() <= 0) {
+		if (((getClass().getSimpleName().toLowerCase().startsWith("jom") || getClass().getSimpleName().toLowerCase().contains("cometchat") || getClass().getSimpleName()
+				.toLowerCase().contains("jbolo")) && getSmartApplication().readSharedPreferences().getString(SP_LOGIN_REQ_OBJECT, "").length() <= 0)) {
 
 			getSmartApplication().writeSharedPreferences(SP_LAST_ACTIVITY, getClass().getName());
+			getSmartApplication().writeSharedPreferences(SP_LAST_ACTIVITY_INTENT, getIntent().getStringExtra("IN_OBJ"));
+			try {
+				((IjoomerSuperMaster) this).setScreenCaption(new JSONObject(getIntent().getStringExtra("IN_OBJ")).getString("itemcaption"));
+			} catch (Exception e) {
+			}
 			Intent intent = new Intent("clearStackActivity");
 			intent.setType("text/plain");
 			sendBroadcast(intent);
 			IjoomerWebService.cookies = null;
 			loadNew(IjoomerLoginActivity.class, this, true);
-
 		} else {
-			EasyTracker.getInstance().setContext(this);
-			mTracker = EasyTracker.getInstance().getTracker();
-			mTracker.sendView(getClass().getSimpleName());
+			try {
+				if (getSmartApplication().readSharedPreferences().getString(SP_LOGIN_REQ_OBJECT, "").length() > 0) {
+					if(IjoomerGlobalConfiguration.isEnableJbolo()){
+						JBoloChatManager.getInstance(this).startPolling();
+					}
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+
+			EasyTracker.getInstance(this).activityStart(this);
+			mTracker = EasyTracker.getInstance(this);
+			mTracker.set(Fields.SCREEN_NAME,getClass().getSimpleName());
+			mTracker.send(MapBuilder.createAppView().build());
 
 			printDeviceConfig(this);
-			// if (!isMemorySufficiant()) {
-			// getOKDialog("Low Memory", "Please close other application.",
-			// "ok",
-			// true, new AlertNeutral() {
-			//
-			// @Override
-			// public void NeutralMathod(DialogInterface dialog, int id) {
-			// finish();
-			// }
-			// });
-			// } else
 
-			if (mlocManager == null) {
-				try {
-					mlocManager = (LocationManager) getSystemService(Activity.LOCATION_SERVICE);
-					mListner = new LocationListner();
-					runOnUiThread(new Runnable() {
+			try {
+				mlocManager = (LocationManager) getSystemService(Activity.LOCATION_SERVICE);
+				mListner = new LocationListner();
+				runOnUiThread(new Runnable() {
 
-						@Override
-						public void run() {
+					@Override
+					public void run() {
+						try {
 							try {
-
-								mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mListner);
-							} catch (Throwable e) {
-								e.printStackTrace();
-							}
-							try {
-								mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mListner);
+								mlocManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, mListner);
 							} catch (Throwable e) {
 								e.printStackTrace();
 							}
 
+							mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mListner);
+						} catch (Throwable e) {
+							e.printStackTrace();
 						}
-					});
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
+						try {
+							mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mListner);
+						} catch (Throwable e) {
+							e.printStackTrace();
+						}
+
+					}
+				});
+			} catch (Throwable e) {
+				e.printStackTrace();
 			}
 			{
 				setRequestedOrientation(CURRENTORIENTATION);
+
 				/** Initialize Components */
 				initiateActivity();
 
@@ -234,9 +271,12 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 
 				initComponents();
 
+				initTheme();
+
 				prepareViews();
 
 				setActionListeners();
+				setOnLoadAdvertisement();
 
 			}
 		}
@@ -287,44 +327,16 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 
 		FrameLayout frm = new FrameLayout(this);
 		frm.addView(screenRootView);
-		frm.setLayoutParams(new FrameLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight()));
+		frm.setLayoutParams(new FrameLayout.LayoutParams(getDeviceWidth(), getDeviceHeight()));
 		FrameLayout frm1 = new FrameLayout(this);
-		frm1.setLayoutParams(new FrameLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight()));
+		frm1.setLayoutParams(new FrameLayout.LayoutParams(getDeviceWidth(), getDeviceHeight()));
 		frm1.setBackgroundColor(Color.TRANSPARENT);
-		frm.addView(frm1, new FrameLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight()));
+		frm.addView(frm1, new FrameLayout.LayoutParams(getDeviceWidth(), getDeviceHeight()));
 		frm1.setId(123);
 		frm1.setVisibility(View.GONE);
 
-		topView = new LinearLayout(this);
-		topView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-
-		grandParent = new LinearLayout(this);
-		grandParent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-
-		hScrollView = new IjoomerHorizontalScroll(this);
-		hScrollView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT));
-		hScrollView.setId(100);
-
-		sideMenu = new LinearLayout(this);
-		sideMenu.setId(108);
-		// sideMenu.setBackgroundColor(Color.parseColor("#80ff23ff"));
-
-		grandParent.addView(sideMenu, new LinearLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth() - convertSizeToDeviceDependent(60),
-				LinearLayout.LayoutParams.FILL_PARENT));
-		grandParent.addView(frm, new FrameLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth(), FrameLayout.LayoutParams.FILL_PARENT));
-
-		hScrollView.addView(grandParent, new LinearLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth(), LinearLayout.LayoutParams.FILL_PARENT));
-
-		topView.addView(hScrollView, new FrameLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth(), FrameLayout.LayoutParams.FILL_PARENT));
-
-		super.setContentView(topView);
-		hScrollView.post(new Runnable() {
-
-			@Override
-			public void run() {
-				hScrollView.fullScroll(ScrollView.FOCUS_RIGHT);
-			}
-		});
+		mMenuDrawer = MenuDrawer.attach(this, MenuDrawer.MENU_DRAG_WINDOW);
+		mMenuDrawer.setContentView(frm);
 
 	}
 
@@ -340,7 +352,7 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 		if (screenRootView == null) {
 			if (screenRootViewResId == 0) {
 				screenRootView = new LinearLayout(this);
-				screenRootView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+				screenRootView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 				((LinearLayout) screenRootView).setOrientation(LinearLayout.VERTICAL);
 			} else {
 				LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -356,12 +368,12 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 			headerResId = setHeaderLayoutId();
 			if (headerResId != 0) {
 				headerView = new LinearLayout(this);
-				headerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				headerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 				LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				inflater.inflate(headerResId, headerView);
 			} else {
 				headerView = new LinearLayout(this);
-				headerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				headerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 			}
 
 		}
@@ -373,11 +385,11 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 			View v = setTopAdvertisement();
 			if (v != null) {
 				topAdvertiseView = new LinearLayout(this);
-				topAdvertiseView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-				topAdvertiseView.addView(v, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				topAdvertiseView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				topAdvertiseView.addView(v, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 			} else {
 				topAdvertiseView = new LinearLayout(this);
-				topAdvertiseView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				topAdvertiseView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 			}
 
 		}
@@ -389,11 +401,11 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 			View v = setBottomAdvertisement();
 			if (v != null) {
 				bottomAdvertiseView = new LinearLayout(this);
-				bottomAdvertiseView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-				bottomAdvertiseView.addView(v, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				bottomAdvertiseView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				bottomAdvertiseView.addView(v, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 			} else {
 				bottomAdvertiseView = new LinearLayout(this);
-				bottomAdvertiseView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				bottomAdvertiseView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 			}
 
 		}
@@ -405,12 +417,12 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 			footerResId = setFooterLayoutId();
 			if (footerResId != 0) {
 				footerView = new LinearLayout(this);
-				footerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				footerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 				LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				inflater.inflate(footerResId, footerView);
 			} else {
 				footerView = new LinearLayout(this);
-				footerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				footerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 			}
 		}
 		return footerView;
@@ -419,10 +431,20 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 	private LinearLayout getContentView() {
 		if (contentView == null) {
 			contentView = new LinearLayout(this);
-			contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+			contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
 			contentView.setOrientation(LinearLayout.VERTICAL);
 		}
 		return contentView;
+	}
+
+	/**
+	 * This method will set header custom header layout view.
+	 * 
+	 * @param headerView
+	 *            = Int from R.layout.layout_name
+	 */
+	public void setHeaderView(LinearLayout headerView) {
+		this.headerView = headerView;
 	}
 
 	/**
@@ -433,16 +455,6 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 	 */
 	public void setHeaderView(int headerResId) {
 		this.headerResId = headerResId;
-	}
-
-	/**
-	 * This method will set header custom header layout view.
-	 * 
-	 * @param headerResId
-	 *            = Int from R.layout.layout_name
-	 */
-	public void setHeaderView(LinearLayout headerView) {
-		this.headerView = headerView;
 	}
 
 	/**
@@ -510,10 +522,10 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 			BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
 			Calendar calendar = Calendar.getInstance();
 			try {
-				System.err.println("Logged Date-Time : " + calendar.getTime().toLocaleString());
+				System.err.println("Logged Date-Time : " + ((String) DateFormat.format("yyyy-MM-dd kk:mm:ss", calendar)));
 			} catch (Throwable e) {
 			}
-			buf.append("Logged Date-Time : " + calendar.getTime().toLocaleString());
+			buf.append("Logged Date-Time : " + ((String) DateFormat.format("yyyy-MM-dd kk:mm:ss", calendar)));
 			buf.append("\n\n");
 			buf.append(text);
 			buf.newLine();
@@ -638,7 +650,7 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 
 			@Override
 			public void onClick(View v) {
-				target.NeutralMathod();
+				target.NeutralMethod();
 				dialog.dismiss();
 			}
 		});
@@ -661,7 +673,7 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 
 			@Override
 			public void onClick(View v) {
-				target.PositiveMathod();
+				target.PositiveMethod();
 				dialog.dismiss();
 			}
 		});
@@ -670,7 +682,7 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 
 			@Override
 			public void onClick(View v) {
-				target.NegativeMathod();
+				target.NegativeMethod();
 				dialog.dismiss();
 			}
 		});
@@ -704,12 +716,12 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 
 		builder.setTitle(title).setMessage(msg).setIcon(image).setCancelable(false).setPositiveButton(positiveBtnCaption, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				target.PositiveMathod(dialog, id);
+				target.PositiveMethod(dialog, id);
 			}
 		}).setNegativeButton(negativeBtnCaption, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				target.NegativeMathod(dialog, id);
+				target.NegativeMethod(dialog, id);
 			}
 		});
 
@@ -817,8 +829,6 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 	 * @param forgetMe
 	 *            = boolean forgetMe will decide whether the current activity
 	 *            should remain in activity stack or not.
-	 * @param key
-	 *            = String key will be the key to pass value to next activity.
 	 * @param dataTopass
 	 *            = Any number of key-value pair of any type passed to next
 	 *            activity with specified String key.<br>
@@ -827,10 +837,9 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 	 *            e.g<br>
 	 *            <b> {@code}loadNew(NextActivity.Class, CurrentActivity.this
 	 *            ,true,"first","hi","second",10,"third",false);
-	 * 
 	 */
 	public void loadNew(Class<?> clazz, Activity current, boolean forgetMe, Object... dataTopass) throws WronNumberOfArgumentsException, InvalidKeyFormatException,
-			NullDataException {
+	NullDataException {
 
 		if (dataTopass.length % 2 != 0) {
 			throw new WronNumberOfArgumentsException();
@@ -903,6 +912,101 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 		if (forgetMe) {
 			finish();
 		}
+	}
+
+	/**
+	 * This method will load new activity. If the <b>forgetMe</b> flag is passed
+	 * <b>false</b> then the current activity will remain in activity stack.
+	 * Otherwise it will be finished first and then new activity will be loaded.
+	 * This method will also pass String value with a key to next activity.
+	 * 
+	 * @param clazz
+	 *            = Class clazz Activity will be loaded.
+	 * @param current
+	 *            = Activity current will be the same activity from which this
+	 *            function is being called.
+	 * @param requestCode
+	 *            = int request code.
+	 * @param dataTopass
+	 *            = Any number of key-value pair of any type passed to next
+	 *            activity with specified String key.<br>
+	 *            Note: Key Must Be String ,Non-Empty and NotNull.<br>
+	 *            Value can be any type.<br>
+	 *            e.g<br>
+	 *            <b> {@code}loadNew(NextActivity.Class, CurrentActivity.this
+	 *            ,true,"first","hi","second",10,"third",false);
+	 */
+	public void loadNewResult(Class<?> clazz, Activity current, int requestCode, Object... dataTopass) throws WronNumberOfArgumentsException, InvalidKeyFormatException,
+	NullDataException {
+
+		if (dataTopass.length % 2 != 0) {
+			throw new WronNumberOfArgumentsException();
+		}
+		Intent intent = new Intent(current, clazz);
+
+		for (int i = 1; i < dataTopass.length; i += 2) {
+
+			if ((!(dataTopass[i - 1] instanceof String)) || (String.valueOf(dataTopass[i - 1]).length() <= 0) || (dataTopass[i - 1] == null)) {
+				throw new InvalidKeyFormatException();
+			}
+
+			if (dataTopass[i] == null)
+				throw new NullDataException();
+
+			try {
+				if (dataTopass[i] instanceof Boolean) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), Boolean.parseBoolean(String.valueOf(dataTopass[i])));
+				} else if (dataTopass[i] instanceof boolean[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (boolean[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Byte) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), Byte.parseByte((String.valueOf(dataTopass[i]))));
+				} else if (dataTopass[i] instanceof byte[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (byte[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Character) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (char) (Character) dataTopass[i]);
+				} else if (dataTopass[i] instanceof char[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (char[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Double) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), Double.parseDouble((String.valueOf(dataTopass[i]))));
+				} else if (dataTopass[i] instanceof double[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (double[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Float) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), Float.parseFloat(String.valueOf(dataTopass[i])));
+				} else if (dataTopass[i] instanceof float[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (float[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Integer) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), Integer.parseInt(String.valueOf(dataTopass[i])));
+				} else if (dataTopass[i] instanceof int[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (int[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Long) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), Long.parseLong(String.valueOf(dataTopass[i])));
+				} else if (dataTopass[i] instanceof long[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (long[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Short) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), Short.parseShort(String.valueOf(dataTopass[i])));
+				} else if (dataTopass[i] instanceof short[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (short[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof String) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (String.valueOf(dataTopass[i])));
+				} else if (dataTopass[i] instanceof String[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (String[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Parcelable) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (Parcelable) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Parcelable[]) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (Parcelable[]) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Serializable) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (Serializable) dataTopass[i]);
+				} else if (dataTopass[i] instanceof Bundle) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (Bundle) dataTopass[i]);
+				} else if (dataTopass[i] instanceof CharSequence) {
+					intent.putExtra(String.valueOf(dataTopass[i - 1]), (CharSequence) dataTopass[i]);
+				}
+			} catch (Throwable e) {
+			}
+		}
+
+		startActivityForResult(intent, requestCode);
+
 	}
 
 	/*
@@ -1096,6 +1200,7 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 	 * will not sleep until either application is finished or removeWakeLock()
 	 * method is called.
 	 */
+	@SuppressWarnings("deprecation")
 	public void setWakeLock() {
 
 		if (wakelock == null) {
@@ -1165,8 +1270,8 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 			System.err.println("VERSION RELEASE: " + android.os.Build.VERSION.RELEASE);
 			stringBuilder.append("VERSION RELEASE: " + android.os.Build.VERSION.RELEASE);
 			stringBuilder.append("\n");
-			System.err.println("VERSION SDK: " + android.os.Build.VERSION.SDK);
-			stringBuilder.append("VERSION SDK: " + android.os.Build.VERSION.SDK);
+			System.err.println("VERSION SDK: " + android.os.Build.VERSION.SDK_INT);
+			stringBuilder.append("VERSION SDK: " + android.os.Build.VERSION.SDK_INT);
 			stringBuilder.append("\n");
 
 			System.err.println("=============== Device Information ===============================");
@@ -1223,10 +1328,19 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 	protected void onPause() {
 		super.onPause();
 		System.gc();
+		try {
+			mlocManager.removeUpdates(mListner);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
-	public MapView getMapView() {
-		return IjoomerActivityHostFragment.mapView;
+	public GoogleMap getMapView() {
+		FragmentManager fm = getSupportFragmentManager();
+		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.maps);
+
+		// Getting GoogleMap object from the fragment
+		return f.getExtendedMap();
 	}
 
 	public int convertSizeToDeviceDependent(int value) {
@@ -1242,13 +1356,16 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 		Location loc = mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (loc == null) {
 			loc = mlocManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			if (loc == null) {
+				loc = mlocManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+			}
 			if (loc != null) {
 				return "" + loc.getLatitude();
 			}
 		} else {
 			return "" + loc.getLatitude();
 		}
-		return "0.0";
+		return "0";
 	}
 
 	public void setLatitude(String latitide) {
@@ -1262,13 +1379,16 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 		Location loc = mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (loc == null) {
 			loc = mlocManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			if (loc == null) {
+				loc = mlocManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+			}
 			if (loc != null) {
 				return "" + loc.getLongitude();
 			}
 		} else {
 			return "" + loc.getLongitude();
 		}
-		return "0.0";
+		return "0";
 	}
 
 	public void setLongitude(String longitude) {
@@ -1281,7 +1401,7 @@ public abstract class SmartActivity extends FragmentActivity implements SmartAct
 		public void onLocationChanged(Location location) {
 			setLatitude("" + location.getLatitude());
 			setLongitude("" + location.getLongitude());
-			mlocManager.removeUpdates(mListner);
+			setCurrentLocation(location);
 		}
 
 		@Override

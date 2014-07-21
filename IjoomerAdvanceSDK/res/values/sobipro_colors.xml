@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="sobipro_blue">#725850</color>
+    <color name="sobipro_white">#ffffff</color>
+    <color name="sobipro_bg_color">#ebe9e3</color>
+    <color name="sobipro_txt_color">#797979</color>
+    <color name="sobipro_edit_color">#797979</color>
+    <color name="sobipro_black">#000000</color>
+    <color name="sobipro_sidemenu">#342826</color>
+    <color name="sobipro_orange">#fa6800</color>
+    <color name="sobipro_pink">#d80073</color>
+    <color name="sobipro_green">#60a917</color>
+    <color name="sobipro_brown">#825a2c</color>
+    <color name="sobipro_lightorange">#fd8d3e</color>
+    <color name="sobipro_lightpink">#f14da5</color>
+    <color name="sobipro_lightgreen">#7ac430</color>
+    <color name="sobipro_lightbrown">#9d713f</color>
+    <color name="sobipro_grey">#d7d7d7</color>
+    <color name="sobipro_light_green">#54d805</color>
+    <color name="sobipro_transparent_bg">#cbffffff</color>
+    <color name="sobipro_transparent_black">#be000000</color>
+    <color name="sobipro_transparent_dark_bg">#ca000000</color>
+    <color name="sobipro_popup_button_bg">#595959</color>
+    <color name="sobipro_review_box_bg">#eaeaea</color>
+    <!-- Sobipro Car Section color code -->
+    <color name="sobipro_car_theme_text_color">#fdee00</color>
+    <color name="sobipro_car_theme_light_color">#626262</color>
+    <color name="sobipro_car_theme_dark_color">#464646</color>
+    <color name="sobipro_car_theme_grid_border_color">#979797</color>
+    <!-- Sobipro Restaurant Section color code -->
+    <color name="sobipro_restaurant_entry_text_color">#797979</color>
+    <color name="sobipro_restaurant_detail_bg">#efefef</color>
+    <color name="sobipro_restaurant_theme_light_green">#e0f8c8</color>
+    <color name="sobipro_restaurant_theme_detail_grey">#464646</color>
+    <color name="sobipro_restaurant_theme_detail_off_red">#d00000</color>
+    <color name="sobipro_white_50_opacity">#80ffffff</color>
+    <color name="sobipro_black_50_opacity">#80000000</color>
+
+</resources>

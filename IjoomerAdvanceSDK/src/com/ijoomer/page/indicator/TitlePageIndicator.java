@@ -17,8 +17,6 @@
  */
 package com.ijoomer.page.indicator;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -39,6 +37,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.ijoomer.src.R;
+
+import java.util.ArrayList;
 
 /**
  * A TitlePageIndicator is a PageIndicator which displays the title of left view
@@ -158,6 +158,7 @@ public class TitlePageIndicator extends View implements PageIndicator {
 		this(context, attrs, R.attr.vpiTitlePageIndicatorStyle);
 	}
 
+	@SuppressWarnings("deprecation")
 	public TitlePageIndicator(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		if (isInEditMode())
@@ -543,6 +544,8 @@ public class TitlePageIndicator extends View implements PageIndicator {
 			canvas.drawPath(mPath, mPaintFooterIndicator);
 			mPaintFooterIndicator.setAlpha(0xFF);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -844,7 +847,6 @@ public class TitlePageIndicator extends View implements PageIndicator {
 			dest.writeInt(currentPage);
 		}
 
-		@SuppressWarnings("UnusedDeclaration")
 		public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
 			public SavedState createFromParcel(Parcel in) {
 				return new SavedState(in);

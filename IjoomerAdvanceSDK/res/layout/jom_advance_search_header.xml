@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical"
+    android:paddingBottom="5dp" >
+
+    <LinearLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtCriteria"
+                style="?jom_textview_h3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="@string/criteria" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtAddCriteria"
+                style="?jom_textview_h2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingRight="2dp"
+                android:text="@string/addcriteria" />
+
+            <ImageView
+                android:id="@+id/btnAddCriteria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="5dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/jom_advance_search_add" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mainSpinnerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/jom_advance_search_content_box"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Spinner
+                    android:id="@+id/spCriteria"
+                    style="?jom_spinner"
+                    android:layout_width="142dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingRight="15dp"
+                    android:visibility="visible" />
+
+                <Spinner
+                    android:id="@+id/spCondition"
+                    style="?jom_spinner"
+                    android:layout_width="142dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="2dp"
+                    android:paddingRight="15dp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containsSingleValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/txtValue"
+                    style="?jom_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:hint="@string/valuetosearch"
+                    android:paddingLeft="4dp"
+                    android:singleLine="true"
+                    android:visibility="visible" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/txtValueMultiSelect"
+                    style="?jom_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:hint="@string/valuetosearch"
+                    android:paddingLeft="4dp"
+                    android:singleLine="true"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/spOptions"
+                    style="?jom_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containsToValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:visibility="gone" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/txtValueFrom"
+                    style="?jom_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:hint="@string/startdate"
+                    android:paddingLeft="4dp"
+                    android:singleLine="true" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/txtValueTo"
+                    style="?jom_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:hint="@string/enddate"
+                    android:singleLine="true" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

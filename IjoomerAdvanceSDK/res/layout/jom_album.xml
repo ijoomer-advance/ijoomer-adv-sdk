@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?jom_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lnrPhotosHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jom_album_detail_header_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtAllPhotos"
+            style="?jom_textview_h3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/all_phots" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtMyPhotos"
+            style="?jom_textview_h3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/jom_album_detail_header_divider"
+            android:gravity="center"
+            android:text="@string/my_phots" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtAddAlbum"
+            style="?jom_textview_h3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/jom_album_detail_header_divider"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:text="@string/add_album" />
+    </LinearLayout>
+
+    <com.ijoomer.customviews.IjoomerButton
+        android:id="@+id/btnAddAlbum"
+        style="?jom_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/add_album"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/lnrFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,7 +2,7 @@ package com.ijoomer.media.player;
 
 /**
  * Created with IntelliJ IDEA.
- * User: kslazarev
+ * User: tasol
  * Date: 03.11.12
  * Time: 8:55
  * To change this template use File | Settings | File Templates.

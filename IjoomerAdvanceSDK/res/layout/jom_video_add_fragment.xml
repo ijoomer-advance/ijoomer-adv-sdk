@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/jom_album_detail_header_bg" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtUploadVideo"
+                    style="?jom_textview_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:drawableRight="@drawable/jom_album_detail_header_divider"
+                    android:gravity="center"
+                    android:text="@string/uplod_video"
+                    android:textColor="@color/jom_blue" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtLinkVideo"
+                    style="?jom_textview_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/link_video" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnrUploadVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtVideoFile"
+                    style="?jom_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnBrowse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="2dp"
+                    android:background="@color/jom_blue"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:text="@string/browse"
+                    android:textColor="@color/jom_white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnrLinkVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtVideoLink"
+                    style="?jom_edittext_h2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:hint="@string/videos_link_url"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtVideoTitle"
+                style="?jom_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:hint="@string/videos_title"
+                android:singleLine="true" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtVideoDescription"
+                style="?jom_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="left|top"
+                android:hint="@string/description"
+                android:lines="3"
+                android:maxLines="3" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtVideoCaption"
+                style="?jom_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="left|top"
+                android:hint="@string/say_about_video"
+                android:lines="3"
+                android:visibility="gone"
+                android:maxLines="3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtVideoLocation"
+                    style="?jom_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/locaton"
+                    android:singleLine="true" />
+
+                <ImageView
+                    android:id="@+id/imgMap"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:padding="2dp"
+                    android:src="@drawable/ijoomer_map_pin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtVideoCategory"
+                    style="?jom_textview_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/category" />
+
+                <Spinner
+                    android:id="@+id/spnVideoCategory"
+                    style="?jom_spinner"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtVideoWhoCanSee"
+                    style="?jom_textview_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/who_can_see" />
+
+                <Spinner
+                    android:id="@+id/spnWhoCanSee"
+                    style="?jom_spinner"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnCancle"
+            style="?jom_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnUpload"
+            style="?jom_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:text="@string/upload" />
+    </LinearLayout>
+
+</LinearLayout>

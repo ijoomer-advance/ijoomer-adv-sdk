@@ -1,39 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ijoomer.src"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="6"
+    android:versionName="1.5" >
 
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
 
+    <!-- GOOGLE MAP V2 PERMISSIONS START -->
+
+    <permission
+        android:name="com.ijoomer.src.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.ijoomer.src.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!-- GOOGLE MAP V2 PERMISSIONS END -->
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.ACCESS_COARSE_LOCATION"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.ACCESS_MOCK_LOCATION"
-        android:required="false" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission
-        android:name="android.permission.ACCESS_WIFI_STATE"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.CALL_PHONE"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.CAMERA"
-        android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <!-- GCM PERMISSIONS START -->
+
+    <permission
+        android:name="com.ijoomer.src.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.ijoomer.src.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- GCM PERMISSIONS END -->
 
     <application
         android:name="com.smart.framework.SmartApplication"
@@ -41,8 +63,32 @@
         android:icon="@drawable/ijoomer_luncher_icon"
         android:label="@string/app_name"
         android:theme="@style/ijoomer_theme" >
+
+        <!-- GCM RECEIVER And SERVICE START -->
+
+        <receiver
+            android:name="com.ijoomer.src.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.android.c2dm.intent.GCM_RECEIVED_ACTION" />
+
+                <category android:name="com.ijoomer.src" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.ijoomer.src.GcmIntentService"
+            android:enabled="true" />
+
+        <!-- GCM RECEIVER And SERVICE END -->
+
+
+        <!-- CoreiJoomerAdvance Activities START -->
+
         <activity
-            android:name=".IjoomerSplashActivity"
+            android:name="com.ijoomer.src.IjoomerSplashActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,23 +97,233 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".IjoomerLoginActivity"
+            android:name="com.ijoomer.src.IjoomerLoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".IjoomerHomeActivity"
+            android:name="com.ijoomer.src.IjoomerPushNotificationLuncherActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.ijoomer.src.IjoomerHomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".IjoomerRegistrationStep1Activity"
+            android:name="com.ijoomer.src.IjoomerMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.ijoomer.src.IjoomerRegistrationStep1Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".IjoomerRegistrationStep2Activity"
+            android:name="com.ijoomer.src.IjoomerRegistrationStep1Activity_v30"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.src.IjoomerRegistrationStep2Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IjoomerWebviewClient"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IjoomerFileChooserActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IjoomerPhotoGalaryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.media.player.IjoomerMediaPlayer"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IJoomerTwitterShareActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IJoomerMailShareActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IJoomerGooglePlusShareActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IjoomerFacebookSharingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IjoomerShareActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IjoomerMapAddress"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IjoomerMapPloyline"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.common.classes.IjoomerCometChat"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
+        <!-- CoreiJoomerAdvance Activities END -->
 
-        <!-- ICMS Activities -->
+        <!-- Crash Handler Activity START-->
+        <activity
+            android:name="com.smart.framework.CrashReportActivity"/>
+        <!-- Crash Handler Activity END-->
+
+
+        <!-- JomSocial Activities START -->
+
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomActivitiesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomFriendListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomProfileActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomProfileDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomAlbumsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomAlbumsDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomPhotoDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomVideoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomVideoDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomWallOrActivityDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomPrivacySettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomMapActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomUplodPhotosActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomEventActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomEventCreateActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomEventDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomEventDetailsActivity_v30"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomGroupActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomGroupCreateActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomGroupDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomGroupDetailsActivity_v30"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomGroupAnnouncementDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomGroupDiscussionDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomMessageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomMessageDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomMessageComposeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomPhotoFullScreenActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomAdvanceSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomAdvanceSearchDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomInviteFriendActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomPhotoTagActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomVideoTrimmerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomFriendSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jomsocial.JomTagPhotoVideoAddRemoveActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- JomSocial Activities END -->
+
+
+        <!-- ICMS Activities START -->
+
         <activity
             android:name="com.ijoomer.components.icms.IcmsArchivedArticlesActivity"
             android:screenOrientation="portrait"
@@ -97,42 +353,264 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <!-- Common Activities -->
+        <!-- ICMS Activities END -->
+
+
+        <!-- Plugins Activities START -->
+
         <activity
-            android:name="com.ijoomer.map.IjoomerMapAddress"
+            android:name="com.ijoomer.plugins.PluginsYoutubeMediaPlayer"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.ijoomer.plugins.PluginsContactUsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.ijoomer.common.classes.IjoomerWebviewClient"
+            android:name="com.ijoomer.plugins.PluginsYoutubePlaylistActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.ijoomer.common.classes.IjoomerFileChooserActivity"
+            android:name="com.ijoomer.plugins.PluginsYoutubeVideoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.ijoomer.common.classes.IjoomerPhotoGalaryActivity"
+            android:name="com.ijoomer.plugins.PluginsFacebookCheckinActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.ijoomer.map.IjoomerMapActivity"
+            android:name="com.ijoomer.plugins.PluginsWeatherActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.ijoomer.media.player.IjoomerMediaPlayer"
-            android:configChanges="orientation"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name="com.ijoomer.common.classes.IJoomerTwitterShareActivity"
+            android:name="com.ijoomer.plugins.PluginsWeatherLocationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <uses-library android:name="com.google.android.maps" />
+        <!-- Plugins Activities END -->
+
+
+        <!-- Sobipro Activities START -->
+
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproGalleryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproFavouriteActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproEntryDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproSectionCategoryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproEntriesActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproMapActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproReviewAddActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproSearchResultActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproAddEntryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproRestaurantDetailMapActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.sobipro.SobiproFacebookLoginForCheckinActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- Sobipro Activities END -->
+
+
+        <!-- K2 Activities Start -->
+
+        <activity
+            android:name="com.ijoomer.components.k2.K2MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.k2.K2NewsDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.k2.K2CatalogDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.k2.K2ItemsDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.k2.K2GalleryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- K2 Activities End -->
+
+
+        <!-- JBoloChat Activities START -->
+
+        <activity
+            android:name="com.ijoomer.components.jbolochat.JboloOnlineUserListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jbolochat.JboloMessageListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jbolochat.JboloHistoryListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jbolochat.JboloInviteUserListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- JBoloChat Activities END -->
+
+
+        <!-- EasyBlog Activities START -->
+
+        <activity
+            android:name="com.ijoomer.components.easyblog.EasyBlogEntriesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.easyblog.EasyBlogEntryDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.easyblog.EasyBlogAddBlogActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.easyblog.EasyBlogAllCategoryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- EasyBlog Activities END -->
+
+
+        <!-- JReview Activities START -->
+
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewAllDirectoriesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewCategoriesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewCategoryArticlesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewCreateArticleActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticlesMapActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticleDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticleDetailMapActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticleReviewsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticleReviewsDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticleAddReviewActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticleGalleryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JreviewArticleAttachmentsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticleVideosActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewVideosUploadActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewArticleVideosDetailsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewFavouriteArticlesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewSearchResultActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.ijoomer.components.jReview.JReviewPricingPlansActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <!-- JReview Activities END -->
+
+
+        <!-- External Activity START -->
 
         <activity
             android:name="com.facebook.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+
+        <!-- External Activity END -->
+
+
+        <!-- CoreIJoomerAdvance meta-data START -->
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -140,10 +618,15 @@
         <meta-data
             android:name="ADMOB_ALLOW_LOCATION_FOR_ADS"
             android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="4452000" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/map_api_key" />
 
-        <activity
-            android:name="com.google.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <!-- CoreIJoomerAdvance meta-data END -->
+
     </application>
 
 </manifest>

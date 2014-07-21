@@ -1,0 +1,75 @@
+<resources>
+
+    <string-array name="sobipro_pageLayout">
+        <item>Business</item>
+        <item>Cars</item>
+        <item>Restaurant</item>
+    </string-array>
+
+    <string name="sobipro_search_keyword_hint">Keyword</string>
+    <string name="sobipro_miles_text">miles</string>
+    <string name="sobipro_from_text">from</string>
+    <string name="sobipro_current_location">Current location</string>
+    <string name="sobipro_search_allwords">All Words</string>
+    <string name="sobipro_search_anywords">Any Words</string>
+    <string name="sobipro_search_exactphrase">Exact Phrase</string>
+    <string name="sobipro_search_searchwithin_text">Search Within</string>
+    <string name="sobipro_search_price_1">$</string>
+    <string name="sobipro_search_price_2">$$</string>
+    <string name="sobipro_search_price_3">$$$</string>
+    <string name="sobipro_search_price_4">$$$$</string>
+    <string name="sobipro_rating_text">Star Rating</string>
+    <string name="sobipro_search_apply">Apply</string>
+    <string name="sobipro_search_cancel">Cancel</string>
+    <string name="sobipro_1mile_text">1 mile</string>
+    <string name="sobipro_1000mile_text">1000 miles</string>
+    <string name="sobipro_detail_about_text">About</string>
+    <string name="sobipro_detail_review_text">Reviews</string>
+    <string name="sobipro_add_review">Add Review</string>
+    <string name="sobipro_favourite">Favourite</string>
+    <string name="sobipro_addtofavorite">entry added as favorite</string>
+    <string name="sobipro_entry_remove">Remove Entry</string>
+    <string name="sobipro_choose_email_client">Choose an Email client :</string>
+    <string name="sobipro_sortby">Sort By</string>
+    <string name="sobipro_filterby">Filter By</string>
+    <string name="sobipro_rating">Rating</string>
+    <string name="sobipro_title">Title</string>
+    <string name="sobipro_one_star">only 1 star</string>
+    <string name="sobipro_two_star">2 star or</string>
+    <string name="sobipro_three_star">3 star or</string>
+    <string name="sobipro_four_star">4 star or</string>
+    <string name="sobipro_five_star">only 5 star</string>
+    <string name="sobipro_more">more</string>
+    <string name="review">Review</string>
+    <string name="sobipro_entry_added">Entry added successfully</string>
+    <string name="sobipro_pros">Pros</string>
+    <string name="sobipro_cons">Cons</string>
+    <string name="sobipro_error_location">Unable to find current location, please on your GPS for accurate location</string>
+    <string name="sobipro_not_available_phone">Phone number not available</string>
+    <string name="sobipro_not_available_email">Email not available</string>
+    <string name="sobipro_detail_info_text">Info</string>
+    <string name="sobipro_detail_gallery_text">Gallery</string>
+    <string name="sobipro_restaurant_miles_text">mi</string>
+    <string name="sobipro_reviews">Reviews (%s)</string>
+    <string name="sobipro_deal_of_the_day">Deal of the day</string>
+    <string name="sobipro_restaurant_detail_direction">Direction</string>
+    <string name="sobipro_restaurant_detail_rating">Rating</string>
+    <string name="sobipro_restaurant_detail_checkin">CheckIn</string>
+    <string name="sobipro_restaurant_detail_menu">Menu</string>
+    <string name="sobipro_restaurant_detail_call">Call</string>
+    <string name="sobipro_restaurant_less">- Less</string>
+    <string name="sobipro_restaurant_more">+ More</string>
+    <string name="sobipro_review_date">Reviewed %s</string>
+    <string name="sobipro_restaurant_hours_today">Hours Today</string>
+    <string name="sobipro_restaurant_goodfor">Good For</string>
+    <string name="sobipro_price">Price</string>
+    <string name="sobipro_validfor">Valid for :</string>
+    <string name="sobipro_startdate">Starts :</string>
+    <string name="sobipro_enddate">Ends :</string>
+    <string name="sobipro_range_to">To :</string>
+    <string name="sobipro_range_from">From :</string>
+    <string name="sobipro_nearby_venues">NearBy Venues</string>
+    <string name="sobipro_no_review_found">No reviews yet? Be the first!</string>
+
+
+</resources>

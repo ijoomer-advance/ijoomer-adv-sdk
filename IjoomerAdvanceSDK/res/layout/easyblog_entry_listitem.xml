@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="5dp" >
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ijoomer_wall_activity_topbox">
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:gravity="center">
+            <ImageView
+                    android:id="@+id/easyblogEntriesImage"
+                    android:layout_width="55dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"/>
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:orientation="vertical" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/easyblogEntriesTxtTitle"
+                        style="?easyblog_textview_blue_h2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"/>
+
+                <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/easyblogEntriesTxtIntro"
+                        style="?easyblog_textview_h1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:ellipsize="marquee"
+                        android:maxLines="3"/>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="1dp"
+                        android:layout_height="wrap_content">
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                            style="?easyblog_textview_h1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/easy_blog_postedby"/>
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/easyblogEntriesTxtPostedBy"
+                            style="?easyblog_textview_blue_h1"
+                            android:layout_width="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/easyblogEntriesEdit"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ijoomer_edit_icon"
+                android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ijoomer_wall_activity_bottombox"
+            android:gravity="center">
+
+        <com.ijoomer.customviews.IjoomerTextView
+                style="?easyblog_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/easy_blog_hits"
+                android:textStyle="bold" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/easyblogEntriesTxtHits"
+                style="?easyblog_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:textStyle="bold" />
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
+                android:layout_weight="1">
+            <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/easyblogEntriesCommentCount"
+                    style="?easyblog_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/jom_comment"
+                    android:drawablePadding="2dp" />
+
+            <com.ijoomer.customviews.IjoomerRatingBar
+                    android:id="@+id/easyblogEntriesRtbRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:padding="1dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

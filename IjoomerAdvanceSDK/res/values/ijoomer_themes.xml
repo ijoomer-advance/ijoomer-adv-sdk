@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ijoomer_theme" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="button">@style/ijoomer_button</item>
+        <item name="edittext_h1">@style/ijoomer_edittext_h1</item>
+        <item name="edittext_h2">@style/ijoomer_edittext_h2</item>
+        <item name="edittext_h3">@style/ijoomer_edittext_h3</item>
+        <item name="edittext_h4">@style/ijoomer_edittext_h4</item>
+        <item name="edittext_h5">@style/ijoomer_edittext_h5</item>
+        <item name="edittext_h6">@style/ijoomer_edittext_h6</item>
+        <item name="textview_h0">@style/ijoomer_textview_h0</item>
+        <item name="textview_h1">@style/ijoomer_textview_h1</item>
+        <item name="textview_h2">@style/ijoomer_textview_h2</item>
+        <item name="textview_h3">@style/ijoomer_textview_h3</item>
+        <item name="textview_h4">@style/ijoomer_textview_h4</item>
+        <item name="textview_h5">@style/ijoomer_textview_h5</item>
+        <item name="textview_h6">@style/ijoomer_textview_h6</item>
+        <item name="textview_white_h1">@style/ijoomer_textview_white_h1</item>
+        <item name="textview_white_h2">@style/ijoomer_textview_white_h2</item>
+        <item name="textview_white_h3">@style/ijoomer_textview_white_h3</item>
+        <item name="textview_white_h4">@style/ijoomer_textview_white_h4</item>
+        <item name="textview_white_h5">@style/ijoomer_textview_white_h5</item>
+        <item name="textview_white_h6">@style/ijoomer_textview_white_h6</item>
+        <item name="textview_blue_h1">@style/ijoomer_textview_blue_h1</item>
+        <item name="textview_blue_h2">@style/ijoomer_textview_blue_h2</item>
+        <item name="textview_blue_h3">@style/ijoomer_textview_blue_h3</item>
+        <item name="textview_blue_h4">@style/ijoomer_textview_blue_h4</item>
+        <item name="textview_blue_h5">@style/ijoomer_textview_blue_h5</item>
+        <item name="textview_blue_h6">@style/ijoomer_textview_blue_h6</item>
+        <item name="alert_header_textview">@style/ijoomer_alert_header_textview</item>
+        <item name="spinner">@style/ijoomer_spinner</item>
+        <item name="background">@style/ijoomer_background</item>
+        <item name="header">@style/ijoomer_header</item>
+        <item name="footer">@style/ijoomer_footer</item>
+    </style>
+
+</resources>

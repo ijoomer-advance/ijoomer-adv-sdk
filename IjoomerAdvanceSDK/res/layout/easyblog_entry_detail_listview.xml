@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?easyblog_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <com.ijoomer.customviews.IjoomerListView
+            android:id="@+id/easyblogLstEntryDetail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@null"
+            android:divider="@null"
+            android:smoothScrollbar="true" >
+        </com.ijoomer.customviews.IjoomerListView>
+
+        <LinearLayout
+            android:id="@+id/lnrAddComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:visibility="visible" >
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtComment"
+                style="?easyblog_edittext_h2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/easy_blog_write_comment_here"
+                android:lines="2" />
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnAddComment"
+                style="?button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="@string/send" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/easyblogPbr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

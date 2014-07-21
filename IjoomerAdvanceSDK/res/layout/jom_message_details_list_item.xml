@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="2dp" >
+
+        <LinearLayout
+            android:id="@+id/lnrSent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/ijoomer_edittext"
+            android:visibility="visible" >
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnSentMessageRemove"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/wall_remove" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="vertical"
+                android:padding="3dp" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtSentMessage"
+                    style="?jom_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right" />
+
+                <com.ijoomer.customviews.IjoomerVoiceButton
+                    android:id="@+id/btnSentMessagePlayVoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtSentMessageDate"
+                    style="?jom_textview_blue_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="right" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgSentUser"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/jom_album_photo_bg"
+                android:scaleType="fitXY" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrReceive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/ijoomer_edittext"
+            android:visibility="visible" >
+
+            <ImageView
+                android:id="@+id/imgReceiveUser"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/jom_album_photo_bg"
+                android:scaleType="fitXY" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="3dp" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtReceiveMessage"
+                    style="?jom_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.ijoomer.customviews.IjoomerVoiceButton
+                    android:id="@+id/btnReceiveMessagePlayVoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtReceiveMessageDate"
+                    style="?jom_textview_blue_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnReceiveMessageRemove"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/wall_remove" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

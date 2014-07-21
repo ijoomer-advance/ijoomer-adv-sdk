@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    style="?jom_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:id="@+id/lnrGroupDiscussionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jom_album_detail_header_bg"
+        android:gravity="center" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtGroupDiscussionEdit"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/jom_album_detail_header_divider"
+            android:gravity="center"
+            android:text="@string/edit"
+            android:visibility="gone" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtGroupDiscussionRemove"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/jom_album_detail_header_divider"
+            android:gravity="center"
+            android:text="@string/remove"
+            android:visibility="gone" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtGroupDiscussionLockUnlock"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/jom_album_detail_header_divider"
+            android:gravity="center"
+            android:text="@string/lock"
+            android:visibility="gone" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtGroupDiscussionsUploadFile"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/upload_file"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lstGroupDiscussionReplies"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/jom_blue"
+        android:dividerHeight="0dp"
+        android:smoothScrollbar="true"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/lnrGroupDiscussionWriteReplies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.ijoomer.customviews.IjoomerVoiceAndTextMessager
+            android:id="@+id/voiceMessager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:message_hint="@string/replies"
+            app:messager="textOnly" >
+        </com.ijoomer.customviews.IjoomerVoiceAndTextMessager>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrDiscussionRepliesLocked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
+        android:visibility="gone" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            style="?jom_textview_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_discussion_locked"
+            android:textColor="@color/jom_red" />
+    </LinearLayout>
+
+</LinearLayout>

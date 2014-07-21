@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:id="@+id/lnrGgroup"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blue"
         android:orientation="horizontal"
@@ -24,7 +24,7 @@
 
     <LinearLayout
         android:id="@+id/lnrReadOnly"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -53,8 +53,7 @@
             android:background="@android:color/transparent"
             android:focusable="false"
             android:gravity="center_vertical"
-            android:inputType="none"
-            android:singleLine="true" />
+            android:inputType="none" />
 
         <ImageView
             android:id="@+id/imgPrivacyValue"
@@ -64,8 +63,56 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lnrLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtLable"
+            style="?textview_h2"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|right" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <com.ijoomer.customviews.IjoomerEditText
+            android:id="@+id/txtValue"
+            style="?textview_h2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:inputType="none" />
+
+        <ImageView
+            android:id="@+id/imgPrivacyValue"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical" />
+
+        <Spinner
+            android:id="@+id/spnWhoCanSee"
+            style="?spinner"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:entries="@array/wall_post_type"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/lnrEdit"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -110,7 +157,7 @@
 
     <LinearLayout
         android:id="@+id/lnrEditArea"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -136,8 +183,7 @@
             android:layout_height="90dp"
             android:layout_gravity="right|center_vertical"
             android:layout_weight="1"
-            android:gravity="top|center_vertical"
-            android:singleLine="true" />
+            android:gravity="top|center_vertical" />
 
         <ImageView
             android:id="@+id/imgPrivacyValue"
@@ -155,7 +201,7 @@
 
     <LinearLayout
         android:id="@+id/lnrEditClickable"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -201,7 +247,7 @@
 
     <LinearLayout
         android:id="@+id/lnrEditMap"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -235,7 +281,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:padding="2dp"
-            android:src="@drawable/jom_map_pin" />
+            android:src="@drawable/ijoomer_map_pin" />
 
         <ImageView
             android:id="@+id/imgPrivacyValue"
@@ -253,7 +299,7 @@
 
     <LinearLayout
         android:id="@+id/lnrSpin"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"

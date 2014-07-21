@@ -6,8 +6,24 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+/**
+ * This Class Contains All Method Related To IjoomerResponseValidator.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerResponseValidator extends IjoomerRequestDataProvider {
 
+	private static JSONObject notificationData;
+	private String errorMessage;
+	private int responseCode = 108;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param mContext
+	 *            {@link Context}
+	 */
 	public IjoomerResponseValidator(Context mContext) {
 		super(mContext);
 		try {
@@ -23,34 +39,71 @@ public class IjoomerResponseValidator extends IjoomerRequestDataProvider {
 		}
 	}
 
-	private int responseCode = 108;
-	private String errorMessage;
-	private static JSONObject notificationData;;
-
+	/**
+	 * This method used to get notification data.
+	 * 
+	 * @return represented {@link JSONObject}
+	 */
 	public JSONObject getNotificationData() {
 		return notificationData;
 	}
 
+	/**
+	 * This method used to get error message.
+	 * 
+	 * @return represented {@link String}
+	 */
 	public String getErrorMessage() {
 		return errorMessage;
 	}
 
+	/**
+	 * This method used to set message.
+	 * 
+	 * @param errorMessage
+	 *            represented error message
+	 */
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
 
+	/**
+	 * This method used to get response code.
+	 * 
+	 * @return represented {@link Integer}
+	 */
 	public int getResponseCode() {
 		return responseCode;
 	}
 
+	/**
+	 * This method used to set reponse code.
+	 * 
+	 * @param responseCode
+	 *            represented response code
+	 */
 	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
 
+	/**
+	 * This method used to validate json response.
+	 * 
+	 * @param data
+	 *            represented json object
+	 * @return represented {@link Boolean}
+	 */
 	public boolean validateResponse(JSONObject data) {
 		long startTime;
 		long endTime;
 		startTime = Calendar.getInstance().getTimeInMillis();
+		if (data.has("php_server_error")) {
+			try {
+				System.err.println("WSPHP_SERVER_WARNINGS/ERRORS : " + data.getString("php_server_error"));
+				data.remove("php_server_error");
+			} catch (Exception e) {
+			}
+		}
 		if (data.has("notification")) {
 			try {
 				JSONObject obj = data.getJSONObject("notification");
@@ -109,10 +162,15 @@ public class IjoomerResponseValidator extends IjoomerRequestDataProvider {
 		return false;
 	}
 
+	/**
+	 * This method used to remove unnecessary filed from response.
+	 * 
+	 * @param data
+	 *            represented json object
+	 */
 	private void removeUnnacessaryFields(JSONObject data) {
 		data.remove("code");
 		data.remove("message");
-		data.remove("full");
 		data.remove("notification");
 	}
 }

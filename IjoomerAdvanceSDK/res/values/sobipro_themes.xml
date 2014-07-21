@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="sobipro_theme" parent="ijoomer_theme">
+        <item name="sobipro_button">@style/sobipro_button</item>
+        <item name="sobipro_spinner">@style/sobipro_spinner</item>
+        <item name="sobipro_background">@style/sobipro_background</item>
+
+        <item name="sobipro_edittext_h1">@style/sobipro_edittext_h1</item>
+        <item name="sobipro_edittext_h2">@style/sobipro_edittext_h2</item>
+
+        <item name="sobipro_textview_h2">@style/sobipro_textview_h2</item>
+        <item name="sobipro_textview_h3">@style/sobipro_textview_h3</item>
+        <item name="sobipro_textview_h4">@style/sobipro_textview_h4</item>
+        <item name="sobipro_textview_h6">@style/sobipro_textview_h6</item>
+
+        <item name="sobipro_textview_white_h1">@style/sobipro_textview_white_h1</item>
+        <item name="sobipro_textview_white_h2">@style/sobipro_textview_white_h2</item>
+        <item name="sobipro_textview_white_h3">@style/sobipro_textview_white_h3</item>
+        <item name="sobipro_textview_white_h4">@style/sobipro_textview_white_h4</item>
+        <item name="sobipro_textview_white_h6">@style/sobipro_textview_white_h4</item>
+
+        <item name="sobipro_textview_black_h1">@style/sobipro_textview_black_h1</item>
+        <item name="sobipro_textview_black_h2">@style/sobipro_textview_black_h2</item>
+        <item name="sobipro_textview_black_h3">@style/sobipro_textview_black_h3</item>
+
+        <item name="sobipro_textview_light_green_h1">@style/sobipro_textview_light_green_h1</item>
+    </style>
+
+</resources>

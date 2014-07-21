@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="CutPasteId" severity="ignore" />
+    <issue id="DefaultLocale" severity="ignore" />
+    <issue id="NewApi" severity="ignore" />
+    <issue id="SdCardPath" severity="ignore" />
+    <issue id="ValidFragment" severity="ignore" />
+    <issue id="WrongCall" severity="ignore" />
+</lint>

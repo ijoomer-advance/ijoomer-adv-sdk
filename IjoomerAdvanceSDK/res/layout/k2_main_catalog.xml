@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/k2_white"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtk2CatalogCategoryName"
+            style="?k2_textview_h4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="15dp"
+            android:visibility="gone"
+            android:singleLine="true" />
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="#00000000"
+            android:divider="@color/k2_orange"
+            android:dividerHeight="0dp"
+            android:padding="5dp"
+            android:smoothScrollbar="true" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtk2CatalogCategoryNoItem"
+            style="?textview_h3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/k2_no_items"
+            android:visibility="gone" />
+    </LinearLayout>
+    
+    <ProgressBar
+        android:id="@+id/pbrSingleCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

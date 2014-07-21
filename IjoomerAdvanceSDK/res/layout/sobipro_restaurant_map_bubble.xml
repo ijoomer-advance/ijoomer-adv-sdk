@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/sobipro_white"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtTitle"
+            style="?sobipro_textview_white_h3"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/sobipro_green"
+            android:visibility="gone" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtDistance"
+            style="?sobipro_textview_black_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:singleLine="true"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtGoodFor"
+            style="?sobipro_textview_black_h1"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/sobipro_restaurant_entry_text_color"
+            android:visibility="gone" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtPrice"
+            style="?sobipro_textview_white_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:singleLine="true"
+            android:textColor="@color/sobipro_green"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <com.ijoomer.customviews.IjoomerRatingBar
+        android:id="@+id/rtbRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:star_size="13" >
+    </com.ijoomer.customviews.IjoomerRatingBar>
+
+</LinearLayout>

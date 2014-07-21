@@ -3,16 +3,63 @@ package com.ijoomer.customviews;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.widget.ListView;
 
+/**
+ * This Class Contains All Method Related To IjoomerListView.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerListView extends ListView {
 
+	@SuppressWarnings("unused")
 	private static final int SWIPE_MIN_DISTANCE = 50;
+	@SuppressWarnings("unused")
 	private static final int SWIPE_THRESHOLD_VELOCITY = 100;
+	@SuppressWarnings("unused")
 	private GestureDetector gDetector;
-	private boolean isFling = false;
+	@SuppressWarnings("unused")
+	private boolean isFling;
+
+	private float mDiffX;
+	private float mDiffY;
+	private float mLastX;
+	private float mLastY;
+
+	/**
+	 * Overrides method
+	 */
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		switch (ev.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			// reset difference values
+			mDiffX = 0;
+			mDiffY = 0;
+
+			mLastX = ev.getX();
+			mLastY = ev.getY();
+			break;
+
+		case MotionEvent.ACTION_MOVE:
+			final float curX = ev.getX();
+			final float curY = ev.getY();
+			mDiffX += Math.abs(curX - mLastX);
+			mDiffY += Math.abs(curY - mLastY);
+			mLastX = curX;
+			mLastY = curY;
+
+			// don't intercept event, when user tries to scroll vertically
+			if (mDiffX > mDiffY) {
+				return false; // do not react to horizontal touch events, these
+								// events will be passed to your list item view
+			}
+		}
+
+		return super.onInterceptTouchEvent(ev);
+	}
 
 	public IjoomerListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -30,31 +77,5 @@ public class IjoomerListView extends ListView {
 	}
 
 	private void init(Context mContext) {
-		gDetector = new GestureDetector(new MyGesture());
 	}
-
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		gDetector.onTouchEvent(ev);
-
-		if (isFling) {
-			return true;
-		} else {
-			return gDetector.onTouchEvent(ev);
-		}
-	}
-
-	private class MyGesture extends SimpleOnGestureListener {
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-				isFling = true;
-			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-				isFling = true;
-			}
-			return super.onFling(e1, e2, velocityX, velocityY);
-		}
-	}
-
 }

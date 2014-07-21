@@ -1,12 +1,5 @@
 package com.ijoomer.common.classes;
 
-import java.io.File;
-
-import twitter4j.StatusUpdate;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,16 +19,33 @@ import com.ijoomer.customviews.TwitterOAuthView;
 import com.ijoomer.customviews.TwitterOAuthView.Listener;
 import com.ijoomer.customviews.TwitterOAuthView.Result;
 import com.ijoomer.src.R;
+import com.ijoomer.theme.ThemeManager;
 import com.smart.framework.CustomAlertNeutral;
 
+import java.io.File;
+
+import twitter4j.StatusUpdate;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+
+
+
+/**
+ * This Class Contains All Method Related To IJoomerTwitterShareActivity.
+ * 
+ * @author tasol
+ * 
+ */
 public class IJoomerTwitterShareActivity extends IjoomerSuperMaster {
 
 	private LinearLayout lnrTwit;
-	private ProgressBar pbrTwitterShare;
 	private IjoomerButton btnClose;
+	private ProgressBar pbrTwitterShare;
+	private TwitterOAuthView webTwitter;
 
 	private AQuery androidQuery;
-	private TwitterOAuthView webTwitter;
 	private File statusImage;
 
 	private static final String OAUTH_CALLBACK_SCHEME = "x-oauthflow-twitter";
@@ -50,7 +60,7 @@ public class IJoomerTwitterShareActivity extends IjoomerSuperMaster {
 
 	@Override
 	public int setLayoutId() {
-		return R.layout.ijoomer_twitter_share;
+		return ThemeManager.getInstance().getTwitter();
 	}
 
 	@Override
@@ -142,7 +152,7 @@ public class IJoomerTwitterShareActivity extends IjoomerSuperMaster {
 					R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
 
 						@Override
-						public void NeutralMathod() {
+						public void NeutralMethod() {
 							finish();
 						}
 					});
@@ -212,6 +222,10 @@ public class IJoomerTwitterShareActivity extends IjoomerSuperMaster {
 	/**
 	 * Class method
 	 */
+	
+	/**
+	 * This method used to get intent data.
+	 */
 	private void getIntentData() {
 		IN_TWIT_MESSAGE = getIntent().getStringExtra("IN_TWIT_MESSAGE") == null ? "" : getIntent().getStringExtra("IN_TWIT_MESSAGE");
 		IN_TWIT_IMAGE = getIntent().getStringExtra("IN_TWIT_IMAGE") == null ? "" : getIntent().getStringExtra("IN_TWIT_IMAGE");
@@ -220,6 +234,10 @@ public class IJoomerTwitterShareActivity extends IjoomerSuperMaster {
 		}
 	}
 
+	/**
+	 * This method used to check is authenticated.
+	 * @return represented {@link Boolean}
+	 */
 	private boolean isAuthenticated() {
 
 		if (getSmartApplication().readSharedPreferences().getString(SP_TWITTER_TOKEN, "").length() > 0) {
@@ -229,10 +247,16 @@ public class IJoomerTwitterShareActivity extends IjoomerSuperMaster {
 		}
 	}
 
+	
+	/**
+	 * This method used to send tweet.
+	 * @param twitMessage represented tweet message
+	 */
 	public void sendTweet(final String twitMessage) {
 
-		new AsyncTask<Void, Void, Boolean>() {
 
+		new AsyncTask<Void, Void, Boolean>() {
+            TwitterException twitterException=null;
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
@@ -256,19 +280,12 @@ public class IJoomerTwitterShareActivity extends IjoomerSuperMaster {
 					twitter.updateStatus(statusUpdate);
 					return true;
 				} catch (TwitterException e) {
-					e.printStackTrace();
-					IjoomerUtilities.getCustomOkDialog(getString(R.string.alert_title_twitter), e.getErrorMessage(), getString(R.string.ok), R.layout.ijoomer_ok_dialog,
-							new CustomAlertNeutral() {
+                    twitterException = e;
+                    e.printStackTrace();
+                    return false;
+                }
 
-								@Override
-								public void NeutralMathod() {
-									finish();
-								}
-							});
-					return false;
-				}
-
-			}
+            }
 
 			@Override
 			protected void onPostExecute(Boolean result) {
@@ -279,11 +296,20 @@ public class IJoomerTwitterShareActivity extends IjoomerSuperMaster {
 							R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
 
 								@Override
-								public void NeutralMathod() {
+								public void NeutralMethod() {
 									finish();
 								}
 							});
-				}
+				}else{
+                    IjoomerUtilities.getCustomOkDialog(getString(R.string.alert_title_twitter), twitterException.getErrorMessage(), getString(R.string.ok), R.layout.ijoomer_ok_dialog,
+                            new CustomAlertNeutral() {
+
+                                @Override
+                                public void NeutralMethod() {
+                                    finish();
+                                }
+                            });
+                }
 			}
 		}.execute();
 	}

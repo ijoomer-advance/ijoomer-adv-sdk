@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ijoomer_wall_activity_topbox" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtPhotoTagUser"
+                    style="?jom_textview_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:text="sdlkfl;sdkfl;sdkf;kd" />
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnPhotoTag"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="3dp"
+                    android:background="@color/jom_blue"
+                    android:padding="2dp"
+                    android:text="@string/tag"
+                    android:textColor="@color/jom_white"
+                    android:visibility="gone" />
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnRemovePhotoTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="3dp"
+                    android:background="@color/jom_blue"
+                    android:padding="2dp"
+                    android:text="@string/remove"
+                    android:textColor="@color/jom_white"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

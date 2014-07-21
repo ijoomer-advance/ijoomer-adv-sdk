@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/jreview_category_bg_color"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="10dp" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/jreviewCatTxtTitle"
+            style="?jreview_textview_lightgray_h2"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:text="Title"
+            android:textStyle="bold" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/jreviewCatTxtArticlesCountlbl"
+            style="?jreview_textview_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/jreviewCatTxtArticlesCount"
+            style="?jreview_textview_lightgray_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(100)"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/jreviewCatDivider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/jreview_imgtag"
+        android:scaleType="fitXY"
+        android:src="@drawable/jreview_categorylist_separator_line" />
+
+</LinearLayout>

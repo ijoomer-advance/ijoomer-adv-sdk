@@ -4,6 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.webkit.WebView;
 
+/**
+ * This Class Contains All Method Related To IjoomerFacebookWebview.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerFacebookWebview extends WebView {
 	public IjoomerFacebookWebview(Context context) {
 		super(context);

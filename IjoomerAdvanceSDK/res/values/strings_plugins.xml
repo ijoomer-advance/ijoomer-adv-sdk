@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Contact Us -->
+    <string name="postcode">Postal Code:</string>
+    <string name="telephone">Telephone:</string>
+    <string name="fax">Fax:</string>
+    <string name="mobile">Mobile:</string>
+    <string name="contactus">Contact Us</string>
+    <string name="contactinfo">Contact Info</string>
+    <string name="addtocontact">Add To Contact</string>
+    <string name="addcontactsucessfully">Contact Added Successfully</string>
+    <string name="addcontacterror">Error when saving contact</string>
+
+    <!-- YouTube Videos -->
+    <string name="views">views</string>
+    <string name="video_lbl">video</string>
+    <string name="videos_lbl">videos</string>
+
+    <!-- Facebook Checkins -->
+    <string name="watsinyrmind">Whats on your mind?</string>
+    <string name="whoyouwith">Who are you with?</string>
+    <string name="dialog_title_post_message">Post on facebook</string>
+    <string name="dialog_post_facebook">Post</string>
+    <string name="where_are_you">Where are you?</string>
+    <string name="select_friend_facebook">Select Friends</string>
+    <string name="facebook_status_friend_string">- With %s</string>
+    <string name="facebook_status_location_string">At %s</string>
+    <string name="facebook_post_success">Successfully posted</string>
+    <string name="facebook_nearby_progress_title">Fetching Nearby Venues…</string>
+    <string name="facebook_post_progress_title">Posting on facebook</string>
+    <string name="facebook_location_not_found">Unable to find your location</string>
+
+    <!-- Weather -->
+    <string name="humidity">Humidity</string>
+    <string name="cloudcover">Cloudcover</string>
+    <string name="visibility">Visibility</string>
+    <string name="pressure">Pressure</string>
+    <string name="wind">Wind</string>
+    <string name="direction">Direction</string>
+    <string name="speed">Speed</string>
+    <string name="temp_unit">F</string>
+    <string name="mile">mi</string>
+    <string name="km">km</string>
+    <string name="inches">in</string>
+    <string name="mph">mph</string>
+    <string name="addlocation">Add Location</string>
+
+    <string-array name="Location">
+        <item>id</item>
+        <item>name</item>
+        <item>location</item>
+    </string-array>
+
+    <string name="location_remove">Remove Location</string>
+
+</resources>
