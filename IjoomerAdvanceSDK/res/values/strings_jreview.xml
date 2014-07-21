@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="jreview_sync_with_server">Syncing with server.This may take few minutes …</string>
+    <string name="jreview_hits">Hits</string>
+    <string name="jreview_map">Map</string>
+    <string name="jreview_videos_link_url">Video link url</string>
+    <string name="jreview_videos_title">Video title</string>
+    <string name="jreview_description">Description</string>
+    <string name="jreview_upload_video">Upload video</string>
+    <string name="jreview_link_video">Link Video</string>
+    <string name="jreview_write_comment">Write a comment …</string>
+    <string name="jreview_directorylist">Directories</string>
+    <string name="jreview_imgtag">JReview</string>
+    <string name="jreview_user_reviews">User Reviews</string>
+    <string name="jreview_view_more">"View More"</string>
+    <string name="jreview_reviews_details">Review Detail</string>
+    <string name="jreview_reviewd_by">"Reviewed by"</string>
+    <string name="jreview_view_less">"View Less"</string>
+    <string name="jreview_size">Size</string>
+    <string name="jreview_cancel">Cancel</string>
+    <string name="jreview_create">Create</string>
+    <string name="jreview_done">Done</string>
+    <string name="jreview_submit">Submit</string>
+    <string name="jreview_save">Save</string>
+    <string name="jreview_type">Type</string>
+    <string name="jreview_duration">Duration</string>
+    <string name="jreview_by">By</string>
+    <string name="jreview_review">Reviews</string>
+    <string name="jreview_photos">Photos</string>
+    <string name="jreview_videos">Videos</string>
+    <string name="jreview_attachments">Attachments</string>
+    <string name="jreview_upload_limit_notice">You have reached your upload limit.</string>
+    <string name="jreview_upload_notice">You are not allowed to upload.</string>
+    <string name="jreview_not_allowes_upload">You are not allowed to upload.</string>
+    <string name="jreview_favourite">Favourite</string>
+    <string name="jreview_review_added_successfully">Review added successfully.</string>
+    <string name="jreview_review_title">"Review Title *"</string>
+    <string name="jreview_comments">"Comments *"</string>
+    <string name="jreview_comments_title">"Comments"</string>
+    <string name="jreview_review_comment_remove">Comment remove</string>
+    <string name="jreview_add_review">Add Review</string>
+    <string name="jreview_edit_review">Edit Review</string>
+    <string name="jreview_rating">"Ratings (the higher the better) *"</string>
+    <string name="jreview_overall_rating">"Overall rating"</string>
+    <string name="jreview_average_user_rating">"AVERAGE USER RATING"</string>
+    <string name="jreview_advancesearch">"Advanced search"</string>
+    <string name="jreview_search_listingauthor">"Listing author"</string>
+    <string name="jreview_search_keyword_hint">Keyword</string>
+    <string name="jreview_search_by">Search by</string>
+    <string name="jreview_search_category">Category</string>
+    <string name="jreview_search_allwords">All Words</string>
+    <string name="jreview_search_anywords">Any Words</string>
+    <string name="jreview_article_details">Details</string>
+    <string name="jreview_search_exactphrase">Exact Phrase</string>
+    <string name="jreview_search_results">Search Results</string>
+    <string name="jreview_search_apply">Apply</string>
+    <string name="jreview_search">Search</string>
+    <string name="jreview_search_cancel">Cancel</string>
+    <string name="jreview_addtofavorite">article added to my places.</string>
+    <string name="jreview_removedfromfavorite">article removed from my places.</string>
+    <string name="jreview_nocontentfound">No Content Found.</string>
+    <string name="jreview_new_article">New Article</string>
+    <string name="jreview_edit_article">Edit</string>
+
+    <!-- Custom Dialog String -->
+    <string name="dialog_loading_create_article">Create Listing …</string>
+    <string name="dialog_loading_addtofavoutrite">adding to favourite …</string>
+    <string name="dialog_loading_removefromfavourite">removing from favourite …</string>
+    <string name="dialog_loading_addreview">sending review …</string>
+    <string name="dialog_loading_addcomment">sending comment …</string>
+    <string name="dialog_loading_removecomment">removing comment …</string>
+
+    <!-- Add listing page caption -->
+    <string name="jreview_listing_plans">"AVAILABLE PLANS *"</string>
+    <string name="jreview_listing_plans_caption">"Available Plans"</string>
+    <string name="jreview_listing_title">"Listing Title *"</string>
+    <string name="jreview_listing_title_alias">"Listing Title Alias"</string>
+    <string name="jreview_listing_summary">"Summary"</string>
+    <string name="jreview_listing_disc">"Description"</string>
+    <string name="jreview_listing_metadata">"Meta Data"</string>
+    <string name="jreview_listing_meta_disc">"Meta Description"</string>
+    <string name="jreview_listing_meta_keywords">"Meta Keywords"</string>
+    <string name="jreview_listing_required">" All form inputs marked (*) are required."</string>
+    <string name="jreview_listing_select_plan">Tap here to select plan</string>
+    <string name="jreview_listing_created_successfully">Listing created successfully.</string>
+    <string name="jreview_listing_updated_successfully">Listing updated successfully.</string>
+
+    <!-- dynamic page caption -->
+    <string name="jreview_state">State/Province</string>
+    <string name="jreview_city_town">City</string>
+    <string name="jreview_phone">Phone</string>
+    <string name="jreview_fax">Fax</string>
+    <string name="jreview_year">Year</string>
+    <string name="jreview_email">Email</string>
+    <string name="jreview_website">Website</string>
+    <string name="jreview_country">Country</string>
+    <string name="jreview_price">Price</string>
+
+    <string-array name="jreview_searchby">
+        <item>Listing title</item>
+        <item>Listing summary</item>
+        <item>Listing description</item>
+        <item>Review comments</item>
+    </string-array>
+
+    <string name="jreview_upload_attachment">Upload file</string>
+    <string name="jreview_attachment_upload_starts">file upload starts.</string>
+    <string name="jreview_attachment_upload_failure">file upload failure.</string>
+    <string name="jreview_attachment_uploaded">file uploaded.</string>
+    <string name="jreview_file_downloaded_success">file downloaded successfully.</string>
+    <string name="jreview_no_comments">No comments yet.</string>
+
+    <!-- near by captions -->
+    <string name="jreview_nearby">Near By</string>
+    <string name="jreview_result_within">Results Within</string>
+    <string name="jreview_miles">Miles</string>
+    <string name="jreview_btnGo">Go</string>
+
+</resources>

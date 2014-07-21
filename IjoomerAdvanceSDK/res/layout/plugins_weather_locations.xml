@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="1dp" >
+
+    <AutoCompleteTextView
+        android:id="@+id/edtAddLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="@string/addlocation" />
+
+    <com.ijoomer.customviews.IjoomerListView
+        android:id="@+id/lstLocations"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:cacheColorHint="@null"
+        android:divider="@null"
+        android:smoothScrollbar="true" >
+    </com.ijoomer.customviews.IjoomerListView>
+
+</LinearLayout>

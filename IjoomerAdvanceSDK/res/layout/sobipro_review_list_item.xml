@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/sobipro_white"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtTitle"
+                style="?sobipro_textview_h3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/sobipro_orange"
+                android:textStyle="bold" />
+
+            <com.ijoomer.customviews.IjoomerRatingBar
+                android:id="@+id/rtbRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp" >
+            </com.ijoomer.customviews.IjoomerRatingBar>
+        </LinearLayout>
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtPlus"
+            style="?sobipro_textview_h6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrExpandedView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:id="@+id/lnrRatingCriteria"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp" >
+
+            <LinearLayout
+                android:id="@+id/lnrRatingLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnrRatingRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtReview"
+            style="?sobipro_textview_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/lnrPros"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@color/sobipro_review_box_bg"
+            android:orientation="vertical"
+            android:padding="3dp"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtProsTitle"
+                    style="?sobipro_textview_h3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sobipro_pros"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPositiveReview"
+                style="?sobipro_textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrCons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@color/sobipro_review_box_bg"
+            android:orientation="vertical"
+            android:padding="3dp"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtConsTitle"
+                    style="?sobipro_textview_h3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sobipro_cons"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtNegativeReview"
+                style="?sobipro_textview_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgSeparator"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/sobipro_review_line" />
+
+</LinearLayout>

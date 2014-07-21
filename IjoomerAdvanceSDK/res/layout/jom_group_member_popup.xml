@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/popup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/jom_blue"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dip"
+            android:background="@color/jom_bg_color"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/jom_bg_color"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:background="@color/jom_blue"
+                    android:orientation="horizontal" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        style="?jom_alert_header_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:text="@string/group_member"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/imgTagClose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/com_facebook_close" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/jom_bg_color"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/jom_album_detail_header_bg" >
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtGroupAllMember"
+                            style="?jom_textview_h2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:drawableRight="@drawable/jom_album_detail_header_divider"
+                            android:gravity="center"
+                            android:text="@string/all_member"
+                            android:textColor="@color/jom_blue" />
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtGroupBanMember"
+                            style="?jom_textview_h2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/ban_list" />
+                    </LinearLayout>
+
+                    <ListView
+                        android:id="@+id/lstGroupMember"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/jom_bg_color"
+                        android:layout_marginTop="5dp"
+                        android:padding="3dp"
+                        android:cacheColorHint="@null"
+                        android:divider="@android:color/transparent"
+                        android:dividerHeight="0dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbrGroupMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

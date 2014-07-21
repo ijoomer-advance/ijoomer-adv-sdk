@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jreview_article_topbox"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            style="?jreview_textview_dark_h2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:text="@string/jreview_average_user_rating"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/jreviewarticleaveragereviews"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/jreview_imgtag"
+        android:scaleType="fitXY"
+        android:src="@drawable/jreview_categorylist_separator_line" />
+
+</LinearLayout>

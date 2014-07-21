@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ijoomer_wall_activity_topbox"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" >
+
+                <ImageView
+                    android:id="@+id/easyblogimgCommentUserAvatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_launcher" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/easyblogtxtCommentUserName"
+                    style="?easyblog_textview_h3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:singleLine="true" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/easyblogtxtCommentDate"
+                    style="?easyblog_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="3dp"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/easyblogbtnCommentEdit"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/ijoomer_edit_icon"
+                    android:visibility="gone" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/easyblogbtnCommentRemove"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/wall_remove"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/easyblogtxtCommentTitle"
+                style="?easyblog_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"/>
+
+            <LinearLayout
+                android:id="@+id/lnrCommentEdit"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtCommentEdit"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    style="?easyblog_edittext_h1"/>
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnCommentEditSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    style="?button"
+                    android:text="@string/save"/>
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnCommentEditCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    style="?button"
+                    android:text="@string/cancel"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ijoomer_wall_activity_bottombox"
+        android:gravity="center"
+        android:visibility="visible" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/easyblogReplay"
+            style="?easyblog_textview_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/easy_blog_replay"
+            android:textStyle="bold" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/easyblogLike"
+            style="?easyblog_textview_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/easy_blog_like"
+            android:textStyle="bold" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/easyblogUnlike"
+            style="?easyblog_textview_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/easy_blog_unlike"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:layout_weight="1" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/easyblogtxtCommentLikeCount"
+                style="?easyblog_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:drawableLeft="@drawable/jom_like_icon"
+                android:drawablePadding="2dp" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/easyblogtxtReplayCount"
+                style="?easyblog_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:drawableLeft="@drawable/jom_comment"
+                android:drawablePadding="2dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@color/jom_blue"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="@color/jom_bg_color"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?jom_alert_header_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text="@string/event_send_mail"
+                android:textStyle="bold" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtEventSendMailTitle"
+                style="?jom_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="left|top"
+                android:hint="@string/title" 
+                android:singleLine="true"/>
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtEventSendMailMessage"
+                style="?jom_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="left|top"
+                android:hint="@string/message"
+                android:lines="4"
+                android:maxLines="4" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp" >
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnCancel"
+                    style="?jom_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/cancel" />
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnSend"
+                    style="?jom_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/send" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

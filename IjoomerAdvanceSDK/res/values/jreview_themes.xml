@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="jreview_theme" parent="ijoomer_theme">
+        <item name="jreview_button">@style/jreview_button</item>
+        <item name="jreview_textview_h0">@style/jreview_textview_h0</item>
+        <item name="jreview_textview_h1">@style/jreview_textview_h1</item>
+        <item name="jreview_textview_h2">@style/jreview_textview_h2</item>
+        <item name="jreview_textview_h3">@style/jreview_textview_h3</item>
+        <item name="jreview_textview_white_h1">@style/jreview_textview_white_h1</item>
+        <item name="jreview_textview_white_h2">@style/jreview_textview_white_h2</item>
+        <item name="jreview_textview_white_h3">@style/jreview_textview_white_h3</item>
+        <item name="jreview_textview_white_h4">@style/jreview_textview_white_h4</item>
+        <item name="jreview_textview_lightgray_h2">@style/jreview_textview_lightgray_h2</item>
+        <item name="jreview_textview_dark_h1">@style/jreview_textview_dark_h1</item>
+        <item name="jreview_textview_dark_h2">@style/jreview_textview_dark_h2</item>
+        <item name="jreview_textview_dark_h3">@style/jreview_textview_dark_h3</item>
+        <item name="jreview_edittext_h2">@style/jreview_edittext_h2</item>
+        <item name="jreview_search_edittext_h2">@style/jreview_search_edittext_h2</item>
+        <item name="jreview_spinner">@style/jreview_spinner</item>
+        <item name="jreview_background">@style/jreview_background</item>
+        <item name="jreview_header">@style/jreview_header</item>
+    </style>
+
+</resources>

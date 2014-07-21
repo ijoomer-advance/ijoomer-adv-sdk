@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="icms_textview_h0" format="reference" />
+    <attr name="icms_textview_h1" format="reference" />
+    <attr name="icms_textview_h2" format="reference" />
+    <attr name="icms_textview_h3" format="reference" />
+    <attr name="icms_textview_white_h4" format="reference" />
+    <attr name="icms_textview_lightgray_h2" format="reference" />
+    <attr name="icms_textview_blue_h1" format="reference" />
+    <attr name="icms_textview_blue_h2" format="reference" />
+    <attr name="icms_textview_blue_h3" format="reference" />
+    <attr name="icms_background" format="reference" />
+    <attr name="icms_header" format="reference" />
+
+</resources>

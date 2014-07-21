@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@color/blue"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="@color/bg_color"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtTitle"
+                style="?alert_header_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:padding="5dp"
+                android:text="@string/dialog_title_post_message"
+                android:textStyle="bold" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtMessage"
+                style="?edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="100dip"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="left|top"
+                android:hint="@string/watsinyrmind" />
+
+            <AutoCompleteTextView
+                android:id="@+id/edtExtraMessage"
+                style="?edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="30dip"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="left|top"
+                android:hint="@string/where_are_you" />
+
+            <HorizontalScrollView
+                android:id="@+id/photoScroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:id="@+id/lnrPhotoLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/imgAddPhotos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxHeight="100dp"
+                        android:maxWidth="100dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/plugins_facebook_plus_doted_img"
+                        android:visibility="gone" >
+                    </ImageView>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <com.ijoomer.customviews.IjoomerRadioButton
+                        android:id="@+id/imgPlace"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginTop="5dip"
+                        android:background="@drawable/plugins_facebook_radio_selector_place"
+                        android:button="@null"
+                        android:checked="true" />
+
+                    <com.ijoomer.customviews.IjoomerRadioButton
+                        android:id="@+id/imgDivider1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginTop="5dip"
+                        android:background="@drawable/plugins_facebook_header_divider"
+                        android:button="@null" />
+
+                    <com.ijoomer.customviews.IjoomerRadioButton
+                        android:id="@+id/imgPhotos"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginTop="5dip"
+                        android:background="@drawable/plugins_facebook_radio_selector_photo"
+                        android:button="@null"
+                        android:checked="false" />
+
+                    <com.ijoomer.customviews.IjoomerRadioButton
+                        android:id="@+id/imgDivider2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginTop="5dip"
+                        android:background="@drawable/plugins_facebook_header_divider"
+                        android:button="@null" />
+
+                    <com.ijoomer.customviews.IjoomerRadioButton
+                        android:id="@+id/imgFriends"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginTop="5dip"
+                        android:background="@drawable/plugins_facebook_radio_selector_friend"
+                        android:button="@null"
+                        android:checked="false"
+                        android:drawablePadding="5dip" />
+
+                    <com.ijoomer.customviews.IjoomerRadioButton
+                        android:id="@+id/imgDivider3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginTop="5dip"
+                        android:background="@drawable/plugins_facebook_header_divider"
+                        android:button="@null" />
+                </RadioGroup>
+
+                <com.ijoomer.customviews.IjoomerButton
+                    android:id="@+id/btnOk"
+                    style="?button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:text="@string/dialog_post_facebook" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

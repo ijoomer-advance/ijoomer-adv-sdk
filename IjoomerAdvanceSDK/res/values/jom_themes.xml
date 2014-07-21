@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="jom_theme" parent="ijoomer_theme">
+
+        <item name="jom_button">@style/jom_button</item>
+
+        <item name="jom_edittext_h1">@style/jom_edittext_h1</item>
+        <item name="jom_edittext_h2">@style/jom_edittext_h2</item>
+        <item name="jom_edittext_h3">@style/jom_edittext_h3</item>
+        <item name="jom_edittext_h4">@style/jom_edittext_h4</item>
+        <item name="jom_edittext_h5">@style/jom_edittext_h5</item>
+        <item name="jom_edittext_h6">@style/jom_edittext_h6</item>
+
+        <item name="jom_textview_h0">@style/jom_textview_h0</item>
+        <item name="jom_textview_h1">@style/jom_textview_h1</item>
+        <item name="jom_textview_h2">@style/jom_textview_h2</item>
+        <item name="jom_textview_h3">@style/jom_textview_h3</item>
+        <item name="jom_textview_h4">@style/jom_textview_h4</item>
+        <item name="jom_textview_h5">@style/jom_textview_h5</item>
+        <item name="jom_textview_h6">@style/jom_textview_h6</item>
+
+        <item name="jom_textview_white_h1">@style/jom_textview_white_h1</item>
+        <item name="jom_textview_white_h2">@style/jom_textview_white_h2</item>
+        <item name="jom_textview_white_h3">@style/jom_textview_white_h3</item>
+        <item name="jom_textview_white_h4">@style/jom_textview_white_h4</item>
+        <item name="jom_textview_white_h5">@style/jom_textview_white_h5</item>
+        <item name="jom_textview_white_h6">@style/jom_textview_white_h6</item>
+
+        <item name="jom_textview_blue_h1">@style/jom_textview_blue_h1</item>
+        <item name="jom_textview_blue_h2">@style/jom_textview_blue_h2</item>
+        <item name="jom_textview_blue_h3">@style/jom_textview_blue_h3</item>
+        <item name="jom_textview_blue_h4">@style/jom_textview_blue_h4</item>
+        <item name="jom_textview_blue_h5">@style/jom_textview_blue_h5</item>
+        <item name="jom_textview_blue_h6">@style/jom_textview_blue_h6</item>
+
+        <item name="jom_alert_header_textview">@style/jom_alert_header_textview</item>
+        <item name="jom_spinner">@style/jom_spinner</item>
+        <item name="jom_background">@style/jom_background</item>
+        <item name="jom_header">@style/jom_header</item>
+        <item name="jom_footer">@style/jom_footer</item>
+
+    </style>
+
+</resources>

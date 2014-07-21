@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:baselineAligned="false"
+    android:padding="5dp" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp" >
+
+        <ImageView
+            android:id="@+id/imgPlaylistThumb"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtPlaylistTitle"
+            style="?textview_white_h2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:background="@color/transparent_dark_bg"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:padding="1dp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+</LinearLayout>

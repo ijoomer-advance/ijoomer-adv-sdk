@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/jreview_map_bubble"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtTitle"
+            style="?jreview_textview_dark_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="3dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/jreview_imgtag"
+                android:src="@drawable/jreview_user_rating" />
+
+            <com.ijoomer.customviews.IjoomerRatingBar
+                android:id="@+id/jreviewarticleuserratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="3dp"
+                android:singleLine="true"
+                app:isEditable="false"
+                app:star_empty="@drawable/jreview_rating_empty"
+                app:star_filled="@drawable/jreview_rating_full"
+                app:star_half="@drawable/jreview_rating_half"
+                app:star_size="22" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/jreviewarticleuserrating"
+                style="?jreview_textview_dark_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:text="(3.2)" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/jreviewarticleuserratingcount"
+                style="?jreview_textview_dark_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:text="(100)" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/jreview_imgtag"
+                android:src="@drawable/jreview_editor_rating" />
+
+            <com.ijoomer.customviews.IjoomerRatingBar
+                android:id="@+id/jreviewarticleeditorratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="3dp"
+                android:singleLine="true"
+                app:isEditable="false"
+                app:star_empty="@drawable/jreview_rating_empty"
+                app:star_filled="@drawable/jreview_rating_full"
+                app:star_half="@drawable/jreview_rating_half"
+                app:star_size="22" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/jreviewarticleeditorrating"
+                style="?jreview_textview_dark_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:text="(3.2)" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/jreviewarticleeditorratingcount"
+                style="?jreview_textview_dark_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:text="(100)" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

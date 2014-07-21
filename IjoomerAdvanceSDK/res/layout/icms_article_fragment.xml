@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?icms_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/icms_article_title_bar_top" />
+
+    <ListView
+        android:id="@+id/icmsListArticle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@android:color/transparent"
+        android:cacheColorHint="@null"
+        android:divider="@drawable/icms_articlelist_separator_line"
+        android:smoothScrollbar="true" >
+    </ListView>
+
+</LinearLayout>

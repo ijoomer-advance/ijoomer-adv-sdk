@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <attr name="button" format="reference" />
+    <attr name="textview_h0" format="reference" />
+    <attr name="textview_h1" format="reference" />
+    <attr name="textview_h2" format="reference" />
+    <attr name="textview_h3" format="reference" />
+    <attr name="textview_h4" format="reference" />
+    <attr name="textview_h5" format="reference" />
+    <attr name="textview_h6" format="reference" />
+    <attr name="edittext_h1" format="reference" />
+    <attr name="edittext_h2" format="reference" />
+    <attr name="edittext_h3" format="reference" />
+    <attr name="edittext_h4" format="reference" />
+    <attr name="edittext_h5" format="reference" />
+    <attr name="edittext_h6" format="reference" />
+    <attr name="textview_white_h1" format="reference" />
+    <attr name="textview_white_h2" format="reference" />
+    <attr name="textview_white_h3" format="reference" />
+    <attr name="textview_white_h4" format="reference" />
+    <attr name="textview_white_h5" format="reference" />
+    <attr name="textview_white_h6" format="reference" />
+    <attr name="textview_blue_h1" format="reference" />
+    <attr name="textview_blue_h2" format="reference" />
+    <attr name="textview_blue_h3" format="reference" />
+    <attr name="textview_blue_h4" format="reference" />
+    <attr name="textview_blue_h5" format="reference" />
+    <attr name="textview_blue_h6" format="reference" />
+    <attr name="alert_header_textview" format="reference" />
+    <attr name="spinner" format="reference" />
+    <attr name="background" format="reference" />
+    <attr name="header" format="reference" />
+    <attr name="footer" format="reference" />
+
+</resources>

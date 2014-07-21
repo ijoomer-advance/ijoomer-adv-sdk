@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnrMain"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lnrName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ijoomer_wall_activity_topbox"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/lnrName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/imgEventGuestAvatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="3dp"
+                    android:adjustViewBounds="true"
+                    android:padding="1dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_launcher" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtEventGuestName"
+                    style="?jom_textview_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:singleLine="true" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <com.ijoomer.customviews.IjoomerButton
+                        android:id="@+id/btnEventGuestRemove"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/wall_remove"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/imgEventGuestOnlineStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="3dp"
+                        android:src="@drawable/jom_friend_member_offline" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnrEventGuestRemove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="2dp"
+                android:visibility="gone" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtEventGuestRemove"
+                    style="?jom_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:text="@string/are_you_sure" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <com.ijoomer.customviews.IjoomerCheckBox
+                        android:id="@+id/chbEventGuestBock"
+                        style="?jom_textview_h2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="3dp"
+                        android:button="@drawable/checkbox_selector"
+                        android:gravity="center"
+                        android:paddingLeft="20dp"
+                        android:text="@string/event_block_guest"
+                        android:textColor="@color/jom_txt_color" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <com.ijoomer.customviews.IjoomerButton
+                        android:id="@+id/btnEventGuestYes"
+                        style="?jom_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="3dp"
+                        android:text="@string/yes" />
+
+                    <com.ijoomer.customviews.IjoomerButton
+                        android:id="@+id/btnEventGuestNo"
+                        style="?jom_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/no" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ijoomer_wall_activity_bottombox"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="visible" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtEventGuestApproval"
+                    style="?jom_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/approval"
+                    android:visibility="gone" />
+                
+                  <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtEventGuestSetAsAdmin"
+                    style="?jom_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/jom_event_guest_as_admin_member"
+                    android:drawablePadding="3dp"
+                    android:text="@string/event_set_as_admin"
+                    android:visibility="gone" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtEventGuestSetAsMember"
+                    style="?jom_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/jom_event_guest_as_admin_member"
+                    android:drawablePadding="3dp"
+                    android:text="@string/event_set_as_member"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

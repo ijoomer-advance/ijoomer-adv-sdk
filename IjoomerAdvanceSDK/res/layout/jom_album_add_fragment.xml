@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="5dp" >
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtAlbumName"
+                style="?jom_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/album_name"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtAlbumLocation"
+                    style="?jom_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/locaton"
+                    android:singleLine="true" />
+
+                <ImageView
+                    android:id="@+id/imgMap"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:padding="2dp"
+                    android:src="@drawable/ijoomer_map_pin" />
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/edtAlbumDescription"
+                style="?jom_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="3dp"
+                android:gravity="top|left"
+                android:hint="@string/description" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtAlbumWhoCanSee"
+                    style="?jom_textview_h3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/who_can_see" />
+
+                <Spinner
+                    android:id="@+id/spnWhoCanSee"
+                    style="?jom_spinner"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnCancle"
+            style="?jom_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnCreate"
+            style="?jom_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:text="@string/create" />
+    </LinearLayout>
+
+</LinearLayout>

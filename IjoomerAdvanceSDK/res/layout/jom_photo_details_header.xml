@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/jom_wall_activity_bottombox1"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPhotoRemove"
+                style="?jom_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:clickable="false"
+                android:drawableLeft="@drawable/jom_remove"
+                android:drawablePadding="2dp"
+                android:text="@string/remove"
+                android:visibility="gone" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPhotoDownload"
+                style="?jom_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:drawableLeft="@drawable/jom_download"
+                android:drawablePadding="2dp"
+                android:text="@string/download" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPhotoShare"
+                style="?jom_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:drawableLeft="@drawable/jom_share"
+                android:drawablePadding="2dp"
+                android:text="@string/share" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtPhotoReport"
+                    style="?jom_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:drawableLeft="@drawable/jom_report"
+                    android:drawablePadding="2dp"
+                    android:text="@string/report" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/pbrPhotoViewPager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnPhotoCaptionEdit"
+                style="?jom_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="@string/edit"
+                android:textSize="10dp"
+                android:visibility="gone" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPhotoCaption"
+                style="?jom_textview_h2"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:padding="3dp"
+                android:visibility="visible" />
+
+            <com.ijoomer.customviews.IjoomerVoiceAndTextMessager
+                android:id="@+id/voiceMessagerPhotoCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                app:can_blank="false"
+                app:send_button_caption="@string/save"
+                app:message_hint="@string/caption"
+                app:showpopup="false" >
+            </com.ijoomer.customviews.IjoomerVoiceAndTextMessager>
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPhotoCurrentView"
+                style="?jom_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="1/10" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ijoomer_wall_activity_bottombox"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPhotoLikeCount"
+                style="?jom_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:drawableLeft="@drawable/ijoomer_like_icon"
+                android:drawablePadding="2dp"
+                android:text="0" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPhotoDislikeCount"
+                style="?jom_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:drawableLeft="@drawable/ijoomer_dislike_icon"
+                android:drawablePadding="2dp"
+                android:text="0" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtPhotoCommentCount"
+                style="?jom_textview_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:drawableLeft="@drawable/jom_comment"
+                android:drawablePadding="2dp"
+                android:text="0" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtPhotoTagCount"
+                    style="?jom_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:drawableLeft="@drawable/jom_tag"
+                    android:drawablePadding="2dp"
+                    android:text="0" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrPlayRecordComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="@color/jom_voice_messager_bg"
+        android:gravity="center"
+        android:visibility="gone" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtRecordUser"
+            style="?jom_textview_blue_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:visibility="gone" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtTotalRecordComment"
+            style="?jom_textview_blue_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp" />
+
+        <com.ijoomer.customviews.IjoomerVoiceButton
+            android:id="@+id/btnPlayAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

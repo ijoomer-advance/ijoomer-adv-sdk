@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="jreview_button" format="reference" />
+    <attr name="jreview_textview_h0" format="reference" />
+    <attr name="jreview_textview_h1" format="reference" />
+    <attr name="jreview_textview_h2" format="reference" />
+    <attr name="jreview_textview_h3" format="reference" />
+    <attr name="jreview_textview_white_h1" format="reference" />
+    <attr name="jreview_textview_white_h2" format="reference" />
+    <attr name="jreview_textview_white_h3" format="reference" />
+    <attr name="jreview_textview_white_h4" format="reference" />
+    <attr name="jreview_textview_lightgray_h2" format="reference" />
+    <attr name="jreview_textview_dark_h1" format="reference" />
+    <attr name="jreview_textview_dark_h2" format="reference" />
+    <attr name="jreview_textview_dark_h3" format="reference" />
+    <attr name="jreview_edittext_h2" format="reference" />
+    <attr name="jreview_search_edittext_h2" format="reference" />
+    <attr name="jreview_spinner" format="reference" />
+    <attr name="jreview_background" format="reference" />
+    <attr name="jreview_header" format="reference" />
+
+</resources>

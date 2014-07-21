@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    
+    <string name="easy_blog_postedby">Posted By : </string>
+    <string name="easy_blog_detail">Detail</string>
+    <string name="easy_blog_list">Blog list</string>
+    <string name="easy_blog_postedon">Posted On : </string>
+    <string name="easy_blog_hits">Hits :</string>
+    <string name="easy_blog_replay">Replay</string>
+    <string name="easy_blog_like">Like</string>
+    <string name="easy_blog_unlike">Unlike</string>
+    <string name="easy_blogs">Easy Blogs</string>
+    <string name="easy_blog_comments">Comments</string>
+    <string name="easy_blog_add">Add</string>
+    <string name="easy_blog_add_blog">Add Blog</string>
+    <string name="easy_blog_write_comment_here">Write comment here</string>
+    <string name="easy_blog_rate">Rate this blog</string>
+    <string name="easy_blog_comment_remove">Comment remove</string>
+</resources>

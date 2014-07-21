@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/k2_orange" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtk2DirectoriesCategoryName"
+            style="?k2_textview_white_h4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+         android:id="@+id/hrzk2DirectoriesCategoryItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:id="@+id/lnrk2DirectoriesScrollable"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content" >
+        </LinearLayout>
+    </HorizontalScrollView>
+    
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/txtk2DirectoriesCategoryNoItem"
+        style="?k2_textview_h2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/k2_bg_color"
+        android:padding="2dp"
+        android:text="@string/k2_no_items"
+        android:visibility="gone" />
+
+</LinearLayout>

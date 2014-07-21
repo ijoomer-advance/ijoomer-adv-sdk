@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnrMain"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lnrName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/ijoomer_edittext"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/lnrName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imgFriend"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:adjustViewBounds="true"
+                android:padding="1dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_launcher" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtName"
+                style="?jom_textview_h3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:singleLine="true" />
+
+            <ImageView
+                android:id="@+id/imgOnlineStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="3dp"
+                android:visibility="visible"
+                android:src="@drawable/jom_friend_member_offline" />
+
+            <com.ijoomer.customviews.IjoomerCheckBox
+                android:id="@+id/chkSelectFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/checkbox_selector"
+                android:visibility="gone" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtInvited"
+                style="?jom_textview_h3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/invited"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?jom_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/rvExpandableList"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="70dp" >
+
+        <ListView
+            android:id="@+id/lstAdvanceSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:focusable="false"
+            android:groupIndicator="@null" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/jom_advance_search_list_bg" >
+
+        <RelativeLayout
+            android:id="@+id/rvRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioGroup
+                android:id="@+id/rgCriteria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rbMatchAllCriteria"
+                    style="?jom_textview_h2"
+                    android:layout_gravity="center|left"
+                    android:checked="true"
+                    android:text="@string/matchallcriteria" />
+
+                <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rbMatchAnyCriteria"
+                    style="?jom_textview_h2"
+                    android:layout_gravity="center|right"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/matchanycriteria" />
+            </RadioGroup>
+        </RelativeLayout>
+
+        <com.ijoomer.customviews.IjoomerCheckBox
+            android:id="@+id/chbMemberWithAvatar"
+            style="?jom_textview_h2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rvRadioGroup"
+            android:layout_gravity="center|left"
+            android:layout_weight="1"
+            android:text="@string/memberwithpicture" />
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnSearch"
+            style="?jom_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/rvRadioGroup"
+            android:layout_centerVertical="true"
+            android:src="@drawable/jom_advance_search_add"
+            android:text="@string/search" />
+    </RelativeLayout>
+
+</RelativeLayout>

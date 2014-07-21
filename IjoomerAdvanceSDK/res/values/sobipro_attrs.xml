@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="sobipro_background" format="reference" />
+    <attr name="sobipro_button" format="reference" />
+
+    <attr name="sobipro_spinner" format="reference" />
+
+    <attr name="sobipro_textview_h2" format="reference" />
+    <attr name="sobipro_textview_h3" format="reference" />
+    <attr name="sobipro_textview_h4" format="reference" />
+    <attr name="sobipro_textview_h6" format="reference" />
+
+    <attr name="sobipro_textview_white_h1" format="reference" />
+    <attr name="sobipro_textview_white_h2" format="reference" />
+    <attr name="sobipro_textview_white_h3" format="reference" />
+    <attr name="sobipro_textview_white_h4" format="reference" />
+    <attr name="sobipro_textview_white_h6" format="reference" />
+
+    <attr name="sobipro_textview_black_h1" format="reference" />
+    <attr name="sobipro_textview_black_h2" format="reference" />
+    <attr name="sobipro_textview_black_h3" format="reference" />
+
+    <attr name="sobipro_textview_light_green_h1" format="reference" />
+
+    <attr name="sobipro_edittext_h1" format="reference" />
+    <attr name="sobipro_edittext_h2" format="reference" />
+
+
+</resources>

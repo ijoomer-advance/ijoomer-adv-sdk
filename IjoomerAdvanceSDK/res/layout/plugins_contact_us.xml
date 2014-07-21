@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lnrTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                android:id="@+id/rdbContactInfo"
+                style="?textview_blue_h2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/plugins_radio_selector_background"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center_horizontal"
+                android:padding="5dp"
+                android:text="@string/contactinfo"
+                android:textColor="@drawable/plugins_radio_selector_color"
+                android:textStyle="bold" />
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                android:id="@+id/rdbContactForm"
+                style="?textview_blue_h2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/plugins_radio_selector_background"
+                android:button="@null"
+                android:gravity="center_horizontal"
+                android:padding="5dp"
+                android:text="@string/contactus"
+                android:textColor="@drawable/plugins_radio_selector_color"
+                android:textStyle="bold" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrContactInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/ijoomer_welcome_content_box"
+                    android:orientation="horizontal"
+                    android:padding="5dp" >
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="0dp"
+                        android:paddingTop="3dp" />
+
+                    <LinearLayout
+                        android:id="@+id/lnrContactPosition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:padding="3dp" >
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtValueName"
+                            style="?textview_blue_h4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:textStyle="bold" />
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtValuePosition"
+                            style="?textview_blue_h3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="5dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/ijoomer_welcome_content_box"
+                    android:orientation="vertical"
+                    android:padding="5dp" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtValueAddress"
+                        style="?textview_blue_h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtValueCity"
+                        style="?textview_blue_h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtValueState"
+                        style="?textview_blue_h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtValueCountry"
+                        style="?textview_blue_h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnrContactPostcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtLablePostcode"
+                        style="?textview_blue_h3"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:paddingLeft="5dp"
+                        android:text="@string/postcode" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtValuePostcode"
+                        style="?textview_h2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/ijoomer_welcome_content_box"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:id="@+id/lnrContactTelephone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone" >
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtLableTelephone"
+                            style="?textview_blue_h3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingLeft="5dp"
+                            android:text="@string/telephone" />
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtValueTelephone"
+                            style="?textview_h2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="5dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lnrContactMobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone" >
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtLableMobile"
+                            style="?textview_blue_h3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingLeft="5dp"
+                            android:text="@string/mobile" />
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtValueMobile"
+                            style="?textview_h2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="5dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lnrContactFax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone" >
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtLableFax"
+                            style="?textview_blue_h3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingLeft="5dp"
+                            android:text="@string/fax" />
+
+                        <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtValueFax"
+                            style="?textview_h2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="5dp" />
+                    </LinearLayout>
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtValueEmailTo"
+                        style="?textview_blue_h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="3dp" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtValueWebpage"
+                        style="?textview_blue_h3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="3dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnrLinks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical" 
+                    android:layout_marginRight="10dp">
+                </LinearLayout>
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtValueMisc"
+                    style="?textview_blue_h3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnAddToContact"
+            style="?button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/addtocontact"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrContactForm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:visibility="gone" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtContactName"
+                    style="?edittext_h3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="@string/name" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtContactEmail"
+                    style="?edittext_h3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="@string/email" />
+
+                <Spinner
+                    android:id="@+id/spnSubject"
+                    style="?spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/edtContactMessage"
+                    style="?edittext_h3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="top|left"
+                    android:hint="@string/message"
+                    android:minLines="8" />
+            </LinearLayout>
+        </ScrollView>
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnSendEmail"
+            style="?button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/send" />
+    </LinearLayout>
+
+</LinearLayout>

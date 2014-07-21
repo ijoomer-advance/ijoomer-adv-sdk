@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnrHeader"
+    style="?jreview_header"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/lnrSideMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/imgSideMenu"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ijoomer_sidemenu" />
+
+            <View
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/ijoomer_sidemenu_seprator" />
+        </LinearLayout>
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtHeader"
+            style="?jreview_textview_white_h4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|center_vertical"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingRight="30dp"
+            android:singleLine="true"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imgMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/jreview_imgtag"
+            android:src="@drawable/jreview_location_icon"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imgAddArticle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/jreview_imgtag"
+            android:src="@drawable/jreview_add_listing"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imgeditArticle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/jreview_imgtag"
+            android:src="@drawable/jreview_edit_listing"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imgaddReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/jreview_imgtag"
+            android:src="@drawable/jreview_add_review"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imgeditReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/jreview_imgtag"
+            android:src="@drawable/jreview_edit_review"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imgaddphotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/jreview_imgtag"
+            android:src="@drawable/jreview_add_photo"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</LinearLayout>

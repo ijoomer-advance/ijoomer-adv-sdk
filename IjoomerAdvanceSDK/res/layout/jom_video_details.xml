@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    style="?jom_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:id="@+id/lnrHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jom_album_detail_header_bg"
+        android:gravity="center_vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="3dp" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtVideoEdit"
+                    style="?jom_textview_h3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/edit" />
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtVideoRemove"
+                    style="?jom_textview_h3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/jom_album_detail_header_divider"
+                    android:drawablePadding="3dp"
+                    android:gravity="center"
+                    android:text="@string/remove" />
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtVideoSetAsProfileVideo"
+                style="?jom_textview_h3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:drawableLeft="@drawable/jom_album_detail_header_divider"
+                android:drawablePadding="3dp"
+                android:gravity="center"
+                android:text="@string/set_as_profile_video" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lstVideoComment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/jom_blue"
+        android:dividerHeight="0dp"
+        android:smoothScrollbar="true"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.ijoomer.customviews.IjoomerVoiceAndTextMessager
+            android:id="@+id/voiceMessager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:message_hint="@string/write_comment" >
+        </com.ijoomer.customviews.IjoomerVoiceAndTextMessager>
+    </LinearLayout>
+
+</LinearLayout>

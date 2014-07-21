@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    android:id="@+id/lnrAbout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/sobipro_white"
+    android:padding="5dp" >
+
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/txtCaption"
+        style="?sobipro_textview_h2"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content" />
+
+    <com.ijoomer.customviews.IjoomerTextView
+        android:id="@+id/txtValue"
+        style="?sobipro_textview_h2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

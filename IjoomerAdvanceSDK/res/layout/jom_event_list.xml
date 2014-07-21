@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?jom_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lnrEventHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jom_album_detail_header_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventAll"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/all" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventMy"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/jom_album_detail_header_divider"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="@string/my" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventPast"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/jom_album_detail_header_divider"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="@string/past" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventPending"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/jom_album_detail_header_divider"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="@string/pending" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrEventSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="right" >
+
+        <com.ijoomer.customviews.IjoomerEditText
+            android:id="@+id/editEventSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/ijoomer_friend_member_search"
+            android:singleLine="true" />
+
+        <ImageView
+            android:id="@+id/imgSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:padding="2dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ijoomer_search_icon" />
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnEventCreate"
+            style="?jom_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp"
+            android:text="@string/create"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="easyblog_theme" parent="ijoomer_theme">
+        
+        <item name="easyblog_spinner">@style/easyblog_spinner</item>
+        
+        <item name="easyblog_background">@style/easyblog_background</item>
+        <item name="easyblog_header">@style/easyblog_header</item>
+        <item name="easyblog_textview_h0">@style/easyblog_textview_h0</item>
+        <item name="easyblog_textview_h1">@style/easyblog_textview_h1</item>
+        <item name="easyblog_textview_h2">@style/easyblog_textview_h2</item>
+        <item name="easyblog_textview_h3">@style/easyblog_textview_h3</item>
+        
+        <item name="easyblog_edittext_h1">@style/easyblog_edittext_h1</item>
+        <item name="easyblog_edittext_h2">@style/easyblog_edittext_h2</item>
+        <item name="easyblog_edittext_h3">@style/easyblog_edittext_h3</item>
+        <item name="easyblog_edittext_h4">@style/easyblog_edittext_h4</item>
+        <item name="easyblog_edittext_h5">@style/easyblog_edittext_h5</item>
+        
+        
+        <item name="easyblog_textview_white_h4">@style/easyblog_textview_white_h4</item>
+        <item name="easyblog_textview_lightgray_h2">@style/easyblog_textview_lightgray_h2</item>
+        <item name="easyblog_textview_blue_h1">@style/easyblog_textview_blue_h1</item>
+        <item name="easyblog_textview_blue_h2">@style/easyblog_textview_blue_h2</item>
+        <item name="easyblog_textview_blue_h3">@style/easyblog_textview_blue_h3</item>
+    </style>
+
+</resources>

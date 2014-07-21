@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="3dp" >
+
+    <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtItemTitle"
+            style="?k2_textview_h4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center" />
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="150dp"
+            android:orientation="vertical" >
+
+        <ImageView
+                android:id="@+id/imgItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/k2_default" />
+
+        <ProgressBar
+                android:id="@+id/pbrImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
+
+        <LinearLayout
+                android:id="@+id/lnrItemColor1"
+                android:layout_width="30dp"
+                android:layout_height="25dp"
+                android:layout_gravity="left"
+                android:layout_marginRight="5dp"
+                android:background="@color/k2_orange"
+                android:padding="1dp"
+                android:visibility="gone" >
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/k2_white"
+                    android:padding="3dp" >
+
+                <View
+                        android:id="@+id/viewItemColor1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/k2_bg_color" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/lnrItemColor2"
+                android:layout_width="30dp"
+                android:layout_height="25dp"
+                android:layout_gravity="left"
+                android:layout_marginRight="5dp"
+                android:background="@color/k2_orange"
+                android:padding="1dp"
+                android:visibility="gone" >
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/k2_white"
+                    android:padding="3dp" >
+
+                <View
+                        android:id="@+id/viewItemColor2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/k2_bg_color" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/lnrItemColor3"
+                android:layout_width="30dp"
+                android:layout_height="25dp"
+                android:layout_gravity="left"
+                android:layout_marginRight="5dp"
+                android:background="@color/k2_orange"
+                android:padding="1dp"
+                android:visibility="gone" >
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/k2_white"
+                    android:padding="3dp" >
+
+                <View
+                        android:id="@+id/viewItemColor3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/k2_bg_color" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right" >
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rdbItemSizeSmall"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/k2_radio_size_selector_background"
+                    android:button="@null"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:text="@string/k2_small_size"
+                    android:textColor="@drawable/k2_radio_size_selector_color" />
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rdbItemSizeMedium"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/k2_radio_size_selector_background"
+                    android:button="@null"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:text="@string/k2_medium_size"
+                    android:textColor="@drawable/k2_radio_size_selector_color" />
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rdbItemSizeLarge"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/k2_radio_size_selector_background"
+                    android:button="@null"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:text="@string/k2_large_size"
+                    android:textColor="@drawable/k2_radio_size_selector_color" />
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rdbItemSizeXtraLarge"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/k2_radio_size_selector_background"
+                    android:button="@null"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:text="@string/k2_xtra_large_size"
+                    android:textColor="@drawable/k2_radio_size_selector_color" />
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rdbItemSizeDoubleXtraLarge"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/k2_radio_size_selector_background"
+                    android:button="@null"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:text="@string/k2_douable_xtra_large_size"
+                    android:textColor="@drawable/k2_radio_size_selector_color" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/k2_white">
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
+
+        <com.ijoomer.customviews.IjoomerButton
+                android:id="@+id/btnItemPrice"
+                style="?k2_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:clickable="false"
+                android:visibility="gone" />
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:orientation="horizontal" >
+
+            <com.ijoomer.customviews.IjoomerRatingBar
+                    android:id="@+id/rtbItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
+                    app:isEditable="true"
+                    app:star_empty="@drawable/k2_rating_empty"
+                    app:star_filled="@drawable/k2_rating"
+                    app:star_half="@drawable/k2_rating_half"
+                    app:star_size="30" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtItemRatingVote"
+                    style="?textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:visibility="visible" />
+
+            <ImageView
+                    android:id="@+id/imgSubmitRating"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/k2_right"
+                    android:visibility="gone" />
+
+            <ImageView
+                    android:id="@+id/imgCancelRating"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/k2_wrong"
+                    android:visibility="gone" />
+
+            <ImageView
+                    android:id="@+id/imgItemShare"
+                    android:layout_width="35dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/k2_article_share" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/k2_white">
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/k2_orange" >
+
+        <RadioGroup
+                android:id="@+id/rdgDescriptionBrandReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/k2_orange"
+                android:orientation="horizontal" >
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rdbtItemDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/k2_radio_selector_background"
+                    android:button="@null"
+                    android:checked="true"
+                    android:padding="2dp"
+                    android:text="@string/k2_description"
+                    android:textColor="@drawable/k2_radio_selector_color"
+                     />
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rdbItemBrand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:background="@drawable/k2_radio_selector_background"
+                    android:button="@null"
+                    android:padding="2dp"
+                    android:text="@string/k2_brand"
+                    android:textColor="@drawable/k2_radio_selector_color"
+                     />
+
+            <com.ijoomer.customviews.IjoomerRadioButton
+                    android:id="@+id/rdbItemReviews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/k2_radio_selector_background"
+                    android:button="@null"
+                    android:padding="2dp"
+                    android:text="@string/k2_reviews"
+                    android:textColor="@drawable/k2_radio_selector_color"
+                     />
+        </RadioGroup>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/k2_bg_color"
+                android:orientation="horizontal" >
+
+            <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:background="@color/k2_orange" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+                    android:orientation="vertical" >
+
+                <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/k2_orange" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/k2_orange"
+            android:orientation="vertical"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingBottom="1dp" >
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="70dp"
+                android:background="@color/k2_white"
+                android:gravity="center"
+                android:padding="5dp"
+                android:orientation="vertical" >
+
+            <LinearLayout
+                    android:id="@+id/lnrItemDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtItemDescription"
+                        style="?k2_textview_h2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/lnrItemBrand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                <ImageView
+                        android:id="@+id/imgItemBrandLogo"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY" />
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical" >
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtItemBrandName"
+                            style="?k2_textview_h2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                            android:id="@+id/txtItemBrandDescription"
+                            style="?k2_textview_h2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtItemNoBrand"
+                    style="?k2_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/k2_no_brand"
+                    android:visibility="gone" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtItemNoDescription"
+                    style="?k2_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/k2_no_description"
+                    android:visibility="gone" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                    android:id="@+id/txtItemNoComment"
+                    style="?k2_textview_h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/k2_be_the_first_to_comment"
+                    android:visibility="gone" />
+
+            <LinearLayout
+                    android:id="@+id/lnrWriteComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/k2_bg_color"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    android:visibility="gone" >
+
+                <com.ijoomer.customviews.IjoomerEditText
+                        android:id="@+id/edtCommentMessage"
+                        style="?k2_textview_h2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="top|left"
+                        android:hint="@string/k2_enter_comment"
+                        android:lines="5" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                        android:id="@+id/edtCommentUserName"
+                        style="?k2_textview_h2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:hint="@string/k2_enter_name"
+                        android:singleLine="true" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                        android:id="@+id/edtCommentEmail"
+                        style="?k2_textview_h2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:hint="@string/k2_enter_email"
+                        android:singleLine="true" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                        android:id="@+id/edtCommentSiteUrl"
+                        style="?k2_textview_h2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="top|left"
+                        android:hint="@string/k2_enter_site_url"
+                        android:singleLine="true" />
+
+                <com.ijoomer.customviews.IjoomerButton
+                        android:id="@+id/btnCommentSubmit"
+                        style="?k2_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="3dp"
+                        android:text="@string/k2_submit_comment" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?jreview_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?jreview_textview_dark_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/jreview_listing_required" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?jreview_textview_white_h3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:background="@color/blue"
+                android:gravity="left|center_vertical"
+                android:padding="5dp"
+                android:text="@string/jreview_listing_title" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/jreviewlistingtitle"
+                style="?jreview_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical"
+                android:singleLine="true" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?jreview_textview_white_h3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:background="@color/blue"
+                android:gravity="left|center_vertical"
+                android:padding="5dp"
+                android:text="@string/jreview_listing_title_alias" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/jreviewlistingtitlealias"
+                style="?jreview_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:id="@+id/lnr_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?jreview_textview_white_h3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:background="@color/blue"
+                android:gravity="left|center_vertical"
+                android:padding="5dp"
+                android:text="@string/jreview_listing_summary" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/jreviewlistingsummary"
+                style="?jreview_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="top|center_vertical" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?jreview_textview_white_h3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:background="@color/blue"
+                android:gravity="left|center_vertical"
+                android:padding="5dp"
+                android:text="@string/jreview_listing_disc" />
+
+            <com.ijoomer.customviews.IjoomerEditText
+                android:id="@+id/jreviewlistingdiscription"
+                style="?jreview_edittext_h2"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="top|center_vertical" />
+
+            <com.ijoomer.customviews.IjoomerTextView
+                style="?jreview_textview_white_h3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:background="@color/blue"
+                android:gravity="left|center_vertical"
+                android:padding="5dp"
+                android:text="@string/jreview_listing_metadata" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    style="?jreview_textview_h2"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical|right"
+                    android:text="@string/jreview_listing_meta_disc" />
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/jreviewlistingmetadiscription"
+                    style="?jreview_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="top|center_vertical" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" >
+
+                <com.ijoomer.customviews.IjoomerTextView
+                    style="?jreview_textview_h2"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical|right"
+                    android:text="@string/jreview_listing_meta_keywords" />
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <com.ijoomer.customviews.IjoomerEditText
+                    android:id="@+id/jreviewlistingmetakeywords"
+                    style="?jreview_edittext_h2"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="top|center_vertical" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnBack"
+            style="?button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/jreview_cancel" />
+
+        <com.ijoomer.customviews.IjoomerButton
+            android:id="@+id/btnSubmit"
+            style="?button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:text="@string/jreview_submit" />
+    </LinearLayout>
+
+</LinearLayout>

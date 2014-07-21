@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+        <resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="k2_background">
+        <item name="android:background">@color/k2_bg_color</item>
+    </style>
+
+    <style name="k2_header">
+        <item name="android:background">@color/k2_orange</item>
+    </style>
+
+    <style name="k2_footer">
+        <item name="android:background">@color/k2_orange</item>
+    </style>
+
+    <style name="k2_button">
+        <item name="android:background">@drawable/k2_button_selector</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="k2_textview_h4">
+        <item name="android:textColor">@color/k2_text_color</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="k2_textview_h2">
+        <item name="android:textColor">@color/k2_text_color</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="k2_textview_h3">
+        <item name="android:textColor">@color/k2_text_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="k2_textview_white_h3">
+        <item name="android:textColor">@color/k2_white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="k2_textview_white_h4">
+        <item name="android:textColor">@color/k2_white</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="k2_textview_orange_h2">
+        <item name="android:textColor">@color/k2_orange</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="k2_textview_orange_h3">
+        <item name="android:textColor">@color/k2_orange</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+    <style name="k2_edittext_h2">
+        <item name="android:background">@drawable/ijoomer_edittext</item>
+        <item name="android:textColor">@color/k2_edit_color</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
+</resources>

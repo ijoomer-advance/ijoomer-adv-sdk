@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
+    style="?jom_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:id="@+id/lnrEventHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jom_album_detail_header_bg"
+        android:gravity="center" >
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventEdit"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone"
+            android:drawableRight="@drawable/jom_album_detail_header_divider"
+            android:text="@string/edit" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventRemove"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:drawableRight="@drawable/jom_album_detail_header_divider"
+            android:gravity="center"
+            android:text="@string/remove" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+            android:id="@+id/txtEventSendEmail"
+            style="?jom_textview_h3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/event_send_mail" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lstEventComment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/jom_blue"
+        android:dividerHeight="0dp"
+        android:smoothScrollbar="true"
+        android:visibility="visible"/>
+    
+     <LinearLayout
+         android:id="@+id/lnrEventWriteComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.ijoomer.customviews.IjoomerVoiceAndTextMessager
+            android:id="@+id/voiceMessager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:message_hint="@string/write_comment" >
+        </com.ijoomer.customviews.IjoomerVoiceAndTextMessager>
+    </LinearLayout>
+
+</LinearLayout>

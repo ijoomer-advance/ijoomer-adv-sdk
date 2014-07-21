@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ijoomer="http://schemas.android.com/apk/com.ijoomer.src"
+    style="?jom_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src">
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:smoothScrollbar="true" />
+    
+    <LinearLayout
+        android:id="@+id/lnrWallOrActivityDetailsWriteComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.ijoomer.customviews.IjoomerVoiceAndTextMessager
+            android:id="@+id/voiceMessager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:message_hint="@string/write_comment" >
+        </com.ijoomer.customviews.IjoomerVoiceAndTextMessager>
+    </LinearLayout>
+
+</LinearLayout>

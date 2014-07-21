@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="k2_bg_color">#eeeeee</color>
+    <color name="k2_orange">#f04e23</color>
+    <color name="k2_white">#ffffff</color>
+    <color name="k2_text_color">#878787</color>
+    <color name="k2_edit_color">#878787</color>
+    <color name="k2_catalog_item_dark">#dfdede</color>
+    <color name="k2_transparent_bg">#cbffffff</color>
+
+</resources>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:background="@drawable/ijoomer_button_selector"
+              android:orientation="horizontal" >
+
+    <LinearLayout
+            android:id="@+id/lnrPlayVoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+        <ImageView
+                android:id="@+id/imgPlay"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center_vertical"
+                android:adjustViewBounds="true" />
+
+        <ProgressBar
+                android:id="@+id/pbrLoading"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center_vertical" />
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:layout_gravity="center" >
+            <com.ijoomer.customviews.IjoomerGifView
+                    android:id="@+id/gifVoiceLoader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+            </com.ijoomer.customviews.IjoomerGifView>
+        </LinearLayout>
+
+        <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtButtonCaption"
+                style="?textview_white_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="10 s" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/lnrReportVoice"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="3dp"
+            android:gravity="center_vertical"
+            android:visibility="gone" >
+
+        <ImageView
+                android:id="@+id/imgReport"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ijoomer_report_icon" />
+
+        <com.ijoomer.customviews.IjoomerTextView
+                android:id="@+id/txtReportCaption"
+                style="?textview_white_h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp" />
+    </LinearLayout>
+
+</LinearLayout>
