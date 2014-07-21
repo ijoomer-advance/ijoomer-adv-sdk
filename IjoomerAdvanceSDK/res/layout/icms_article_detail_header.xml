@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?background"
+    style="?icms_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <ImageView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:src="@drawable/icms_article_title_bar_top" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/icms_article_detail_title_bar"
         android:gravity="center" >
 
         <com.ijoomer.customviews.IjoomerTextView
             android:id="@+id/icmsTxtCategory"
-            style="?textview_h0"
+            style="?icms_textview_h0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="0dp"
@@ -30,7 +30,7 @@
 
         <com.ijoomer.customviews.IjoomerTextView
             android:id="@+id/icmsTxtIndicator"
-            style="?textview_h0"
+            style="?icms_textview_h0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -39,7 +39,7 @@
 
         <com.ijoomer.customviews.IjoomerTextView
             android:id="@+id/icmsTxtPublishedOn"
-            style="?textview_h0"
+            style="?icms_textview_h0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="0dp"
@@ -51,15 +51,15 @@
 
     <com.ijoomer.customviews.IjoomerTextView
         android:id="@+id/icmsTxtTitle"
-        style="?textview_h3"
-        android:layout_width="fill_parent"
+        style="?icms_textview_h3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="7dp"
         android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/icmsImageFullText"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:background="@drawable/icms_article_bg"
@@ -67,21 +67,22 @@
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:paddingTop="3dp"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:visibility="gone" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="5dp" >
 
         <com.ijoomer.customviews.IjoomerTextView
             android:id="@+id/icmsTxtWriitenBy"
-            style="?textview_blue_h1"
+            style="?icms_textview_blue_h1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/brown" >
+            android:textColor="@color/icms_brown" >
         </com.ijoomer.customviews.IjoomerTextView>
 
         <ImageView
@@ -95,8 +96,8 @@
             android:id="@+id/icmsImageShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="2dp"
             android:layout_marginLeft="4dp"
+            android:padding="2dp"
             android:src="@drawable/icms_article_share" />
     </LinearLayout>
 

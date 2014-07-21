@@ -16,9 +16,6 @@
  */
 package com.ijoomer.page.indicator;
 
-import static android.graphics.Paint.ANTI_ALIAS_FLAG;
-import static android.widget.LinearLayout.HORIZONTAL;
-import static android.widget.LinearLayout.VERTICAL;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -37,6 +34,10 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.ijoomer.src.R;
+
+import static android.graphics.Paint.ANTI_ALIAS_FLAG;
+import static android.widget.LinearLayout.HORIZONTAL;
+import static android.widget.LinearLayout.VERTICAL;
 
 /**
  * Draws circles (one for each view). The current view position is filled and
@@ -73,7 +74,8 @@ public class CirclePageIndicator extends View implements PageIndicator {
         this(context, attrs, R.attr.vpiCirclePageIndicatorStyle);
     }
 
-    public CirclePageIndicator(Context context, AttributeSet attrs, int defStyle) {
+    @SuppressWarnings("deprecation")
+	public CirclePageIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         if (isInEditMode()) return;
 
@@ -105,7 +107,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
 
         Drawable background = a.getDrawable(R.styleable.CirclePageIndicator_android_background);
         if (background != null) {
-          setBackgroundDrawable(background);
+        	setBackgroundDrawable(background);
         }
 
         a.recycle();
@@ -530,7 +532,6 @@ public class CirclePageIndicator extends View implements PageIndicator {
             dest.writeInt(currentPage);
         }
 
-        @SuppressWarnings("UnusedDeclaration")
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);

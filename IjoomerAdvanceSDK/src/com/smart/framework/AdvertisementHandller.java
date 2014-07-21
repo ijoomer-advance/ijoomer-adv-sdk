@@ -7,4 +7,6 @@ public interface AdvertisementHandller {
 	public View setTopAdvertisement();
 
 	public View setBottomAdvertisement();
+
+	public void setOnLoadAdvertisement();
 }

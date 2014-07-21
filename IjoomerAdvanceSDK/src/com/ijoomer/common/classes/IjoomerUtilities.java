@@ -1,27 +1,31 @@
 package com.ijoomer.common.classes;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -63,6 +67,8 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.webkit.MimeTypeMap;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -70,7 +76,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
@@ -79,10 +84,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.TimePicker;
-
 import com.ijoomer.common.configuration.IjoomerApplicationConfiguration;
 import com.ijoomer.common.configuration.IjoomerGlobalConfiguration;
 import com.ijoomer.custom.interfaces.CustomClickListner;
+import com.ijoomer.custom.interfaces.HttpAccessListener;
+import com.ijoomer.custom.interfaces.IjoomerClickListner;
 import com.ijoomer.custom.interfaces.IjoomerSharedPreferences;
 import com.ijoomer.custom.interfaces.ReportListner;
 import com.ijoomer.custom.interfaces.SelectImageDialogListner;
@@ -94,25 +100,40 @@ import com.ijoomer.customviews.IjoomerEditText;
 import com.ijoomer.customviews.IjoomerRadioButton;
 import com.ijoomer.customviews.IjoomerTextView;
 import com.ijoomer.src.R;
-import com.smart.android.framework.SmartAndroidActivity;
+import com.ijoomer.theme.ThemeManager;
 import com.smart.framework.AlertMagnatic;
 import com.smart.framework.AlertNeutral;
 import com.smart.framework.CustomAlertMagnatic;
 import com.smart.framework.CustomAlertNeutral;
 import com.smart.framework.ItemView;
 import com.smart.framework.SmartActivity;
+import com.smart.framework.SmartApplication;
 import com.smart.framework.SmartListAdapterWithHolder;
 import com.smart.framework.SmartListItem;
 
+/**
+ * This Class Contains All Method Related To IjoomerUtilities.
+ * 
+ * @author tasol
+ * 
+ */
+@SuppressLint("SimpleDateFormat")
 public class IjoomerUtilities implements IjoomerSharedPreferences {
 
+	public static Activity mSmartAndroidActivity;
 	private static ProgressDialog progress = null;
-	private static String progressMsg = "";
-	public static SmartAndroidActivity mSmartIphoneActivity;
-
 	public static SeekBar skProgress;
+
 	private static Geocoder geocoder;
-	private static String currentSharing;
+	private static SmartListAdapterWithHolder contactAdapter;
+
+	private static String progressMsg = "";
+
+	public static int KILOMETER = 0;
+	public static int METER = 1;
+	public static int MILE = 2;
+	public static int DEGREE = 3;
+	public static LinkedHashMap<String, Integer> emojisHashMap = new LinkedHashMap<String, Integer>();
 
 	/**
 	 * This method will show the progress dialog with given message in the given
@@ -121,18 +142,15 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 	 * dismiss it by pressing back IjoomerButton.
 	 * 
 	 * @param msg
-	 *            = String msg to be displayed in progress dialog.
-	 * @param context
-	 *            = Context context will be current activity's context.
-	 *            <b>Note</b> : A new progress dialog will be generated on
-	 *            screen each time this method is called.
+	 *            = String msg to be displayed in progress dialog. screen each
+	 *            time this method is called.
 	 */
 	public static void showProgressDialog(String msg) {
 		progressMsg = msg;
 
-		mSmartIphoneActivity.runOnUiThread(new Runnable() {
+		mSmartAndroidActivity.runOnUiThread(new Runnable() {
 			public void run() {
-				progress = ProgressDialog.show(mSmartIphoneActivity, "", progressMsg);
+				progress = ProgressDialog.show(mSmartAndroidActivity, "", progressMsg);
 			}
 		});
 	}
@@ -147,17 +165,15 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 	 * 
 	 * @param msg
 	 *            = String msg to be displayed in progress dialog.
-	 * @param context
-	 *            = Context context will be current activity's context.
-	 *            <b>Note</b> : A new progress dialog will be generated on
-	 *            screen each time this method is called.
+	 * @param isCancellable
+	 *            = is cancellable or not
 	 */
 	public static void showProgressDialog(String msg, final boolean isCancellable) {
 		progressMsg = msg;
 
-		mSmartIphoneActivity.runOnUiThread(new Runnable() {
+		mSmartAndroidActivity.runOnUiThread(new Runnable() {
 			public void run() {
-				progress = ProgressDialog.show(mSmartIphoneActivity, "", progressMsg);
+				progress = ProgressDialog.show(mSmartAndroidActivity, "", progressMsg);
 				progress.setCancelable(isCancellable);
 			}
 		});
@@ -169,7 +185,7 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 	 * screen and can also be called from non UI threads.
 	 */
 	public static void hideProgressDialog() {
-		mSmartIphoneActivity.runOnUiThread(new Runnable() {
+		mSmartAndroidActivity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
@@ -198,20 +214,22 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 	 *            = String target is AlertNewtral callback for OK IjoomerButton
 	 *            click action.
 	 */
-	public static void getOKDialog(final String title, final String msg, final String IjoomerButtonCaption, final boolean isCancelable, final AlertNeutral target) {
-		if (!msg.equalsIgnoreCase(mSmartIphoneActivity.getString(R.string.code704))) {
+	public static void getOKDialog(final String title, final String msg, final String IjoomerButtonCaption, final boolean isCancelable,
+			final AlertNeutral target) {
+		if (!msg.equalsIgnoreCase(mSmartAndroidActivity.getString(R.string.code704))) {
 
 			try {
-				mSmartIphoneActivity.runOnUiThread(new Runnable() {
+				mSmartAndroidActivity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						AlertDialog.Builder builder = new AlertDialog.Builder(mSmartIphoneActivity);
+						AlertDialog.Builder builder = new AlertDialog.Builder(mSmartAndroidActivity);
 
 						int imageResource = android.R.drawable.stat_sys_warning;
-						Drawable image = mSmartIphoneActivity.getResources().getDrawable(imageResource);
+						Drawable image = mSmartAndroidActivity.getResources().getDrawable(imageResource);
 
-						builder.setTitle(title).setMessage(msg).setIcon(image).setCancelable(false).setNeutralButton(IjoomerButtonCaption, new DialogInterface.OnClickListener() {
+						builder.setTitle(title).setMessage(msg).setIcon(image).setCancelable(false)
+						.setNeutralButton(IjoomerButtonCaption, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								target.NeutralMathod(dialog, id);
 							}
@@ -228,15 +246,30 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		}
 	}
 
-	public static void getCustomOkDialog(final String title, final String msg, final String IjoomerButtonCaption, final int layoutID, final CustomAlertNeutral target) {
-		if (!msg.equals(mSmartIphoneActivity.getResources().getString(R.string.code704))) {
-			mSmartIphoneActivity.runOnUiThread(new Runnable() {
+	/**
+	 * This method used to get custom ok dialog.
+	 * 
+	 * @param title
+	 *            represented dialog title
+	 * @param msg
+	 *            represented message
+	 * @param IjoomerButtonCaption
+	 *            represented ok button caption
+	 * @param layoutID
+	 *            represented layout id
+	 * @param target
+	 *            represented {@link CustomAlertMagnatic}
+	 */
+	public static void getCustomOkDialog(final String title, final String msg, final String IjoomerButtonCaption, final int layoutID,
+			final CustomAlertNeutral target) {
+		if (!msg.equals(mSmartAndroidActivity.getResources().getString(R.string.code704))) {
+			mSmartAndroidActivity.runOnUiThread(new Runnable() {
 
 				@Override
 				public void run() {
 
-					final Dialog dialog = new Dialog(mSmartIphoneActivity, android.R.style.Theme_Translucent_NoTitleBar);
-					dialog.setContentView(layoutID);
+					final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+					dialog.setContentView(ThemeManager.getInstance().getOkDialog());
 
 					IjoomerTextView txtTitle = (IjoomerTextView) dialog.findViewById(R.id.txtTitle);
 					IjoomerTextView txtMessage = (IjoomerTextView) dialog.findViewById(R.id.txtMessage);
@@ -249,7 +282,7 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 						@Override
 						public void onClick(View v) {
-							target.NeutralMathod();
+							target.NeutralMethod();
 							dialog.dismiss();
 						}
 					});
@@ -259,15 +292,92 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		}
 	}
 
+	/**
+	 * This method used to get report dialog
+	 * 
+	 * @param target
+	 *            represented {@link ReportListner}
+	 */
+	public static void getReportDialog(final ReportListner target) {
+		final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+		dialog.setContentView(R.layout.ijoomer_report_dialog);
+		final Spinner spnReportType = (Spinner) dialog.findViewById(R.id.spnReportType);
+		final IjoomerEditText edtReportMessage = (IjoomerEditText) dialog.findViewById(R.id.edtReportMessage);
+		IjoomerButton btnCancel = (IjoomerButton) dialog.findViewById(R.id.btnCancel);
+		IjoomerButton btnSend = (IjoomerButton) dialog.findViewById(R.id.btnSend);
+
+		spnReportType.setAdapter(new MyCustomAdapter(mSmartAndroidActivity, new ArrayList<String>(Arrays.asList(mSmartAndroidActivity
+				.getResources().getStringArray(R.array.report_type)))));
+
+		btnSend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				target.onClick(spnReportType.getSelectedItem().toString(), edtReportMessage.getText().toString().trim());
+				dialog.dismiss();
+			}
+
+		});
+		btnCancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+
+	/**
+	 * This method used to get report dialog
+	 * 
+	 * @param target
+	 *            represented {@link ReportListner}
+	 */
+	public static void getJreviewArticleVideosReportDialog(final ReportListner target) {
+		final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+		dialog.setContentView(R.layout.ijoomer_report_dialog);
+		final Spinner spnReportType = (Spinner) dialog.findViewById(R.id.spnReportType);
+		spnReportType.setVisibility(View.GONE);
+		final IjoomerEditText edtReportMessage = (IjoomerEditText) dialog.findViewById(R.id.edtReportMessage);
+		IjoomerButton btnCancel = (IjoomerButton) dialog.findViewById(R.id.btnCancel);
+		IjoomerButton btnSend = (IjoomerButton) dialog.findViewById(R.id.btnSend);
+
+		btnSend.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				target.onClick("", edtReportMessage.getText().toString().trim());
+				dialog.dismiss();
+			}
+
+		});
+		btnCancel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View paramView) {
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+
+	/**
+	 * This method used to get loading dialog.
+	 * 
+	 * @param message
+	 *            represented message
+	 * @return represented {@link SeekBar}
+	 */
 	public static SeekBar getLoadingDialog(final String message) {
 
-		mSmartIphoneActivity.runOnUiThread(new Runnable() {
+		mSmartAndroidActivity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					final Dialog dialog = new Dialog(mSmartIphoneActivity, android.R.style.Theme_Translucent_NoTitleBar);
-					dialog.setContentView(R.layout.ijoomer_loading_dialog);
+					final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+					dialog.setContentView(ThemeManager.getInstance().getLoadingDialog());
 					final IjoomerTextView txtMessage = (IjoomerTextView) dialog.findViewById(R.id.txtMessage);
 					final IjoomerTextView txtProgrss = (IjoomerTextView) dialog.findViewById(R.id.txtProgrss);
 					skProgress = (SeekBar) dialog.findViewById(R.id.skProgress);
@@ -324,20 +434,29 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		}
 	}
 
+	/**
+	 * This method used to get loading dialog.
+	 * 
+	 * @param message
+	 *            represented message
+	 * @param size
+	 *            represented size
+	 * @return represented {@link SeekBar}
+	 */
 	public static SeekBar getLoadingDialog(final String message, final String size) {
 
-		mSmartIphoneActivity.runOnUiThread(new Runnable() {
+		mSmartAndroidActivity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					final Dialog dialog = new Dialog(mSmartIphoneActivity, android.R.style.Theme_Translucent_NoTitleBar);
-					dialog.setContentView(R.layout.ijoomer_loading_dialog);
+					final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+					dialog.setContentView(ThemeManager.getInstance().getLoadingDialog());
 					final IjoomerTextView txtMessage = (IjoomerTextView) dialog.findViewById(R.id.txtMessage);
 					final IjoomerTextView txtProgrss = (IjoomerTextView) dialog.findViewById(R.id.txtProgrss);
 					final IjoomerTextView txtSize = (IjoomerTextView) dialog.findViewById(R.id.txtSize);
 					txtSize.setVisibility(View.VISIBLE);
-					txtSize.setText(mSmartIphoneActivity.getString(R.string.size) + " : " + size);
+					txtSize.setText(mSmartAndroidActivity.getString(R.string.size) + " : " + size);
 					skProgress = (SeekBar) dialog.findViewById(R.id.skProgress);
 
 					txtMessage.setText(message);
@@ -392,15 +511,29 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		}
 	}
 
-	public static void getCustomConfirmDialog(final String title, final String msg, final String okIjoomerButtonCaption, final String cancelIjoomerButtonCaption,
-			final CustomAlertMagnatic target) {
-		mSmartIphoneActivity.runOnUiThread(new Runnable() {
+	/**
+	 * This method used to get custom confirm dialog.
+	 * 
+	 * @param title
+	 *            represented dialog title
+	 * @param msg
+	 *            represented message
+	 * @param okIjoomerButtonCaption
+	 *            represented ok button caption
+	 * @param cancelIjoomerButtonCaption
+	 *            represented cancel button caption
+	 * @param target
+	 *            represented {@link CustomAlertMagnatic}
+	 */
+	public static void getCustomConfirmDialog(final String title, final String msg, final String okIjoomerButtonCaption,
+			final String cancelIjoomerButtonCaption, final CustomAlertMagnatic target) {
+		mSmartAndroidActivity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
 
-				final Dialog dialog = new Dialog(mSmartIphoneActivity, android.R.style.Theme_Translucent_NoTitleBar);
-				dialog.setContentView(R.layout.ijoomer_confirm_dialog);
+				final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+				dialog.setContentView(ThemeManager.getInstance().getConfirmDialog());
 
 				IjoomerTextView txtTitle = (IjoomerTextView) dialog.findViewById(R.id.txtTitle);
 				IjoomerTextView txtMessage = (IjoomerTextView) dialog.findViewById(R.id.txtMessage);
@@ -415,7 +548,7 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 					@Override
 					public void onClick(View v) {
-						target.PositiveMathod();
+						target.PositiveMethod();
 						dialog.dismiss();
 					}
 				});
@@ -423,7 +556,7 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 					@Override
 					public void onClick(View v) {
-						target.NegativeMathod();
+						target.NegativeMethod();
 						dialog.dismiss();
 					}
 				});
@@ -432,146 +565,44 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		});
 	}
 
-	public static void getShareDialog(final ShareListner target) {
-
-		final ArrayList<HashMap<String, Object>> selectedData = new ArrayList<HashMap<String, Object>>();
-		int popupWidth = mSmartIphoneActivity.getWindowManager().getDefaultDisplay().getWidth();
-		int popupHeight = mSmartIphoneActivity.getWindowManager().getDefaultDisplay().getHeight() - ((SmartActivity) mSmartIphoneActivity).convertSizeToDeviceDependent(50);
-
-		LayoutInflater layoutInflater = (LayoutInflater) mSmartIphoneActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View layout = layoutInflater.inflate(R.layout.ijoomer_share_dialog, null);
-
-		final PopupWindow popup = new PopupWindow(mSmartIphoneActivity);
-		popup.setContentView(layout);
-		popup.setWidth(popupWidth);
-		popup.setHeight(popupHeight);
-		popup.setFocusable(true);
-		popup.setBackgroundDrawable(new BitmapDrawable());
-		popup.showAtLocation(layout, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
-
-		final LinearLayout lnrSayAboutStory = (LinearLayout) layout.findViewById(R.id.lnrSayAboutStory);
-		ImageView imgShareFacebook = (ImageView) layout.findViewById(R.id.imgShareFacebook);
-		ImageView imgShareTwitter = (ImageView) layout.findViewById(R.id.imgShareTwitter);
-		ImageView imgShareAddEmail = (ImageView) layout.findViewById(R.id.imgShareAddEmail);
-		ImageView imgShareClose = (ImageView) layout.findViewById(R.id.imgShareClose);
-		final IjoomerEditText edtShareEmail = (IjoomerEditText) layout.findViewById(R.id.edtShareEmail);
-		final IjoomerEditText edtStory = (IjoomerEditText) layout.findViewById(R.id.edtStory);
-		final IjoomerEditText edtShareEmailMessage = (IjoomerEditText) layout.findViewById(R.id.edtShareEmailMessage);
-		IjoomerButton btnSend = (IjoomerButton) layout.findViewById(R.id.btnSend);
-		IjoomerButton btnCancel = (IjoomerButton) layout.findViewById(R.id.btnCancel);
-		IjoomerButton btnCancelStory = (IjoomerButton) layout.findViewById(R.id.btnCancelStory);
-		IjoomerButton btnShareStory = (IjoomerButton) layout.findViewById(R.id.btnShareStory);
-
-		btnCancel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				popup.dismiss();
-			}
-		});
-
-		btnSend.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (edtShareEmail.getText().toString().trim().length() > 0) {
-					target.onClick("email", edtShareEmail.getText().toString(), edtShareEmailMessage.getText().toString().trim());
-					popup.dismiss();
-				} else {
-					((SmartActivity) mSmartIphoneActivity).ting((mSmartIphoneActivity.getString(R.string.validation_value_required)));
-				}
-			}
-		});
-		imgShareFacebook.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				edtStory.requestFocus();
-				currentSharing = "facebook";
-				lnrSayAboutStory.setVisibility(View.VISIBLE);
-			}
-		});
-
-		btnShareStory.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				target.onClick(currentSharing, null, edtStory.getText().toString().trim());
-				popup.dismiss();
-			}
-		});
-
-		btnCancelStory.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				lnrSayAboutStory.setVisibility(View.GONE);
-			}
-		});
-
-		imgShareTwitter.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				edtStory.requestFocus();
-				currentSharing = "twitter";
-				lnrSayAboutStory.setVisibility(View.VISIBLE);
-			}
-		});
-		imgShareAddEmail.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				getContactDialog(selectedData, new ShareListner() {
-
-					@SuppressWarnings("unchecked")
-					@Override
-					public void onClick(String shareOn, Object value, String message) {
-						selectedData.clear();
-						selectedData.addAll((ArrayList<HashMap<String, Object>>) value);
-						edtShareEmail.setText(message);
-					}
-				});
-			}
-		});
-		imgShareClose.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				popup.dismiss();
-			}
-		});
-
-	}
-
+	/**
+	 * This method used to get contact dialog.
+	 * 
+	 * @param selected
+	 *            represented {@link HashMap} list pre-selected
+	 * @param target
+	 *            represented {@link ShareListner}
+	 */
+	@SuppressWarnings("deprecation")
 	public static void getContactDialog(final ArrayList<HashMap<String, Object>> selected, final ShareListner target) {
 
-		final SmartListAdapterWithHolder adapter;
+		int popupWidth = ((SmartActivity) mSmartAndroidActivity).getDeviceWidth()
+				- ((SmartActivity) mSmartAndroidActivity).convertSizeToDeviceDependent(50);
+		int popupHeight = ((SmartActivity) mSmartAndroidActivity).getDeviceHeight()
+				- ((SmartActivity) mSmartAndroidActivity).convertSizeToDeviceDependent(130);
 
-		int popupWidth = mSmartIphoneActivity.getWindowManager().getDefaultDisplay().getWidth() - ((SmartActivity) mSmartIphoneActivity).convertSizeToDeviceDependent(50);
-		int popupHeight = mSmartIphoneActivity.getWindowManager().getDefaultDisplay().getHeight() - ((SmartActivity) mSmartIphoneActivity).convertSizeToDeviceDependent(130);
+		LayoutInflater layoutInflater = (LayoutInflater) mSmartAndroidActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = layoutInflater.inflate(ThemeManager.getInstance().getContactDilaog(), null);
 
-		LayoutInflater layoutInflater = (LayoutInflater) mSmartIphoneActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = layoutInflater.inflate(R.layout.ijoomer_contact_mail_dialog, null);
-
-		final PopupWindow popup = new PopupWindow(mSmartIphoneActivity);
+		final PopupWindow popup = new PopupWindow(mSmartAndroidActivity);
 		popup.setContentView(layout);
 		popup.setWidth(popupWidth);
 		popup.setHeight(popupHeight);
 		popup.setFocusable(true);
-		popup.setBackgroundDrawable(new BitmapDrawable());
+		popup.setBackgroundDrawable(new BitmapDrawable(mSmartAndroidActivity.getResources()));
 		popup.showAtLocation(layout, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
 
 		final ListView lstContact = (ListView) layout.findViewById(R.id.lstContact);
 		IjoomerButton btnCancel = (IjoomerButton) layout.findViewById(R.id.btnCancel);
 		final IjoomerRadioButton rdbSelectAll = (IjoomerRadioButton) layout.findViewById(R.id.rdbSelectAll);
 		final IjoomerRadioButton rdbSelectNone = (IjoomerRadioButton) layout.findViewById(R.id.rdbSelectNone);
+		rdbSelectAll.setVisibility(View.GONE);
+		rdbSelectNone.setVisibility(View.GONE);
 		IjoomerButton btnDone = (IjoomerButton) layout.findViewById(R.id.btnDone);
 
 		if (selected != null && selected.size() > 0) {
-			adapter = getListAdapter(prepareList(selected));
-			lstContact.setAdapter(adapter);
+			contactAdapter = getListAdapter(prepareList(selected));
+			lstContact.setAdapter(contactAdapter);
 			int count = 0;
 
 			for (HashMap<String, Object> hashMap : selected) {
@@ -579,6 +610,8 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 					count++;
 				}
 			}
+			rdbSelectAll.setVisibility(View.VISIBLE);
+			rdbSelectNone.setVisibility(View.VISIBLE);
 			if (count == selected.size()) {
 				rdbSelectAll.setChecked(true);
 				rdbSelectNone.setChecked(false);
@@ -588,8 +621,23 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 			}
 
 		} else {
-			adapter = getListAdapter(prepareList(getContacts()));
-			lstContact.setAdapter(adapter);
+
+			contactAdapter = getListAdapter(prepareList(getContacts()));
+			lstContact.setAdapter(contactAdapter);
+			if (prepareList(getContacts()).size() > 0) {
+				rdbSelectAll.setVisibility(View.VISIBLE);
+				rdbSelectNone.setVisibility(View.VISIBLE);
+			} else {
+				IjoomerUtilities.getCustomOkDialog(mSmartAndroidActivity.getString(R.string.dialog_contact),
+						mSmartAndroidActivity.getString(R.string.dialog_contact_not_found), mSmartAndroidActivity.getString(R.string.ok),
+						ThemeManager.getInstance().getOkDialog(), new CustomAlertNeutral() {
+
+					@Override
+					public void NeutralMethod() {
+						popup.dismiss();
+					}
+				});
+			}
 		}
 
 		btnDone.setOnClickListener(new OnClickListener() {
@@ -600,7 +648,7 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 				String selectedString = "";
 				ArrayList<HashMap<String, Object>> newSelectedList = new ArrayList<HashMap<String, Object>>();
 				try {
-					for (SmartListItem item : adapter.getSmartListItems()) {
+					for (SmartListItem item : contactAdapter.getSmartListItems()) {
 						HashMap<String, Object> row = (HashMap<String, Object>) item.getValues().get(0);
 						if (row.get("isChecked").toString().equals("true")) {
 							selectedString += row.get("email").toString().split(";")[0] + ",";
@@ -609,8 +657,8 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 					}
 				} catch (Exception e) {
 				}
-				target.onClick("Email", newSelectedList, selectedString != null && selectedString.trim().length() > 0 ? selectedString.substring(0, selectedString.length() - 1)
-						.trim() : "");
+				target.onClick("Email", newSelectedList, selectedString != null && selectedString.trim().length() > 0 ? selectedString
+						.substring(0, selectedString.length() - 1).trim() : "");
 				popup.dismiss();
 			}
 		});
@@ -624,33 +672,47 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 		rdbSelectAll.setOnClickListener(new OnClickListener() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onClick(View arg0) {
-				rdbSelectNone.setChecked(false);
-				int size = lstContact.getAdapter().getCount();
-				for (int i = 0; i < size; i++) {
-					((HashMap<String, String>) ((SmartListItem) lstContact.getAdapter().getItem(i)).getValues().get(0)).put("isChecked", "true");
+				if (contactAdapter != null) {
+					rdbSelectNone.setChecked(false);
+					int size = contactAdapter.getCount();
+					for (int i = 0; i < size; i++) {
+						((HashMap<String, String>) (contactAdapter.getItem(i)).getValues().get(0)).put("isChecked", "true");
+					}
+					contactAdapter.notifyDataSetChanged();
 				}
-				((SmartListAdapterWithHolder) lstContact.getAdapter()).notifyDataSetChanged();
 			}
 		});
 		rdbSelectNone.setOnClickListener(new OnClickListener() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onClick(View v) {
-				rdbSelectAll.setChecked(false);
-				int size = lstContact.getAdapter().getCount();
-				for (int i = 0; i < size; i++) {
-					((HashMap<String, String>) ((SmartListItem) lstContact.getAdapter().getItem(i)).getValues().get(0)).put("isChecked", "false");
+				if (contactAdapter != null) {
+					rdbSelectAll.setChecked(false);
+					int size = lstContact.getAdapter().getCount();
+					for (int i = 0; i < size; i++) {
+						((HashMap<String, String>) (contactAdapter.getItem(i)).getValues().get(0)).put("isChecked", "false");
+					}
+					contactAdapter.notifyDataSetChanged();
 				}
-				((SmartListAdapterWithHolder) lstContact.getAdapter()).notifyDataSetChanged();
 			}
 		});
 	}
 
+	/**
+	 * List adapter for contact dialog.
+	 * 
+	 * @param data
+	 *            represented {@link SmartListItem} list
+	 * @return represented {@link SmartListAdapterWithHolder}
+	 */
 	private static SmartListAdapterWithHolder getListAdapter(final ArrayList<SmartListItem> data) {
 
-		SmartListAdapterWithHolder adapterWithHolder = new SmartListAdapterWithHolder(mSmartIphoneActivity, R.layout.ijoomer_contact_mail_dialog_item, data, new ItemView() {
+		SmartListAdapterWithHolder adapterWithHolder = new SmartListAdapterWithHolder(mSmartAndroidActivity, ThemeManager.getInstance()
+				.getContactItemDilaog(), data, new ItemView() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public View setItemView(final int position, View v, final SmartListItem item, final ViewHolder holder) {
@@ -666,6 +728,8 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 					@Override
 					public void onCheckedChanged(CompoundButton ButtonView, boolean isChecked) {
 						row.put("isChecked", "" + isChecked);
+						contactAdapter.notifyDataSetChanged();
+
 					}
 				});
 
@@ -698,13 +762,20 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return adapterWithHolder;
 	}
 
+	/**
+	 * This method used to prepare list for contact dialog adapter
+	 * 
+	 * @param data
+	 *            represented {@link HashMap} list
+	 * @return represented {@link SmartListItem} list
+	 */
 	private static ArrayList<SmartListItem> prepareList(ArrayList<HashMap<String, Object>> data) {
 		ArrayList<SmartListItem> listData = new ArrayList<SmartListItem>();
 		if (data != null) {
 			int size = data.size();
 			for (int i = 0; i < size; i++) {
 				SmartListItem item = new SmartListItem();
-				item.setItemLayout(R.layout.ijoomer_contact_mail_dialog_item);
+				item.setItemLayout(ThemeManager.getInstance().getContactItemDilaog());
 				ArrayList<Object> obj = new ArrayList<Object>();
 				obj.add(data.get(i));
 				item.setValues(obj);
@@ -732,20 +803,22 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 	 *            = String target is AlertNewtral callback for OK IjoomerButton
 	 *            click action.
 	 */
-	public static void getConfirmDialog(String title, String msg, String positiveBtnCaption, String negativeBtnCaption, boolean isCancelable, final AlertMagnatic target) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(mSmartIphoneActivity);
+	public static void getConfirmDialog(String title, String msg, String positiveBtnCaption, String negativeBtnCaption,
+			boolean isCancelable, final AlertMagnatic target) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(mSmartAndroidActivity);
 
 		int imageResource = android.R.drawable.ic_dialog_alert;
-		Drawable image = mSmartIphoneActivity.getResources().getDrawable(imageResource);
+		Drawable image = mSmartAndroidActivity.getResources().getDrawable(imageResource);
 
-		builder.setTitle(title).setMessage(msg).setIcon(image).setCancelable(false).setPositiveButton(positiveBtnCaption, new DialogInterface.OnClickListener() {
+		builder.setTitle(title).setMessage(msg).setIcon(image).setCancelable(false)
+		.setPositiveButton(positiveBtnCaption, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				target.PositiveMathod(dialog, id);
+				target.PositiveMethod(dialog, id);
 			}
 		}).setNegativeButton(negativeBtnCaption, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				target.NegativeMathod(dialog, id);
+				target.NegativeMethod(dialog, id);
 			}
 		});
 
@@ -761,7 +834,7 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 	 *         <b>false.
 	 */
 	public static boolean isNetwokReachable() {
-		final ConnectivityManager connMgr = (ConnectivityManager) mSmartIphoneActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+		final ConnectivityManager connMgr = (ConnectivityManager) mSmartAndroidActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
 		final NetworkInfo netInfo = connMgr.getActiveNetworkInfo();
 
 		if (netInfo != null && netInfo.isConnected()) {
@@ -788,27 +861,38 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 	}
 
 	public static void finishActivity() {
-		if (mSmartIphoneActivity != null)
-			mSmartIphoneActivity.finish();
+		if (mSmartAndroidActivity != null)
+			mSmartAndroidActivity.finish();
 	}
 
+	/**
+	 * This method used to get multi-selection dialog.
+	 * 
+	 * @param name
+	 *            represented dialog title
+	 * @param jsonString
+	 *            represented json data
+	 * @param value
+	 *            represented value pre-selected
+	 * @param target
+	 *            represented {@link CustomClickListner}
+	 */
 	public static void getMultiSelectionDialog(final String name, String jsonString, final String value, final CustomClickListner target) {
 
 		final ArrayList<String> values = new ArrayList<String>();
-
-		final boolean[] selections = new boolean[values.size()];
 
 		try {
 			JSONArray jsonArray = new JSONArray(jsonString);
 			int size = jsonArray.length();
 			for (int i = 0; i < size; i++) {
-				values.add(((JSONObject) jsonArray.get(i)).getString("value"));
+				values.add(((JSONObject) jsonArray.get(i)).getString("value").trim());
 			}
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
+		final boolean[] selections = new boolean[values.size()];
 		final StringBuilder newValue = new StringBuilder();
 
 		AlertDialog alert = null;
@@ -818,19 +902,19 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 			int size = values.size();
 			for (int i = 0; i < size; i++) {
 				int len = oldValue.length;
-				for (int j = 0; j < size; j++) {
-					if (values.get(i).toString().equalsIgnoreCase(oldValue[j])) {
+				for (int j = 0; j < len; j++) {
+					if (values.get(i).toString().trim().equalsIgnoreCase(oldValue[j].trim())) {
 						selections[i] = true;
 						break;
 					}
 				}
-
 			}
 		}
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(mSmartIphoneActivity);
+		AlertDialog.Builder builder = new AlertDialog.Builder(mSmartAndroidActivity);
 		builder.setTitle(name);
-		builder.setMultiChoiceItems(values.toArray(new CharSequence[values.size()]), selections, new DialogInterface.OnMultiChoiceClickListener() {
+		builder.setMultiChoiceItems(values.toArray(new CharSequence[values.size()]), selections,
+				new DialogInterface.OnMultiChoiceClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -838,21 +922,21 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 			}
 		});
 
-		builder.setPositiveButton(mSmartIphoneActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(mSmartAndroidActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				int size = selections.length;
 				for (int i = 0; i < size; i++) {
 					if (selections[i]) {
-						newValue.append(newValue.length() > 0 ? ", " + values.get(i) : values.get(i));
+						newValue.append(newValue.length() > 0 ? "," + values.get(i) : values.get(i));
 					}
 				}
 				target.onClick(newValue.toString());
 
 			}
 		});
-		builder.setNegativeButton(mSmartIphoneActivity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(mSmartAndroidActivity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -865,20 +949,104 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 	}
 
-	public static void getDateDialog(final String strDate, boolean restrict, final CustomClickListner target) {
+	public static void getMultiSelectionDialogSobipro(final String name, String jsonString, final String value, final String id,
+			final IjoomerClickListner target) {
 
-		Date date = getDateFromString(strDate);
-		Calendar c = GregorianCalendar.getInstance();
+		final ArrayList<String> values = new ArrayList<String>();
+		final ArrayList<String> ids = new ArrayList<String>();
 
-		if (date.getYear() == new Date().getYear() && restrict) {
-			c.add(Calendar.YEAR, -18);
-		} else {
-			c.set(Calendar.YEAR, (date.getYear() + 1900));
-			c.set(Calendar.MONTH, date.getMonth());
-			c.set(Calendar.DATE, date.getDate());
+		try {
+			JSONArray jsonArray = new JSONArray(jsonString);
+			int size = jsonArray.length();
+			for (int i = 0; i < size; i++) {
+				values.add(((JSONObject) jsonArray.get(i)).getString("name").trim());
+				ids.add(((JSONObject) jsonArray.get(i)).getString("value").trim());
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 
-		IjoomerDataPickerView dateDlg = new IjoomerDataPickerView(mSmartIphoneActivity, new DatePickerDialog.OnDateSetListener() {
+		final boolean[] selections = new boolean[values.size()];
+		final StringBuilder newValue = new StringBuilder();
+		final StringBuilder newIds = new StringBuilder();
+
+		AlertDialog alert = null;
+
+		if (value.length() > 0) {
+			String[] oldValue = value.split(",");
+			int size = values.size();
+			for (int i = 0; i < size; i++) {
+				int len = oldValue.length;
+				for (int j = 0; j < len; j++) {
+					if (values.get(i).toString().trim().equalsIgnoreCase(oldValue[j].trim())) {
+						selections[i] = true;
+						break;
+					}
+				}
+			}
+		}
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(mSmartAndroidActivity);
+		builder.setTitle(name);
+		builder.setMultiChoiceItems(values.toArray(new CharSequence[values.size()]), selections,
+				new DialogInterface.OnMultiChoiceClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				selections[which] = isChecked;
+			}
+		});
+
+		builder.setPositiveButton(mSmartAndroidActivity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				int size = selections.length;
+				for (int i = 0; i < size; i++) {
+					if (selections[i]) {
+						newValue.append(newValue.length() > 0 ? "," + values.get(i) : values.get(i));
+						newIds.append(newIds.length() > 0 ? "," + ids.get(i) : ids.get(i));
+					}
+				}
+				target.onClick(newValue.toString(), newIds.toString());
+
+			}
+		});
+		builder.setNegativeButton(mSmartAndroidActivity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				target.onClick(value, id);
+			}
+		});
+		alert = builder.create();
+		alert.show();
+
+	}
+
+	/**
+	 * This method used to get date dialog.
+	 * 
+	 * @param strDate
+	 *            represented date
+	 * @param restrict
+	 *            represented isRestrict
+	 * @param target
+	 *            represented {@link CustomClickListner}
+	 */
+	public static void getDateDialog(final String strDate, boolean restrict, final CustomClickListner target) {
+
+		Calendar date = getDateFromString(strDate);
+		Calendar today = Calendar.getInstance();
+
+		if (restrict && date.get(Calendar.YEAR) == today.get(Calendar.YEAR) && date.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+				&& date.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)) {
+			date.add(Calendar.YEAR, -18);
+		}
+
+		IjoomerDataPickerView dateDlg = new IjoomerDataPickerView(mSmartAndroidActivity, new DatePickerDialog.OnDateSetListener() {
 
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				Time chosenDate = new Time();
@@ -886,24 +1054,30 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 				long dt = chosenDate.toMillis(true);
 				CharSequence strDate = DateFormat.format(IjoomerApplicationConfiguration.dateFormat, dt);
 				target.onClick(strDate.toString());
-
 			}
-
-		}, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), restrict);
+		}, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DATE), restrict);
 
 		dateDlg.show();
 
 	}
 
+	/**
+	 * This method used to get date-time dialog.
+	 * 
+	 * @param strDate
+	 *            represented date-time
+	 * @param target
+	 *            represented {@link CustomClickListner}
+	 */
 	public static void getDateTimeDialog(final String strDate, final CustomClickListner target) {
-		final Date date = getDateFromString(strDate);
-		DatePickerDialog dateDialog = new DatePickerDialog(mSmartIphoneActivity, new DatePickerDialog.OnDateSetListener() {
+		final Calendar date = getDateFromString(strDate);
+		DatePickerDialog dateDialog = new DatePickerDialog(mSmartAndroidActivity, new DatePickerDialog.OnDateSetListener() {
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				final int y = year;
 				final int m = monthOfYear;
 				final int d = dayOfMonth;
 
-				new TimePickerDialog(mSmartIphoneActivity, new TimePickerDialog.OnTimeSetListener() {
+				new TimePickerDialog(mSmartAndroidActivity, new TimePickerDialog.OnTimeSetListener() {
 
 					@Override
 					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -913,34 +1087,49 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 						CharSequence strDate = DateFormat.format(IjoomerApplicationConfiguration.dateTimeFormat, dt);
 						target.onClick(strDate.toString());
 					}
-				}, date.getHours(), date.getMinutes(), true).show();
+				}, date.get(Calendar.HOUR), date.get(Calendar.MINUTE), true).show();
 
 			}
-		}, date.getYear() + 1900, date.getMonth(), date.getDate());
+		}, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DATE));
 
 		dateDialog.show();
 
 	}
 
-	public static void getTimeDialog(final int hour, final int min, final CustomClickListner target) {
+	/**
+	 * This method used to get time dialog.
+	 * 
+	 * @param strTime
+	 *            represented time
+	 * @param target
+	 *            represented {@link CustomClickListner}
+	 */
+	public static void getTimeDialog(final String strTime, final CustomClickListner target) {
 
-		TimePickerDialog timeDialog = new TimePickerDialog(mSmartIphoneActivity, new TimePickerDialog.OnTimeSetListener() {
+		Calendar date = getTimeFromString(strTime);
+		TimePickerDialog timeDialog = new TimePickerDialog(mSmartAndroidActivity, new TimePickerDialog.OnTimeSetListener() {
 
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-				SimpleDateFormat fmt = new SimpleDateFormat(IjoomerApplicationConfiguration.timeFormat);
-				Date date = new Date();
-				date.setHours(hourOfDay);
-				date.setMinutes(minute);
-				String dateString = fmt.format(date);
+				Calendar date = Calendar.getInstance();
+				date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				date.set(Calendar.MINUTE, minute);
+				String dateString = new SimpleDateFormat(IjoomerApplicationConfiguration.timeFormat).format(date);
 				target.onClick(dateString);
 			}
-		}, hour == 0 ? Calendar.getInstance().get(Calendar.HOUR) : hour, min == 0 ? Calendar.getInstance().get(Calendar.MINUTE) : min, true);
+		}, date.get(Calendar.HOUR), date.get(Calendar.MINUTE), true);
 
 		timeDialog.show();
 
 	}
 
+	/**
+	 * This method used to get option spinner adapter.
+	 * 
+	 * @param field
+	 *            represented {@link HashMap} data
+	 * @return represented {@link MyCustomAdapter}
+	 */
 	public static MyCustomAdapter getSpinnerAdapter(HashMap<String, String> field) {
 
 		int index = 0;
@@ -962,7 +1151,8 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 				} else {
 					values.add(options.getString("value"));
 				}
-				if (options.getString("value").equals(field.get("value")) || options.has("title") && options.getString("title").equals(field.get("value")) || options.has("name")
+				if (options.getString("value").equals(field.get("value")) || options.has("title")
+						&& options.getString("title").equals(field.get("value")) || options.has("name")
 						&& options.getString("name").equals(field.get("value"))) {
 					index = i;
 				}
@@ -971,12 +1161,19 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		final MyCustomAdapter adpater = new MyCustomAdapter(mSmartIphoneActivity, values);
+		final MyCustomAdapter adpater = new MyCustomAdapter(mSmartAndroidActivity, values);
 		adpater.setDefaultPostion(index);
 		return adpater;
 
 	}
 
+	/**
+	 * This method used to get privacy spinner adapter
+	 * 
+	 * @param field
+	 *            represented {@link HashMap} data
+	 * @return represented {@link MyCustomAdapter}
+	 */
 	public static MyCustomAdapter getPrivacySpinnerAdapter(HashMap<String, String> field) {
 
 		int index = 0;
@@ -1007,12 +1204,18 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		MyCustomAdapter adpater = new MyCustomAdapter(mSmartIphoneActivity, values);
+		MyCustomAdapter adpater = new MyCustomAdapter(mSmartAndroidActivity, values);
 		adpater.setDefaultPostion(index);
 		return adpater;
 
 	}
 
+	/**
+	 * Custom adapter
+	 * 
+	 * @author tasol
+	 * 
+	 */
 	public static class MyCustomAdapter extends ArrayAdapter<String> {
 
 		Context context;
@@ -1062,6 +1265,13 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		}
 	}
 
+	/**
+	 * This method used to email validator.
+	 * 
+	 * @param mailAddress
+	 *            represented email
+	 * @return represented {@link Boolean}
+	 */
 	public static boolean emailValidator(final String mailAddress) {
 
 		Pattern pattern;
@@ -1075,15 +1285,22 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 	}
 
+	/**
+	 * This method used to birth date validator.
+	 * 
+	 * @param birthDate
+	 *            represented birth date
+	 * @return represented {@link Boolean}
+	 */
 	public static boolean birthdateValidator(String birthDate) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(IjoomerApplicationConfiguration.dateFormat);
 		try {
-			Date bdate = dateFormat.parse(birthDate);
-			Date today = new Date();
-			bdate = new GregorianCalendar(bdate.getYear() + 1900, bdate.getMonth() + 1, bdate.getDate(), 0, 0).getTime();
-			today = new GregorianCalendar(today.getYear() + 1900, today.getMonth() + 1, today.getDate(), 0, 0).getTime();
+			Date date = dateFormat.parse(birthDate);
+			Calendar bdate = Calendar.getInstance();
+			bdate.setTime(date);
+			Calendar today = Calendar.getInstance();
 
-			if (bdate.getTime() >= today.getTime()) {
+			if (bdate.compareTo(today) == 1) {
 				return false;
 			} else {
 				return true;
@@ -1094,20 +1311,54 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return false;
 	}
 
-	public static Date getDateFromString(String strDate) {
+	/**
+	 * This method used to get date from string.
+	 * 
+	 * @param strDate
+	 *            represented date
+	 * @return represented {@link Date}
+	 */
+	public static Calendar getDateFromString(String strDate) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(IjoomerApplicationConfiguration.dateFormat);
+		Calendar calnder = Calendar.getInstance();
 		Date date;
 		try {
 			date = dateFormat.parse(strDate);
-			return date;
+			calnder.setTime(date);
+			return calnder;
 		} catch (Throwable e) {
-			e.printStackTrace();
-			return new Date();
+			return Calendar.getInstance();
 		}
 	}
 
+	/**
+	 * This method used to get time from string.
+	 * 
+	 * @param strTime
+	 *            represented time
+	 * @return represented {@link Date}
+	 */
+	public static Calendar getTimeFromString(String strTime) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(IjoomerApplicationConfiguration.timeFormat);
+		Date date;
+		Calendar calnder = Calendar.getInstance();
+		try {
+			date = dateFormat.parse(strTime);
+			calnder.setTime(date);
+			return calnder;
+		} catch (Throwable e) {
+			return Calendar.getInstance();
+		}
+	}
+
+	/**
+	 * This method used to show select image selection dialog.
+	 * 
+	 * @param target
+	 *            represented {@link SelectImageDialogListner}
+	 */
 	public static void selectImageDialog(final SelectImageDialogListner target) {
-		final Dialog dialog = new Dialog(mSmartIphoneActivity, android.R.style.Theme_Translucent_NoTitleBar);
+		final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
 		dialog.setContentView(R.layout.ijoomer_select_image_dialog);
 		final IjoomerTextView txtCapture = (IjoomerTextView) dialog.findViewById(R.id.txtCapture);
 		final IjoomerTextView txtPhoneGallery = (IjoomerTextView) dialog.findViewById(R.id.txtPhoneGallery);
@@ -1131,54 +1382,15 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		dialog.show();
 	}
 
-	public static class RichTextUtils {
-		public static <A extends CharacterStyle, B extends CharacterStyle> Spannable replaceAll(Spanned original, Class<A> sourceType, SpanConverter<A, B> converter) {
-			SpannableStringBuilder result = new SpannableStringBuilder(original);
-			A[] spans = result.getSpans(0, result.length(), sourceType);
-
-			for (A span : spans) {
-				int start = result.getSpanStart(span);
-				int end = result.getSpanEnd(span);
-				int flags = result.getSpanFlags(span);
-
-				result.removeSpan(span);
-				result.setSpan(converter.convert(span), start, end, flags);
-			}
-
-			return (result);
-		}
-
-		public interface SpanConverter<A extends CharacterStyle, B extends CharacterStyle> {
-			B convert(A span);
-		}
-	}
-
-	public static class URLSpanConverter implements RichTextUtils.SpanConverter<URLSpan, CustumClicableSpan> {
-
-		@Override
-		public CustumClicableSpan convert(URLSpan span) {
-			return new CustumClicableSpan(span.getURL());
-		}
-	}
-
-	private static class CustumClicableSpan extends ClickableSpan {
-		private String url = "";
-
-		public CustumClicableSpan(String url) {
-			this.url = url;
-		}
-
-		@Override
-		public void onClick(View widget) {
-			System.out.println("Url :" + url);
-			Intent intent = new Intent(mSmartIphoneActivity, IjoomerWebviewClient.class);
-			intent.putExtra("url", url);
-			mSmartIphoneActivity.startActivity(intent);
-
-		}
-
-	}
-
+	/**
+	 * This method used to indexing(a-z) list data.
+	 * 
+	 * @param oldData
+	 *            represented list
+	 * @param indexOn
+	 *            represented index on
+	 * @return represented {@link HashMap} list
+	 */
 	public static ArrayList<HashMap<String, String>> getListIndexedData(ArrayList<HashMap<String, String>> oldData, String indexOn) {
 
 		ArrayList<HashMap<String, String>> newData = new ArrayList<HashMap<String, String>>();
@@ -1199,9 +1411,16 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return newData;
 	}
 
+	/**
+	 * This method used to get latitude-longitude from address.
+	 * 
+	 * @param address
+	 *            represented address
+	 * @return represented {@link Address}
+	 */
 	public static Address getLatLongFromAddress(String address) {
 		if (address != null && address.length() > 0) {
-			geocoder = new Geocoder(mSmartIphoneActivity);
+			geocoder = new Geocoder(mSmartAndroidActivity);
 
 			List<Address> list = null;
 			try {
@@ -1215,13 +1434,22 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 	}
 
+	/**
+	 * This method used to get address list from latitude-longitude
+	 * 
+	 * @param lat
+	 *            represented latitude (0-for current latitude)
+	 * @param lng
+	 *            represented longitude (0-for current longitude)
+	 * @return represented {@link Address}
+	 */
 	public static Address getAddressFromLatLong(double lat, double lng) {
 
 		if (lat == 0 || lng == 0) {
-			lat = Double.parseDouble(mSmartIphoneActivity.getLatitude());
-			lng = Double.parseDouble(mSmartIphoneActivity.getLongitude());
+			lat = Double.parseDouble(((SmartActivity) mSmartAndroidActivity).getLatitude());
+			lng = Double.parseDouble(((SmartActivity) mSmartAndroidActivity).getLongitude());
 		}
-		geocoder = new Geocoder(mSmartIphoneActivity);
+		geocoder = new Geocoder(mSmartAndroidActivity);
 
 		List<Address> list = null;
 		try {
@@ -1233,13 +1461,22 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return null;
 	}
 
+	/**
+	 * This method used to get address list from latitude-longitude
+	 * 
+	 * @param lat
+	 *            represented latitude (0-for current latitude)
+	 * @param lng
+	 *            represented longitude (0-for current longitude)
+	 * @return represented {@link Address} list
+	 */
 	public static List<Address> getAddressListFromLatLong(double lat, double lng) {
 
 		if (lat == 0 || lng == 0) {
-			lat = Double.parseDouble(mSmartIphoneActivity.getLatitude());
-			lng = Double.parseDouble(mSmartIphoneActivity.getLongitude());
+			lat = Double.parseDouble(((SmartActivity) mSmartAndroidActivity).getLatitude());
+			lng = Double.parseDouble(((SmartActivity) mSmartAndroidActivity).getLongitude());
 		}
-		geocoder = new Geocoder(mSmartIphoneActivity);
+		geocoder = new Geocoder(mSmartAndroidActivity);
 
 		List<Address> list = null;
 		try {
@@ -1250,40 +1487,120 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return list;
 	}
 
-	public static ArrayList<HashMap<String, String>> getContatctFromDevice(String... args) {
-		Cursor cursor = null;
-		// String[] projection = new
-		// String[]{RawContacts.CONTACT_ID,Contacts.DISPLAY_NAME};
-		try {
-			cursor = mSmartIphoneActivity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (cursor.moveToFirst()) {
-			while (!cursor.isAfterLast()) {
-				final String name = cursor.getString(cursor.getColumnIndex(Contacts.DISPLAY_NAME));
-				final String contactId = cursor.getString(cursor.getColumnIndex(RawContacts.CONTACT_ID));
-				// final String number =
-				// cursor.getString(cursor.getColumnIndex(Phone.NUMBER));
-				// final String email =
-				// cursor.getString(cursor.getColumnIndex(Email.DATA));
-				System.out.println(name);
-				System.out.println(contactId);
-				// System.out.println(email);
-				cursor.moveToNext();
-			}
+	/**
+	 * This method used to show map address dialog.
+	 * 
+	 * @param lat
+	 *            represented latitude
+	 * @param lng
+	 *            represented longitude
+	 * @param target
+	 *            represented {@link CustomClickListner}
+	 */
+	public static void getFilteringMapAddressDialog(final double lat, final double lng, final CustomClickListner target) {
+		mSmartAndroidActivity.runOnUiThread(new Runnable() {
+			SmartListAdapterWithHolder adapter;
 
-		}
-		return null;
+			@Override
+			public void run() {
+
+				final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+				dialog.setContentView(R.layout.ijoomer_filtering_map_dialog);
+
+				ListView lstMapAddress = (ListView) dialog.findViewById(R.id.lstMapAddress);
+				ImageView imgContactClose = (ImageView) dialog.findViewById(R.id.imgContactClose);
+
+				adapter = getMapAddressListAdapter(prepareListMapAddress(getAddressListFromLatLong(lat, lng)));
+				lstMapAddress.setAdapter(adapter);
+
+				lstMapAddress.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long arg3) {
+						Address address = (Address) adapter.getItem(pos).getValues().get(0);
+						target.onClick(address.getAddressLine(0) + "," + address.getAddressLine(1) + "," + address.getAddressLine(2));
+						dialog.dismiss();
+					}
+				});
+
+				imgContactClose.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						dialog.dismiss();
+					}
+				});
+				dialog.show();
+			}
+		});
+
 	}
 
+	/**
+	 * List adapter for map address
+	 * 
+	 * @param data
+	 *            represented {@link SmartListItem} list
+	 * @return represented {@link SmartListAdapterWithHolder}
+	 */
+	private static SmartListAdapterWithHolder getMapAddressListAdapter(final ArrayList<SmartListItem> data) {
+
+		SmartListAdapterWithHolder adapterWithHolder = new SmartListAdapterWithHolder(mSmartAndroidActivity,
+				R.layout.ijoomer_filtering_map_dialog_item, data, new ItemView() {
+			@Override
+			public View setItemView(final int position, View v, final SmartListItem item, final ViewHolder holder) {
+
+				holder.txtMapAddress = (IjoomerTextView) v.findViewById(R.id.txtMapAddress);
+
+				final Address row = (Address) item.getValues().get(0);
+				holder.txtMapAddress.setText(row.getAddressLine(0) + "," + row.getAddressLine(1) + "," + row.getAddressLine(2));
+				return v;
+			}
+
+			@Override
+			public View setItemView(int position, View v, SmartListItem item) {
+				return null;
+			}
+		});
+		return adapterWithHolder;
+	}
+
+	/**
+	 * This method used to prepare list from map address list.
+	 * 
+	 * @param addresses
+	 *            represented address list
+	 * @return represented {@link SmartListItem} list
+	 */
+	private static ArrayList<SmartListItem> prepareListMapAddress(List<Address> addresses) {
+		ArrayList<SmartListItem> listData = new ArrayList<SmartListItem>();
+		if (addresses != null) {
+			int size = addresses.size();
+			for (int i = 0; i < size; i++) {
+				SmartListItem item = new SmartListItem();
+				item.setItemLayout(R.layout.ijoomer_filtering_map_dialog_item);
+				ArrayList<Object> obj = new ArrayList<Object>();
+				obj.add(addresses.get(i));
+				item.setValues(obj);
+				listData.add(item);
+			}
+		}
+		return listData;
+	}
+
+	/**
+	 * This method used to get contact list from device.
+	 * 
+	 * @return represented {@link ArrayList}
+	 */
 	@SuppressWarnings("serial")
 	public static ArrayList<HashMap<String, Object>> getContacts() {
 
 		ArrayList<HashMap<String, Object>> contacts = new ArrayList<HashMap<String, Object>>();
 		final String[] projection = new String[] { RawContacts.CONTACT_ID, RawContacts.DELETED };
 
-		final Cursor rawContacts = mSmartIphoneActivity.getContentResolver().query(RawContacts.CONTENT_URI, projection, null, null, null);
+		@SuppressWarnings("deprecation")
+		final Cursor rawContacts = mSmartAndroidActivity.managedQuery(RawContacts.CONTENT_URI, projection, null, null, null);
 
 		final int contactIdColumnIndex = rawContacts.getColumnIndex(RawContacts.CONTACT_ID);
 		final int deletedColumnIndex = rawContacts.getColumnIndex(RawContacts.DELETED);
@@ -1322,12 +1639,20 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return contacts;
 	}
 
+	/**
+	 * This method used to get name from contact id.
+	 * 
+	 * @param contactId
+	 *            represented contact id
+	 * @return represented {@link String}
+	 */
+	@SuppressWarnings("deprecation")
 	private static String getName(int contactId) {
 		String name = "";
 		final String[] projection = new String[] { Contacts.DISPLAY_NAME };
 
-		final Cursor contact = mSmartIphoneActivity.getContentResolver().query(Contacts.CONTENT_URI, projection, Contacts._ID + "=?", new String[] { String.valueOf(contactId) },
-				null);
+		final Cursor contact = mSmartAndroidActivity.managedQuery(Contacts.CONTENT_URI, projection, Contacts._ID + "=?",
+				new String[] { String.valueOf(contactId) }, null);
 
 		if (contact.moveToFirst()) {
 			name = contact.getString(contact.getColumnIndex(Contacts.DISPLAY_NAME));
@@ -1338,6 +1663,14 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 	}
 
+	/**
+	 * This method used to get mail id from contact id.
+	 * 
+	 * @param contactId
+	 *            represented contact id
+	 * @return represented {@link String}
+	 */
+	@SuppressWarnings("deprecation")
 	private static String getEmail(int contactId) {
 		String emailStr = "";
 		final String[] projection = new String[] { Email.DATA, // use
@@ -1346,8 +1679,8 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 				// 11+
 				Email.TYPE };
 
-		final Cursor email = mSmartIphoneActivity.getContentResolver().query(Email.CONTENT_URI, projection, Data.CONTACT_ID + "=?", new String[] { String.valueOf(contactId) },
-				null);
+		final Cursor email = mSmartAndroidActivity.managedQuery(Email.CONTENT_URI, projection, Data.CONTACT_ID + "=?",
+				new String[] { String.valueOf(contactId) }, null);
 
 		if (email.moveToFirst()) {
 			final int contactEmailColumnIndex = email.getColumnIndex(Email.DATA);
@@ -1362,12 +1695,20 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 	}
 
+	/**
+	 * This method used to get {@link Bitmap} From contact id.
+	 * 
+	 * @param contactId
+	 *            represented contact id
+	 * @return represented {@link Bitmap}
+	 */
+	@SuppressWarnings("deprecation")
 	private static Bitmap getPhoto(int contactId) {
 		Bitmap photo = null;
 		final String[] projection = new String[] { Contacts.PHOTO_ID };
 
-		final Cursor contact = mSmartIphoneActivity.getContentResolver().query(Contacts.CONTENT_URI, projection, Contacts._ID + "=?", new String[] { String.valueOf(contactId) },
-				null);
+		final Cursor contact = mSmartAndroidActivity.managedQuery(Contacts.CONTENT_URI, projection, Contacts._ID + "=?",
+				new String[] { String.valueOf(contactId) }, null);
 
 		if (contact.moveToFirst()) {
 			final String photoId = contact.getString(contact.getColumnIndex(Contacts.PHOTO_ID));
@@ -1382,8 +1723,17 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return photo;
 	}
 
+	/**
+	 * This method used to get {@link Bitmap} From photo id.
+	 * 
+	 * @param photoId
+	 *            represented photo id
+	 * @return represented {@link Bitmap}
+	 */
+	@SuppressWarnings("deprecation")
 	private static Bitmap getBitmap(String photoId) {
-		final Cursor photo = mSmartIphoneActivity.getContentResolver().query(Data.CONTENT_URI, new String[] { Photo.PHOTO }, Data._ID + "=?", new String[] { photoId }, null);
+		final Cursor photo = mSmartAndroidActivity.managedQuery(Data.CONTENT_URI, new String[] { Photo.PHOTO }, Data._ID + "=?",
+				new String[] { photoId }, null);
 
 		final Bitmap photoBitmap;
 		if (photo.moveToFirst()) {
@@ -1396,12 +1746,21 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return photoBitmap;
 	}
 
+	/**
+	 * This method used to get address from contact id.
+	 * 
+	 * @param contactId
+	 *            represented contact id
+	 * @return represented {@link String}
+	 */
+	@SuppressWarnings("deprecation")
 	private static String getAddress(int contactId) {
 		String postalData = "";
 		String addrWhere = ContactsContract.Data.CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
-		String[] addrWhereParams = new String[] { String.valueOf(contactId), ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE };
+		String[] addrWhereParams = new String[] { String.valueOf(contactId),
+				ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE };
 
-		Cursor addrCur = mSmartIphoneActivity.getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, addrWhere, addrWhereParams, null);
+		Cursor addrCur = mSmartAndroidActivity.managedQuery(ContactsContract.Data.CONTENT_URI, null, addrWhere, addrWhereParams, null);
 
 		if (addrCur.moveToFirst()) {
 			postalData = addrCur.getString(addrCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
@@ -1410,12 +1769,20 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return postalData;
 	}
 
+	/**
+	 * This method used to get phone number from contact id.
+	 * 
+	 * @param contactId
+	 *            represented contact id
+	 * @return represented {@link String}
+	 */
+	@SuppressWarnings("deprecation")
 	private static String getPhoneNumber(int contactId) {
 
 		String phoneNumber = "";
 		final String[] projection = new String[] { Phone.NUMBER, Phone.TYPE, };
-		final Cursor phone = mSmartIphoneActivity.getContentResolver().query(Phone.CONTENT_URI, projection, Data.CONTACT_ID + "=?", new String[] { String.valueOf(contactId) },
-				null);
+		final Cursor phone = mSmartAndroidActivity.managedQuery(Phone.CONTENT_URI, projection, Data.CONTACT_ID + "=?",
+				new String[] { String.valueOf(contactId) }, null);
 
 		if (phone.moveToFirst()) {
 			final int contactNumberColumnIndex = phone.getColumnIndex(Phone.DATA);
@@ -1430,9 +1797,17 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return phoneNumber;
 	}
 
+	/**
+	 * This method used to get report code from privacy.
+	 * 
+	 * @param privacy
+	 *            represented privacy
+	 * @return represented {@link String}
+	 */
 	public String getReportCode(String privacy) {
 
-		ArrayList<String> list = new ArrayList<String>(Arrays.asList(mSmartIphoneActivity.getResources().getStringArray(R.array.report_type)));
+		ArrayList<String> list = new ArrayList<String>(Arrays.asList(mSmartAndroidActivity.getResources().getStringArray(
+				R.array.report_type)));
 
 		if (privacy.equals(list.get(0))) {
 			return "0";
@@ -1444,34 +1819,16 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return "0";
 	}
 
-	public String getPrivacyString(String privacy) {
-
-		ArrayList<String> list = new ArrayList<String>(Arrays.asList(mSmartIphoneActivity.getResources().getStringArray(R.array.report_type)));
-
-		if (privacy.equals("0")) {
-			return list.get(0);
-		} else if (privacy.equals("1")) {
-			return list.get(1);
-		} else if (privacy.equals("2")) {
-			return list.get(2);
-		}
-		return list.get(0);
-	}
-
-	public int getPrivacyIndex(String privacy) {
-
-		ArrayList<String> list = new ArrayList<String>(Arrays.asList(mSmartIphoneActivity.getResources().getStringArray(R.array.report_type)));
-
-		if (privacy.equals("0") || privacy.equals(list.get(0))) {
-			return 0;
-		} else if (privacy.equals("1") || privacy.equals(list.get(1))) {
-			return 1;
-		} else if (privacy.equals("2") || privacy.equals(list.get(2))) {
-			return 2;
-		}
-		return 0;
-	}
-
+	/**
+	 * This method used to resize {@link TextView}.
+	 * 
+	 * @param tv
+	 *            represented {@link TextView}
+	 * @param maxLine
+	 *            represented max line
+	 * @param expandText
+	 *            represented expand text
+	 */
 	public static void IjoomerTextViewResizable(final IjoomerTextView tv, final int maxLine, final String expandText) {
 
 		if (tv.getTag() == null) {
@@ -1480,6 +1837,7 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		ViewTreeObserver vto = tv.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onGlobalLayout() {
 
@@ -1490,25 +1848,41 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 					String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
 					tv.setText(text);
 					tv.setMovementMethod(LinkMovementMethod.getInstance());
-					tv.setText(addClickablePartIjoomerTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText), BufferType.SPANNABLE);
+					tv.setText(addClickablePartIjoomerTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText),
+							BufferType.SPANNABLE);
 				} else if (tv.getLineCount() >= maxLine) {
 					int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
 					String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
 					tv.setText(text);
 					tv.setMovementMethod(LinkMovementMethod.getInstance());
-					tv.setText(addClickablePartIjoomerTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText), BufferType.SPANNABLE);
+					tv.setText(addClickablePartIjoomerTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText),
+							BufferType.SPANNABLE);
 				}
 			}
 		});
 
 	}
 
-	private static SpannableStringBuilder addClickablePartIjoomerTextViewResizable(final Spanned strSpanned, final IjoomerTextView tv, final int maxLine, final String expandText) {
+	/**
+	 * This method used to add clickable part on {@link TextView}.
+	 * 
+	 * @param strSpanned
+	 *            represented {@link Spanned} string
+	 * @param tv
+	 *            represented {@link TextView}
+	 * @param maxLine
+	 *            represented max line
+	 * @param expandText
+	 *            represented expand text
+	 * @return represented {@link SpannableStringBuilder}
+	 */
+	private static SpannableStringBuilder addClickablePartIjoomerTextViewResizable(final Spanned strSpanned, final IjoomerTextView tv,
+			final int maxLine, final String expandText) {
 		String str = strSpanned.toString();
 		SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
 
 		if (str.contains(expandText)) {
-			ssb.setSpan(new IjoomerSpannable(Color.parseColor(mSmartIphoneActivity.getString(R.color.blue)), true) {
+			ssb.setSpan(new IjoomerSpannable(Color.parseColor(mSmartAndroidActivity.getString(R.color.blue)), true) {
 
 				@Override
 				public void onClick(View widget) {
@@ -1524,6 +1898,13 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 
 	}
 
+	/**
+	 * This method used to get date in string from time zone.
+	 * 
+	 * @param timestamp
+	 *            represented {@link Long} time stamp
+	 * @return represented {@link String}
+	 */
 	public static String getDateStringCurrentTimeZone(long timestamp) {
 
 		Calendar calendar = Calendar.getInstance();
@@ -1537,6 +1918,13 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return dateString;
 	}
 
+	/**
+	 * This method used to get current date from time zone.
+	 * 
+	 * @param timestamp
+	 *            represented {@link Long} time stamp
+	 * @return represented {@link Date}
+	 */
 	public static Date getDateCurrentTimeZone(long timestamp) {
 
 		Calendar calendar = Calendar.getInstance();
@@ -1548,6 +1936,13 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return (Date) calendar.getTime();
 	}
 
+	/**
+	 * This method used to get milliseconds from time zone.
+	 * 
+	 * @param timestamp
+	 *            represented {@link Long} time stamp
+	 * @return represented {@link Long}
+	 */
 	public static long getMillisecondsTimeZone(long timestamp) {
 
 		Calendar calendar = Calendar.getInstance();
@@ -1559,12 +1954,26 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return calendar.getTimeInMillis();
 	}
 
+	/**
+	 * This method used to get difference from minute.
+	 * 
+	 * @param miliseconds
+	 *            represented {@link Long} milliseconds
+	 * @return represented {@link Long}
+	 */
 	public static long getDfferenceInMinute(long miliseconds) {
 		long diff = (Calendar.getInstance().getTimeInMillis() - miliseconds);
 		diff = diff / 60000L;
 		return Math.abs(diff);
 	}
 
+	/**
+	 * This method used to calculate times ago from milliseconds.
+	 * 
+	 * @param miliseconds
+	 *            represented {@link Long} milliseconds
+	 * @return represented {@link String}
+	 */
 	public static String calculateTimesAgo(long miliseconds) {
 		Date start = new Date(miliseconds);
 		Date end = new Date();
@@ -1577,15 +1986,15 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		/* hours */diff[1] = (diffInSeconds = (diffInSeconds / 60)) >= 24 ? diffInSeconds % 24 : diffInSeconds;
 		/* days */diff[0] = (diffInSeconds = (diffInSeconds / 24));
 
-		System.out.println(String.format("%d day%s, %d hour%s, %d minute%s, %d second%s ago", diff[0], diff[0] > 1 ? "s" : "", diff[1], diff[1] > 1 ? "s" : "", diff[2],
-				diff[2] > 1 ? "s" : "", diff[3], diff[3] > 1 ? "s" : ""));
+		System.out.println(String.format("%d day%s, %d hour%s, %d minute%s, %d second%s ago", diff[0], diff[0] > 1 ? "s" : "", diff[1],
+				diff[1] > 1 ? "s" : "", diff[2], diff[2] > 1 ? "s" : "", diff[3], diff[3] > 1 ? "s" : ""));
 
 		if (diff[0] > 0) {
 			Calendar c = Calendar.getInstance();
 			c.setTime(start);
 
 			if (c.getMaximum(Calendar.DATE) <= diff[0]) {
-				return start.toLocaleString();
+				return (String) DateFormat.format(IjoomerApplicationConfiguration.dateFormat, start);
 			} else {
 				return diff[0] > 1 ? String.format("%d days ago", diff[0]) : String.format("%d day ago", diff[0]);
 			}
@@ -1596,20 +2005,40 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		} else if (diff[3] > 0) {
 			return diff[3] > 1 ? String.format("%d seconds ago", diff[3]) : String.format("%d second ago", diff[3]);
 		} else {
-			return start.toLocaleString();
+			return (String) DateFormat.format(IjoomerApplicationConfiguration.dateFormat, start);
 		}
 
 	}
 
+	/**
+	 * This method used to auto login user params.
+	 * 
+	 * @return represented {@link JSONObject}
+	 */
 	public static JSONObject getLoginParams() {
 		JSONObject loginParams = null;
 		try {
-			loginParams = new JSONObject(((SmartActivity) mSmartIphoneActivity).getSmartApplication().readSharedPreferences().getString(SP_LOGIN_REQ_OBJECT, ""));
+			loginParams = new JSONObject(((SmartActivity) mSmartAndroidActivity).getSmartApplication().readSharedPreferences()
+					.getString(SP_LOGIN_REQ_OBJECT, ""));
+			JSONObject taskData = loginParams.getJSONObject("taskData");
+			taskData.put("lat", ((SmartActivity) mSmartAndroidActivity).getLatitude());
+			taskData.put("long", ((SmartActivity) mSmartAndroidActivity).getLongitude());
+			String udid = SmartApplication.REF_SMART_APPLICATION.readSharedPreferences().getString(SP_GCM_REGID, "");
+			if (udid.length() > 0) {
+				taskData.put("devicetoken", udid);
+			}
 		} catch (Exception e) {
 		}
 		return loginParams;
 	}
 
+	/**
+	 * This method used to prepare mail body for sharing.
+	 * 
+	 * @param parms
+	 *            represented params array
+	 * @return represented {@link String}
+	 */
 	public static String prepareEmailBody(String... parms) {
 
 		String data = "";
@@ -1625,6 +2054,13 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		return data;
 	}
 
+	/**
+	 * This method used to get readable file size from {@link Long} size.
+	 * 
+	 * @param size
+	 *            represented long size
+	 * @return represented {@link String}
+	 */
 	public static String readableFileSize(long size) {
 		if (size <= 0)
 			return "0";
@@ -1632,4 +2068,453 @@ public class IjoomerUtilities implements IjoomerSharedPreferences {
 		int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
 		return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 	}
+
+	/**
+	 * This method used to get notification dialog,
+	 * 
+	 * @param title
+	 *            represented dialog title
+	 * @param termsNCondition
+	 *            represented termsNCondition
+	 */
+	public static void getTermsNConditionDialog(final String title, final String termsNCondition) {
+		final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+		dialog.setContentView(R.layout.ijoomer_terms_n_condition_dialog);
+		final IjoomerTextView txtTermsNConditionTitle = (IjoomerTextView) dialog.findViewById(R.id.txtTermsNConditionTitle);
+		final WebView webTermsNCondition = (WebView) dialog.findViewById(R.id.webTermsNCondition);
+		final ImageView imgTermsNConditionClose = (ImageView) dialog.findViewById(R.id.imgTermsNConditionClose);
+
+		txtTermsNConditionTitle.setText(title);
+		webTermsNCondition.loadDataWithBaseURL("file:///android_asset/css/", termsNCondition, "text/html", "utf-8", null);
+		imgTermsNConditionClose.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+
+	/**
+	 * This method used to add custom notification.
+	 * 
+	 * @param ticker
+	 *            represented notification ticker
+	 * @param title
+	 *            represented notification title
+	 * @param message
+	 *            represented notification message
+	 */
+	@SuppressWarnings("deprecation")
+	public static void addToNotificationBar(String ticker, String title, String message) {
+		long when = System.currentTimeMillis();
+		int icon = R.drawable.ijoomer_push_notification_icon;
+
+		NotificationManager notificationManager = (NotificationManager) mSmartAndroidActivity
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		PendingIntent contentIntent = PendingIntent.getActivity(mSmartAndroidActivity, 0, new Intent(), 0);
+		Notification notification = new Notification(icon, ticker, when);
+		notification.setLatestEventInfo(mSmartAndroidActivity, title, message, contentIntent);
+		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		notificationManager.notify(0, notification);
+	}
+
+	/**
+	 * This method used to get custom ok and cancel dialog.
+	 * 
+	 * @param title
+	 *            represented dialog title
+	 * @param msg
+	 *            represented custom message
+	 * @param IjoomerButtonCaption
+	 *            represented ok button caption
+	 * @param IjoomerButtonCancelCaption
+	 *            represented cancel button caption
+	 * @param layoutID
+	 *            represented custom layout id
+	 * @param target
+	 *            represented {@link CustomAlertMagnatic}
+	 */
+	public static void getCustomOkCancelDialog(final String title, final String msg, final String IjoomerButtonCaption,
+			final String IjoomerButtonCancelCaption, final int layoutID, final CustomAlertNeutral target) {
+		if (!msg.equals(mSmartAndroidActivity.getResources().getString(R.string.code704))) {
+			mSmartAndroidActivity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+
+					final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+					dialog.setContentView(layoutID);
+
+					IjoomerTextView txtTitle = (IjoomerTextView) dialog.findViewById(R.id.txtTitle);
+					IjoomerTextView txtMessage = (IjoomerTextView) dialog.findViewById(R.id.txtMessage);
+					txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
+					txtMessage.setText(Html.fromHtml(msg));
+					txtTitle.setText(title);
+					IjoomerButton ok = (IjoomerButton) dialog.findViewById(R.id.btnOk);
+					ok.setText(IjoomerButtonCaption);
+					ok.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							target.NeutralMethod();
+							dialog.dismiss();
+						}
+					});
+					IjoomerButton cancel = (IjoomerButton) dialog.findViewById(R.id.btnCancel);
+					cancel.setText(IjoomerButtonCancelCaption);
+					cancel.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							dialog.dismiss();
+						}
+					});
+					dialog.show();
+				}
+			});
+		}
+	}
+
+	public static float parseFloat(String value){
+		float result = (float) 0.00;
+		if(value.length() > 0){
+			try{
+				result = round(Float.parseFloat(value), 1);
+			}catch(Exception e){
+				return (float) 0.00;
+			}
+		}
+		return result;
+	}
+
+	public static float round(float d, int decimalPlace) {
+		BigDecimal bd = new BigDecimal(Float.toString(d));
+		bd = bd.setScale(decimalPlace, BigDecimal.ROUND_FLOOR);
+		return bd.floatValue();
+	}
+
+	public static double convertDistance(String valueToConvert, int fromUnit, int toUnit) {
+
+		double dvalueToConvert = Double.parseDouble(valueToConvert);
+		if (dvalueToConvert > 0) {
+			if (fromUnit == IjoomerUtilities.KILOMETER) {
+				dvalueToConvert = dvalueToConvert * 1000d;
+			} else if (fromUnit == IjoomerUtilities.MILE) {
+				dvalueToConvert = dvalueToConvert * 1609.34d;
+			} else if (fromUnit == IjoomerUtilities.DEGREE) {
+				dvalueToConvert = (Math.acos(dvalueToConvert) * 6371) * 1000d;
+			}
+
+			if (toUnit == IjoomerUtilities.KILOMETER) {
+				dvalueToConvert = dvalueToConvert / 1000d;
+			} else if (toUnit == IjoomerUtilities.MILE) {
+				dvalueToConvert = dvalueToConvert / 1609.34d;
+			} else if (fromUnit == IjoomerUtilities.DEGREE) {
+				dvalueToConvert = Math.acos(((dvalueToConvert / 1000d) / 6371d));
+			}
+
+			String s = String.format(String.format("%.2f", dvalueToConvert));
+			return Double.parseDouble(s);
+		}
+		return 0;
+	}
+
+	public static class RichTextUtils {
+		public static <A extends CharacterStyle, B extends CharacterStyle> Spannable replaceAll(Spanned original, Class<A> sourceType,
+				SpanConverter<A, B> converter) {
+			SpannableStringBuilder result = new SpannableStringBuilder(original);
+			A[] spans = result.getSpans(0, result.length(), sourceType);
+
+			for (A span : spans) {
+				int start = result.getSpanStart(span);
+				int end = result.getSpanEnd(span);
+				int flags = result.getSpanFlags(span);
+
+				result.removeSpan(span);
+				result.setSpan(converter.convert(span), start, end, flags);
+			}
+
+			return (result);
+		}
+
+		public interface SpanConverter<A extends CharacterStyle, B extends CharacterStyle> {
+			B convert(A span);
+		}
+	}
+
+	public static class URLSpanConverter implements RichTextUtils.SpanConverter<URLSpan, CustumClicableSpan> {
+
+		private SpnebleListener local;
+
+		public URLSpanConverter() {
+			super();
+		}
+
+		public URLSpanConverter(SpnebleListener target) {
+			this();
+			this.local = target;
+		}
+
+		@Override
+		public CustumClicableSpan convert(URLSpan span) {
+			return new CustumClicableSpan(span.getURL(), local);
+		}
+	}
+
+	private static class CustumClicableSpan extends ClickableSpan {
+		private String url = "";
+		private SpnebleListener local;
+
+		public CustumClicableSpan(String url, SpnebleListener target) {
+			super();
+			this.url = url;
+			this.local = target;
+		}
+
+		@Override
+		public void onClick(View widget) {
+			System.out.println("Url :" + url);
+			if (local == null) {
+				Intent intent = new Intent(mSmartAndroidActivity, IjoomerWebviewClient.class);
+				intent.putExtra("url", url);
+				mSmartAndroidActivity.startActivity(intent);
+			} else {
+				local.onUrlClick(url);
+			}
+
+		}
+
+	}
+
+	public static String getMimeType(String url) {
+		String type = null;
+		String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+		if (extension != null) {
+			MimeTypeMap mime = MimeTypeMap.getSingleton();
+			type = mime.getMimeTypeFromExtension(extension);
+		}
+		return type;
+	}
+
+	public interface SpnebleListener {
+		void onUrlClick(String url);
+	}
+
+	public static LinkedHashMap<String, Integer> getEmojisHashMap() {
+		if (emojisHashMap == null || emojisHashMap.size() == 0) {
+			emojisHashMap = new LinkedHashMap<String, Integer>();
+			/**
+			 * Smiley emojis add here
+			 */
+			emojisHashMap.put(":=q", R.drawable.es1);
+			emojisHashMap.put(":=w", R.drawable.es2);
+			emojisHashMap.put(":=e", R.drawable.es3);
+			emojisHashMap.put(":=r", R.drawable.es4);
+			emojisHashMap.put(":=t", R.drawable.es5);
+			emojisHashMap.put(":=y", R.drawable.es6);
+			emojisHashMap.put(":=u", R.drawable.es7);
+			emojisHashMap.put(":=i", R.drawable.es8);
+			emojisHashMap.put(":=o", R.drawable.es9);
+			emojisHashMap.put(":=p", R.drawable.es10);
+			emojisHashMap.put(":=[", R.drawable.es11);
+			emojisHashMap.put(":=]", R.drawable.es12);
+			emojisHashMap.put(":=a", R.drawable.es13);
+			emojisHashMap.put(":=s", R.drawable.es14);
+			emojisHashMap.put(":=d", R.drawable.es15);
+			emojisHashMap.put(":=f", R.drawable.es16);
+			emojisHashMap.put(":=g", R.drawable.es17);
+			emojisHashMap.put(":=h", R.drawable.es18);
+			emojisHashMap.put(":=j", R.drawable.es19);
+			emojisHashMap.put(":=k", R.drawable.es20);
+			emojisHashMap.put(":=l", R.drawable.es21);
+			emojisHashMap.put(":=;", R.drawable.es22);
+			emojisHashMap.put(":=>", R.drawable.es23);
+			emojisHashMap.put(":=z", R.drawable.es24);
+			emojisHashMap.put(":=x", R.drawable.es25);
+			emojisHashMap.put(":=c", R.drawable.es26);
+			emojisHashMap.put(":=v", R.drawable.es27);
+			emojisHashMap.put(":=b", R.drawable.es28);
+			emojisHashMap.put(":=n", R.drawable.es29);
+			emojisHashMap.put(":=m", R.drawable.es30);
+			emojisHashMap.put(":=<", R.drawable.es31);
+			emojisHashMap.put(":=.", R.drawable.es32);
+
+			/**
+			 * Face emojis add here
+			 */
+			emojisHashMap.put(":#q", R.drawable.ef1);
+			emojisHashMap.put(":#w", R.drawable.ef2);
+			emojisHashMap.put(":#e", R.drawable.ef3);
+			emojisHashMap.put(":#r", R.drawable.ef4);
+			emojisHashMap.put(":#t", R.drawable.ef5);
+			emojisHashMap.put(":#y", R.drawable.ef6);
+			emojisHashMap.put(":#u", R.drawable.ef7);
+			emojisHashMap.put(":#i", R.drawable.ef8);
+			emojisHashMap.put(":#o", R.drawable.ef9);
+			emojisHashMap.put(":#p", R.drawable.ef10);
+			emojisHashMap.put(":#[", R.drawable.ef11);
+			emojisHashMap.put(":#]", R.drawable.ef12);
+			emojisHashMap.put(":#a", R.drawable.ef13);
+			emojisHashMap.put(":#s", R.drawable.ef14);
+			emojisHashMap.put(":#d", R.drawable.ef15);
+			emojisHashMap.put(":#f", R.drawable.ef16);
+			emojisHashMap.put(":#g", R.drawable.ef17);
+			emojisHashMap.put(":#h", R.drawable.ef18);
+			emojisHashMap.put(":#j", R.drawable.ef19);
+			emojisHashMap.put(":#k", R.drawable.ef20);
+			emojisHashMap.put(":#l", R.drawable.ef21);
+			emojisHashMap.put(":#;", R.drawable.ef22);
+			emojisHashMap.put(":#>", R.drawable.ef23);
+			emojisHashMap.put(":#z", R.drawable.ef24);
+			emojisHashMap.put(":#x", R.drawable.ef25);
+			emojisHashMap.put(":#c", R.drawable.ef26);
+			emojisHashMap.put(":#v", R.drawable.ef27);
+			emojisHashMap.put(":#b", R.drawable.ef28);
+			emojisHashMap.put(":#n", R.drawable.ef29);
+			emojisHashMap.put(":#m", R.drawable.ef30);
+			emojisHashMap.put(":#<", R.drawable.ef31);
+			emojisHashMap.put(":#.", R.drawable.ef32);
+			emojisHashMap.put(":#/", R.drawable.ef33);
+			emojisHashMap.put(":#!", R.drawable.ef34);
+			emojisHashMap.put(":#@", R.drawable.ef35);
+			emojisHashMap.put(":##", R.drawable.ef36);
+			emojisHashMap.put(":#$", R.drawable.ef37);
+			emojisHashMap.put(":#%", R.drawable.ef38);
+			emojisHashMap.put(":#^", R.drawable.ef39);
+			emojisHashMap.put(":#*", R.drawable.ef40);
+			emojisHashMap.put(":#(", R.drawable.ef41);
+			emojisHashMap.put(":#)", R.drawable.ef42);
+			emojisHashMap.put(":#_", R.drawable.ef43);
+			emojisHashMap.put(":#+", R.drawable.ef44);
+			emojisHashMap.put(":#|", R.drawable.ef45);
+			emojisHashMap.put(":#Q", R.drawable.ef46);
+			emojisHashMap.put(":#E", R.drawable.ef47);
+			emojisHashMap.put(":#R", R.drawable.ef48);
+			emojisHashMap.put(":#T", R.drawable.ef49);
+			emojisHashMap.put(":#Y", R.drawable.ef50);
+			emojisHashMap.put(":#u", R.drawable.ef51);
+			emojisHashMap.put(":#i", R.drawable.ef52);
+
+			/**
+			 * Hand emojis add here
+			 */
+			emojisHashMap.put(":%q", R.drawable.eh1);
+			emojisHashMap.put(":%w", R.drawable.eh2);
+			emojisHashMap.put(":%e", R.drawable.eh3);
+			emojisHashMap.put(":%r", R.drawable.eh4);
+			emojisHashMap.put(":%t", R.drawable.eh5);
+			emojisHashMap.put(":%y", R.drawable.eh6);
+			emojisHashMap.put(":%u", R.drawable.eh7);
+			emojisHashMap.put(":%i", R.drawable.eh8);
+			emojisHashMap.put(":%o", R.drawable.eh9);
+			emojisHashMap.put(":%p", R.drawable.eh10);
+			emojisHashMap.put(":%[", R.drawable.eh11);
+			emojisHashMap.put(":%]", R.drawable.eh12);
+			emojisHashMap.put(":%a", R.drawable.eh13);
+			emojisHashMap.put(":%s", R.drawable.eh14);
+			emojisHashMap.put(":%d", R.drawable.eh15);
+			emojisHashMap.put(":%f", R.drawable.eh16);
+			emojisHashMap.put(":%g", R.drawable.eh17);
+			emojisHashMap.put(":%h", R.drawable.eh18);
+			emojisHashMap.put(":%j", R.drawable.eh19);
+
+			/**
+			 * Clock emojis add here
+			 */
+			emojisHashMap.put(":&q", R.drawable.ec1);
+			emojisHashMap.put(":&w", R.drawable.ec2);
+			emojisHashMap.put(":&e", R.drawable.ec3);
+			emojisHashMap.put(":&r", R.drawable.ec4);
+			emojisHashMap.put(":&t", R.drawable.ec5);
+			emojisHashMap.put(":&y", R.drawable.ec6);
+			emojisHashMap.put(":&u", R.drawable.ec7);
+			emojisHashMap.put(":&i", R.drawable.ec8);
+			emojisHashMap.put(":&o", R.drawable.ec9);
+			emojisHashMap.put(":&p", R.drawable.ec10);
+			emojisHashMap.put(":&[", R.drawable.ec11);
+
+			/**
+			 * Other emojis add here
+			 */
+			emojisHashMap.put(":*q", R.drawable.eo1);
+			emojisHashMap.put(":*w", R.drawable.eo2);
+			emojisHashMap.put(":*e", R.drawable.eo3);
+			emojisHashMap.put(":*r", R.drawable.eo4);
+			emojisHashMap.put(":*t", R.drawable.eo5);
+			emojisHashMap.put(":*y", R.drawable.eo6);
+			emojisHashMap.put(":*u", R.drawable.eo7);
+			emojisHashMap.put(":*i", R.drawable.eo8);
+			emojisHashMap.put(":*o", R.drawable.eo9);
+			emojisHashMap.put(":*p", R.drawable.eo10);
+			emojisHashMap.put(":*[", R.drawable.eo11);
+			emojisHashMap.put(":*]", R.drawable.eo12);
+			emojisHashMap.put(":*a", R.drawable.eo13);
+			emojisHashMap.put(":*s", R.drawable.eo14);
+			emojisHashMap.put(":*d", R.drawable.eo15);
+			emojisHashMap.put(":*f", R.drawable.eo16);
+			emojisHashMap.put(":*g", R.drawable.eo17);
+			emojisHashMap.put(":*h", R.drawable.eo18);
+			emojisHashMap.put(":*j", R.drawable.eo19);
+			emojisHashMap.put(":*k", R.drawable.eo20);
+			emojisHashMap.put(":*l", R.drawable.eo21);
+			emojisHashMap.put(":*;", R.drawable.eo22);
+			emojisHashMap.put(":*)", R.drawable.eo23);
+			emojisHashMap.put(":*z", R.drawable.eo24);
+			emojisHashMap.put(":*x", R.drawable.eo25);
+			emojisHashMap.put(":*c", R.drawable.eo26);
+			emojisHashMap.put(":*v", R.drawable.eo27);
+			return emojisHashMap;
+		} else {
+			return emojisHashMap;
+		}
+
+	}
+	
+	public static void showHttpAccessDialog(final HttpAccessListener target){
+        mSmartAndroidActivity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                final Dialog dialog = new Dialog(mSmartAndroidActivity, android.R.style.Theme_Translucent_NoTitleBar);
+                dialog.setContentView(R.layout.ijoomer_httpaccess_dialog);
+
+                final IjoomerEditText edtHttpAccessUsername = (IjoomerEditText) dialog.findViewById(R.id.edtHttpAccessUsername);
+                edtHttpAccessUsername.setText(SmartApplication.REF_SMART_APPLICATION.readSharedPreferences().getString(SP_HTTP_ACCESSS_USERNAME,""));
+                final IjoomerEditText edtHttpAccessPassword = (IjoomerEditText) dialog.findViewById(R.id.edtHttpAccessPassword);
+
+                final IjoomerCheckBox chbRemeber = (IjoomerCheckBox) dialog.findViewById(R.id.chbRemeber);
+
+                final IjoomerButton btnLogin = (IjoomerButton) dialog.findViewById(R.id.btnLogin);
+
+                btnLogin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((IjoomerSuperMaster)mSmartAndroidActivity).hideSoftKeyboard();
+                        boolean isValidate = true;
+                        if(edtHttpAccessUsername.getText().toString().length()<=0){
+                            isValidate =false;
+                            edtHttpAccessUsername.setError(mSmartAndroidActivity.getString(R.string.validation_value_required));
+                        }
+
+                        if(edtHttpAccessPassword.getText().toString().length()<=0){
+                            isValidate =false;
+                            edtHttpAccessUsername.setError(mSmartAndroidActivity.getString(R.string.validation_value_required));
+                        }
+
+                        if(isValidate){
+                            SmartApplication.REF_SMART_APPLICATION.writeSharedPreferences(SP_HTTP_ACCESSS_USERNAME, edtHttpAccessUsername.getText().toString());
+                            SmartApplication.REF_SMART_APPLICATION.writeSharedPreferences(SP_HTTP_ACCESSS_PASSWORD, edtHttpAccessPassword.getText().toString());
+                            SmartApplication.REF_SMART_APPLICATION.writeSharedPreferences(SP_HTTP_ACCESSS_REMEMBER, ""+chbRemeber.isChecked());
+                            target.onLogin(edtHttpAccessUsername.getText().toString(),edtHttpAccessPassword.getText().toString());
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                dialog.show();
+            }
+        });
+    }
+
 }

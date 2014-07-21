@@ -30,6 +30,7 @@ public class SmartTabItem extends IjoomerRadioButton {
 		initComponent(attr);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void initComponent(AttributeSet attr) {
 
 		try {

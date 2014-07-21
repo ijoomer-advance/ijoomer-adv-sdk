@@ -1,16 +1,10 @@
 package com.ijoomer.src;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.json.JSONArray;
-
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -19,20 +13,31 @@ import com.ijoomer.common.configuration.IjoomerGlobalConfiguration;
 import com.ijoomer.customviews.IjoomerTextView;
 import com.ijoomer.page.indicator.CirclePageIndicator;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+/**
+ * This Class Contains All Method Related To IjoomerHomeActivity.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerHomeActivity extends IjoomerHomeMaster {
 
 	private ViewPager viewPager;
+	private CirclePageIndicator indicator;
 
 	private ArrayList<HashMap<String, String>> menuData;
 	private HomePageAdapter adapter;
-	private CirclePageIndicator indicator;
 	private JSONArray menuItems;
 
 	private int itemsPerPage = 9;
 	private int normalScreen = 400;
 
 	/**
-	 * Overrides method
+	 * Overrides methods
 	 */
 
 	@Override
@@ -46,8 +51,7 @@ public class IjoomerHomeActivity extends IjoomerHomeMaster {
 		indicator = (CirclePageIndicator) findViewById(R.id.indicator);
 		adapter = new HomePageAdapter(getSupportFragmentManager());
 		menuData = IjoomerGlobalConfiguration.getHomeMenu(this);
-		Display display = getWindowManager().getDefaultDisplay();
-		int height = display.getHeight();
+		int height = getDeviceHeight();
 		if (height > normalScreen)
 			itemsPerPage = 12;
 		else
@@ -89,7 +93,7 @@ public class IjoomerHomeActivity extends IjoomerHomeMaster {
 	}
 
 	/**
-	 * Custom class
+	 * Inner class
 	 */
 	private class HomePageAdapter extends FragmentPagerAdapter {
 

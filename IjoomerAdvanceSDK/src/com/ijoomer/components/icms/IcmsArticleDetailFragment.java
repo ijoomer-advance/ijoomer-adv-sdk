@@ -8,22 +8,20 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -33,14 +31,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.callback.BitmapAjaxCallback;
 import com.ijoomer.caching.IjoomerCaching;
-import com.ijoomer.common.classes.IJoomerTwitterShareActivity;
-import com.ijoomer.common.classes.IjoomerActivityFinder;
-import com.ijoomer.common.classes.IjoomerSuperMaster;
+import com.ijoomer.common.classes.IjoomerShareActivity;
 import com.ijoomer.common.classes.IjoomerUtilities;
 import com.ijoomer.common.classes.IjoomerWebviewClient;
 import com.ijoomer.custom.interfaces.IjoomerSharedPreferences;
-import com.ijoomer.custom.interfaces.ShareListner;
 import com.ijoomer.customviews.IjoomerTextView;
 import com.ijoomer.library.icms.IcmsArticleDetailDataProvider;
 import com.ijoomer.media.player.IjoomerMediaPlayer;
@@ -48,37 +45,47 @@ import com.ijoomer.src.R;
 import com.ijoomer.weservice.WebCallListener;
 import com.smart.framework.CustomAlertNeutral;
 import com.smart.framework.SmartActivity;
+import com.smart.framework.SmartFragment;
 
-public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder, IjoomerSharedPreferences {
-	private ProgressBar pbrArticleDetail;
-	private ListView listArticleDetail;
+/**
+ * This Fragment Contains All Method Related To IcmsArticleDetailFragment.
+ * 
+ * @author tasol
+ * 
+ */
+@SuppressLint({ "ValidFragment", "SimpleDateFormat" })
+public class IcmsArticleDetailFragment extends SmartFragment implements IcmsTagHolder, IjoomerSharedPreferences {
+
 	private LinearLayout lnrUrls;
-	private WebView webFull;
+	private ListView listArticleDetail;
 	private IjoomerTextView txtCategory, txtWrittenBy, txtPublishedOn, txtTitle, txtPageIndicator;
 	private ImageView imgFavorite, imgShare;
 	private ImageView imageFullText;
+	private ProgressBar pbrArticleDetail;
+	private WebView webFull;
 	private View headerView;
 
-	private AQuery androidQuery;
-	private IcmsArticleDetailDataProvider articleDetailDataProvider;
 	private ArrayList<HashMap<String, String>> articleDetail;
-
+	private IcmsArticleDetailDataProvider articleDetailDataProvider;
+	private AQuery androidQuery;
 	private Context mContext;
-	private int position, totalPages;
+
 	private String articleId;
 	private String currentId;
 	private String FAVOURITE;
+	private int position, totalPages;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param mContext
+	 *            represented {@link Context}
 	 * @param articleId
-	 *            : specify id of article
+	 *            represented article id
 	 * @param position
-	 *            : specify index of selected article
+	 *            represented article position
 	 * @param totalPages
-	 *            : specify total number of articles
+	 *            represented articles total pages
 	 */
 	public IcmsArticleDetailFragment(Context mContext, String articleId, int position, int totalPages) {
 		this.articleId = articleId;
@@ -88,14 +95,26 @@ public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder
 	}
 
 	/**
-	 * Overrides method
+	 * Overrides methods
 	 */
+	@Override
+	public int setLayoutId() {
+		return R.layout.icms_article_detail_listview;
+	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.icms_article_detail_listview, null);
-		listArticleDetail = (ListView) v.findViewById(R.id.icmsListArticleDetail);
-		pbrArticleDetail = (ProgressBar) v.findViewById(R.id.icmsPbr);
+	public View setLayoutView() {
+		return null;
+	}
+
+	@SuppressLint("SetJavaScriptEnabled")
+	@SuppressWarnings("deprecation")
+	@Override
+	public void initComponents(View currentView) {
+
+		listArticleDetail = (ListView) currentView.findViewById(R.id.icmsListArticleDetail);
+		pbrArticleDetail = (ProgressBar) currentView.findViewById(R.id.icmsPbr);
+		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		headerView = inflater.inflate(R.layout.icms_article_detail_header, null, false);
 
 		articleDetailDataProvider = new IcmsArticleDetailDataProvider(mContext);
@@ -112,16 +131,29 @@ public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder
 		webFull = (WebView) headerView.findViewById(R.id.icmsWebViewFull);
 		webFull.setBackgroundColor(0);
 		webFull.getSettings().setJavaScriptEnabled(true);
-		webFull.getSettings().setPluginsEnabled(true);
-
+		webFull.getSettings().setPluginState(PluginState.ON);
+		webFull.setInitialScale(99);
 		FAVOURITE = "favourite";
+
+	}
+
+	@Override
+	public void prepareViews(View currentView) {
 		pbrArticleDetail.setVisibility(View.VISIBLE);
 		txtPageIndicator.setText(position + " " + getString(R.string.of) + " " + totalPages);
 		getArticleDetail(articleId);
+		listArticleDetail.addHeaderView(headerView);
+		listArticleDetail.setAdapter(null);
+		listArticleDetail.setSelectionAfterHeaderView();
+		txtPageIndicator.setFocusable(true);
+
+	}
+
+	@Override
+	public void setActionListeners(View currentView) {
 		imgFavorite.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				imgFavorite.setVisibility(View.GONE);
 				ArrayList<HashMap<String, String>> favouriteDataArray = new ArrayList<HashMap<String, String>>();
 				HashMap<String, String> favouriteData = new HashMap<String, String>();
@@ -141,94 +173,71 @@ public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-				IjoomerUtilities.getShareDialog(new ShareListner() {
-
-					@Override
-					public void onClick(String shareOn, Object value, String message) {
-						// TODO Auto-generated method stub
-						if (shareOn.equals("email")) {
-							String[] to = value.toString().split(",");
-							Intent i = new Intent(Intent.ACTION_SEND);
-							i.setType("text/html");
-							i.putExtra(Intent.EXTRA_EMAIL, to);
-							i.putExtra(Intent.EXTRA_SUBJECT, String.format(getString(R.string.share_email_subject), articleDetail.get(0).get(TITLE)));
-							i.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(IjoomerUtilities.prepareEmailBody(message == null ? "" : message, ((SmartActivity) getActivity())
-									.getSmartApplication().readSharedPreferences().getString(SP_USERNAME, "")
-									+ " " + getString(R.string.saw_this_story_on_the) + " " + getString(R.string.app_name) + " " + getString(R.string.thought_you_should_see_it),
-									articleDetail.get(0).get(TITLE), Html.fromHtml(articleDetail.get(0).get(INTROTEXT)).toString(), articleDetail.get(0).get(SHARELINK),
-									getString(R.string.try_ijoomeradvance), getString(R.string.site_url))));
-							try {
-								startActivity(Intent.createChooser(i, "Send mail..."));
-							} catch (android.content.ActivityNotFoundException ex) {
-								((SmartActivity) getActivity()).ting(getString(R.string.share_email_no_client));
-							}
-						} else if (shareOn.equals("facebook")) {
-
-							((IjoomerSuperMaster) getActivity()).facebookSharing(articleDetail.get(0).get(TITLE), articleDetail.get(0).get(TITLE),
-									Html.fromHtml(articleDetail.get(0).get(INTROTEXT)).toString(), articleDetail.get(0).get(SHARELINK), articleDetail.get(0).get(IMAGEFULLTEXT),
-									message == null ? "" : message);
-						} else if (shareOn.equals("twitter")) {
-							try {
-								((SmartActivity) getActivity()).loadNew(IJoomerTwitterShareActivity.class, ((SmartActivity) getActivity()), false, "IN_TWIT_MESSAGE",
-										message == null ? "" : message + "\n" + articleDetail.get(0).get(SHARELINK), "IN_TWIT_IMAGE", articleDetail.get(0).get(IMAGEFULLTEXT));
-							} catch (Throwable e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				});
-
+				try {
+					((SmartActivity) getActivity()).loadNew(IjoomerShareActivity.class, getActivity(), false, "IN_SHARE_CAPTION", articleDetail.get(0).get(TITLE).toString(),
+							"IN_SHARE_DESCRIPTION", articleDetail.get(0).get(INTROTEXT).toString(), "IN_SHARE_THUMB", articleDetail.get(0).get(IMAGEFULLTEXT).toString(),
+							"IN_SHARE_SHARELINK", articleDetail.get(0).get(SHARELINK).toString());
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
 			}
 		});
-		System.gc();
-		listArticleDetail.addHeaderView(headerView);
-		listArticleDetail.setAdapter(null);
-		listArticleDetail.setSelectionAfterHeaderView();
 
-		return v;
 	}
 
+	/**
+	 * Class methods
+	 */
+
+	/**
+	 * This method used to get article details.
+	 * 
+	 * @param id
+	 *            represented article id
+	 */
 	public void getArticleDetail(String id) {
 		currentId = id;
 		articleDetailDataProvider.getArticleDetail(id, new WebCallListener() {
 
 			@Override
 			public void onProgressUpdate(int progressCount) {
-				// TODO Auto-generated method stub
 			}
 
 			@Override
 			public void onCallComplete(final int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
-
-				// TODO Auto-generated method stub
-
-				if (responseCode == 200) {
-					if (data1.get(0).get("id").equalsIgnoreCase(currentId)) {
-						articleDetail = data1;
-						prepareArticleDetail(data1);
+				try {
+					if (responseCode == 200) {
+						if (data1.get(0).get("id").equalsIgnoreCase(currentId)) {
+							articleDetail = data1;
+							prepareArticleDetail(data1);
+							pbrArticleDetail.setVisibility(View.GONE);
+						}
+					} else {
 						pbrArticleDetail.setVisibility(View.GONE);
-					}
-				} else {
-					pbrArticleDetail.setVisibility(View.GONE);
-					IjoomerUtilities.getCustomOkDialog(getString(R.string.articles),
-							getString(getResources().getIdentifier("code" + responseCode, "string", mContext.getPackageName())), getString(R.string.ok),
-							R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+						IjoomerUtilities.getCustomOkDialog(getString(R.string.articles),
+								getString(getResources().getIdentifier("code" + responseCode, "string", mContext.getPackageName())), getString(R.string.ok),
+								R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
 
-								@Override
-								public void NeutralMathod() {
-									if (responseCode == 599) {
-										getActivity().onBackPressed();
+									@Override
+									public void NeutralMethod() {
+
 									}
-								}
-							});
+								});
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
 			}
 		});
 	}
 
+	/**
+	 * This method used to prepare article details.
+	 * 
+	 * @param data
+	 *            represented article data
+	 */
 	public void prepareArticleDetail(ArrayList<HashMap<String, String>> data) {
 
 		if (data != null) {
@@ -243,7 +252,7 @@ public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder
 						IjoomerTextView textUrl = new IjoomerTextView(mContext);
 
 						textUrl.setTag(jsonObject.get("url").toString());
-						textUrl.setTextColor(Color.parseColor(getString(R.color.blue)));
+						textUrl.setTextColor(Color.parseColor(getString(R.color.icms_blue)));
 
 						SpannableString spanString = new SpannableString(jsonObject.get("urltext").toString());
 						spanString.setSpan(new UnderlineSpan(), 0, spanString.length(), 0);
@@ -255,7 +264,6 @@ public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder
 
 							@Override
 							public void onClick(View v) {
-								// TODO Auto-generated method stub
 
 								String url = (String) v.getTag();
 								Intent intent = new Intent(mContext, IjoomerWebviewClient.class);
@@ -273,7 +281,24 @@ public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder
 
 				txtTitle.setText(data.get(0).get(TITLE));
 
-				androidQuery.id(imageFullText).image(data.get(0).get(IMAGEFULLTEXT), true, true, ((SmartActivity) getActivity()).getDeviceWidth(), R.drawable.icms_article_default);
+				try {
+
+					androidQuery.id(imageFullText).image(data.get(0).get(IMAGEFULLTEXT), true, true, ((SmartActivity) getActivity()).getDeviceWidth(), 0, new BitmapAjaxCallback() {
+						@Override
+						protected void callback(String url, ImageView iv, Bitmap bm, AjaxStatus status) {
+							super.callback(url, iv, bm, status);
+							if (bm != null) {
+								imageFullText.setVisibility(View.VISIBLE);
+								imageFullText.setImageBitmap(bm);
+							} else {
+								imageFullText.setVisibility(View.GONE);
+							}
+						}
+					});
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 				if (data.get(0).get(PUBLISH_ON) != null && data.get(0).get(PUBLISH_ON).trim().length() > 0) {
 					String dateStr = data.get(0).get(PUBLISH_ON);
@@ -296,18 +321,17 @@ public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder
 				}
 
 				webFull.setWebViewClient(new WebViewClient() {
-					
+
 					@Override
 					public void onPageFinished(WebView view, String url) {
-						// TODO Auto-generated method stub
 						super.onPageFinished(view, url);
 						listArticleDetail.setSelectionAfterHeaderView();
 					}
+
 					@Override
 					public boolean shouldOverrideUrlLoading(WebView view, String url) {
-						// TODO Auto-generated method stub
-						
-						Intent activityintent = IjoomerActivityFinder.findActivityFromUrl(mContext, url);
+
+						Intent activityintent = IcmsActivityFinder.findActivityFromUrl(mContext, url);
 						if (activityintent == null) {
 
 							Intent intent = new Intent(mContext, IjoomerWebviewClient.class);
@@ -363,7 +387,7 @@ public class IcmsArticleDetailFragment extends Fragment implements IcmsTagHolder
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 	}
 

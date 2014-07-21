@@ -1,12 +1,5 @@
 package com.ijoomer.common.classes;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -26,78 +19,66 @@ import com.ijoomer.customviews.IjoomerEditText;
 import com.ijoomer.customviews.IjoomerTextView;
 import com.ijoomer.src.R;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+/**
+ * This Class Contains All Method Related To IjoomerFileChooserActivity.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerFileChooserActivity extends IjoomerSuperMaster {
+
+	private LinearLayout lnrCreateFolder;
+	private ListView lstFileChooser;
+	private IjoomerButton btnSaveOrOpen;
+	private IjoomerEditText edtFilePath;
+	private IjoomerButton btnCreate;
+	private IjoomerEditText edtFolderName;
+	private ImageView btnMakeFolder;
+
+	protected File mDirectory;
+	protected ArrayList<File> mFiles;
+	protected FilePickerListAdapter mAdapter;
+
+	protected String[] acceptedFileExtensions;
+	private String finalFilePath = "";
+	protected boolean mShowHiddenFiles = false;
+	private boolean IN_ISOPENFILE = false;
+
 	/**
 	 * The file path
 	 */
 	public final static String EXTRA_FILE_PATH = "file_path";
-
+	
 	/**
 	 * Sets whether hidden files should be visible in the list or not
 	 */
 	public final static String EXTRA_SHOW_HIDDEN_FILES = "show_hidden_files";
-
+	
 	/**
 	 * The allowed file extensions in an ArrayList of Strings
 	 */
 	public final static String EXTRA_ACCEPTED_FILE_EXTENSIONS = "accepted_file_extensions";
-
+	
 	/**
 	 * The initial directory which will be used if no directory has been sent
 	 * with the intent
 	 */
 	private static String DEFAULT_INITIAL_DIRECTORY = "/mnt/sdcard/download";
 
-	protected File mDirectory;
-	protected ArrayList<File> mFiles;
-	protected FilePickerListAdapter mAdapter;
-	protected boolean mShowHiddenFiles = false;
-	protected String[] acceptedFileExtensions;
-	private ListView lstFileChooser;
-	private IjoomerButton btnSaveOrOpen;
-	private ImageView btnMakeFolder;
-
-	private boolean IN_ISOPENFILE = false;
-	private String finalFilePath = "";
-	private IjoomerEditText edtFilePath;
-
-	private LinearLayout lnrCreateFolder;
-	private IjoomerButton btnCreate;
-	private IjoomerEditText edtFolderName;
-
+	/**
+	 * Override method
+	 */
+	
 	@Override
-	public int setTabBarDividerResId() {
-		return 0;
-	}
-
-	@Override
-	public int setTabItemLayoutId() {
-		return 0;
-	}
-
-	@Override
-	public String[] setTabItemNames() {
-		return null;
-	}
-
-	@Override
-	public int[] setTabItemOffDrawables() {
-		return null;
-	}
-
-	@Override
-	public int[] setTabItemOnDrawables() {
-		return null;
-	}
-
-	@Override
-	public int[] setTabItemPressDrawables() {
-		return null;
-	}
-
-	@Override
-	public void onCheckedChanged(RadioGroup paramRadioGroup, int paramInt) {
-
+	public int setLayoutId() {
+		return R.layout.ijoomer_file_chooser;
 	}
 
 	@Override
@@ -149,6 +130,13 @@ public class IjoomerFileChooserActivity extends IjoomerSuperMaster {
 		lstFileChooser.setAdapter(mAdapter);
 		edtFilePath.setText(finalFilePath);
 	}
+	
+	@Override
+	protected void onResume() {
+		refreshFilesList();
+		super.onResume();
+	}
+
 
 	@Override
 	public void setActionListeners() {
@@ -225,6 +213,61 @@ public class IjoomerFileChooserActivity extends IjoomerSuperMaster {
 			}
 		});
 	}
+	
+	@Override
+	public void onBackPressed() {
+		if (lnrCreateFolder.getVisibility() == View.VISIBLE) {
+			lnrCreateFolder.setVisibility(View.GONE);
+			return;
+		}
+		if (mDirectory.getParentFile() != null) {
+
+			if ((IN_ISOPENFILE && mDirectory.getParentFile().canRead()) || (!IN_ISOPENFILE && mDirectory.getParentFile().canWrite())) {
+				mDirectory = mDirectory.getParentFile();
+				finalFilePath = mDirectory.getAbsolutePath();
+				edtFilePath.setText(finalFilePath);
+				refreshFilesList();
+				return;
+			}
+		}
+
+		super.onBackPressed();
+	}
+	
+	@Override
+	public int setTabBarDividerResId() {
+		return 0;
+	}
+
+	@Override
+	public int setTabItemLayoutId() {
+		return 0;
+	}
+
+	@Override
+	public String[] setTabItemNames() {
+		return null;
+	}
+
+	@Override
+	public int[] setTabItemOffDrawables() {
+		return null;
+	}
+
+	@Override
+	public int[] setTabItemOnDrawables() {
+		return null;
+	}
+
+	@Override
+	public int[] setTabItemPressDrawables() {
+		return null;
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup paramRadioGroup, int paramInt) {
+
+	}
 
 	@Override
 	public int setFooterLayoutId() {
@@ -237,21 +280,15 @@ public class IjoomerFileChooserActivity extends IjoomerSuperMaster {
 	}
 
 	@Override
-	public int setLayoutId() {
-		return R.layout.ijoomer_file_chooser;
-	}
-
-	@Override
 	public View setLayoutView() {
 		return null;
 	}
 
-	@Override
-	protected void onResume() {
-		refreshFilesList();
-		super.onResume();
-	}
-
+	
+	/**
+	 * Class methods
+	 */
+	
 	/**
 	 * Updates the list view to the current directory
 	 */
@@ -286,26 +323,11 @@ public class IjoomerFileChooserActivity extends IjoomerSuperMaster {
 		mAdapter.notifyDataSetChanged();
 	}
 
-	@Override
-	public void onBackPressed() {
-		if (lnrCreateFolder.getVisibility() == View.VISIBLE) {
-			lnrCreateFolder.setVisibility(View.GONE);
-			return;
-		}
-		if (mDirectory.getParentFile() != null) {
 
-			if ((IN_ISOPENFILE && mDirectory.getParentFile().canRead()) || (!IN_ISOPENFILE && mDirectory.getParentFile().canWrite())) {
-				mDirectory = mDirectory.getParentFile();
-				finalFilePath = mDirectory.getAbsolutePath();
-				edtFilePath.setText(finalFilePath);
-				refreshFilesList();
-				return;
-			}
-		}
-
-		super.onBackPressed();
-	}
-
+	/**
+	 * List adapter
+	 */
+	
 	private class FilePickerListAdapter extends ArrayAdapter<File> {
 
 		private List<File> mObjects;
@@ -348,6 +370,9 @@ public class IjoomerFileChooserActivity extends IjoomerSuperMaster {
 
 	}
 
+	/**
+	 * Inner class 
+	 */
 	private class FileComparator implements Comparator<File> {
 		@Override
 		public int compare(File f1, File f2) {

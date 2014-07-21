@@ -5,8 +5,28 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
 
+/**
+ * This Class Contains All Method Related To IjoomerHorizontalScroll.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerHorizontalScroll extends HorizontalScrollView {
 
+	
+	/**
+	 * Overrides methods
+	 */
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+		return false;
+	}
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		return false;
+	}
+	
 	public IjoomerHorizontalScroll(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
@@ -31,16 +51,6 @@ public class IjoomerHorizontalScroll extends HorizontalScrollView {
 
 		setHorizontalScrollBarEnabled(false);
 
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-		return false;
-	}
-
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		return false;
 	}
 
 }

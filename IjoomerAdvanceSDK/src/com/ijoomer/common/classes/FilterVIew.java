@@ -1,27 +1,18 @@
 package com.ijoomer.common.classes;
 
-import java.util.ArrayList;
-
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
 import com.ijoomer.custom.interfaces.CustomClickListner;
 import com.ijoomer.custom.interfaces.FilterListener;
 import com.ijoomer.customviews.IjoomerButton;
@@ -35,6 +26,14 @@ import com.smart.framework.SmartActivity;
 import com.smart.framework.SmartListAdapterWithHolder;
 import com.smart.framework.SmartListItem;
 
+import java.util.ArrayList;
+
+/**
+ * This Class Contains All Method Related To FilterVIew.
+ * 
+ * @author tasol
+ * NOTE : currently this class not used,future development
+ */
 public class FilterVIew {
 
 	private PopupWindow filterPopUp;
@@ -60,8 +59,6 @@ public class FilterVIew {
 	private IjoomerEditText edtStartTime;
 	private IjoomerEditText edtEndTime;
 	private LinearLayout lnrLocation;
-	private MapView mapView;
-	private GestureDetector detector;
 
 	public static final int DATE = 1;
 	public static final int TIME = 2;
@@ -71,8 +68,8 @@ public class FilterVIew {
 		this.mContext = mContext;
 		filterItems = new ArrayList<FilterItem>();
 		filterListData = new ArrayList<SmartListItem>();
-		filterHeight = ((Activity) mContext).getWindowManager().getDefaultDisplay().getHeight();
-		filterWidth = ((Activity) mContext).getWindowManager().getDefaultDisplay().getWidth();
+		filterHeight = ((SmartActivity) mContext).getDeviceWidth();
+		filterWidth = ((SmartActivity) mContext).getDeviceHeight();
 
 	}
 
@@ -130,6 +127,7 @@ public class FilterVIew {
 		filterItems.add(filterItem);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void showFilter() {
 
 		if (filterItems.size() <= 0) {
@@ -144,7 +142,7 @@ public class FilterVIew {
 				filterPopUp.setWidth(getFilterWidth());
 				filterPopUp.setHeight(getFilterHeight());
 				filterPopUp.setFocusable(true);
-				filterPopUp.setBackgroundDrawable(new BitmapDrawable());
+				filterPopUp.setBackgroundDrawable(new BitmapDrawable(mContext.getResources()));
 				filterPopUp.showAtLocation(layout, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
 
 				lnrLocation = (LinearLayout) layout.findViewById(R.id.lnrLocation);
@@ -194,15 +192,16 @@ public class FilterVIew {
 
 				edtEndTime.setOnClickListener(new OnClickListener() {
 
+					@SuppressWarnings("unused")
 					@Override
 					public void onClick(final View v) {
-						int h = 0;
-						int m = 0;
+						int h;
+						int m;
 						if (((IjoomerEditText) v).getText().toString() != null && ((IjoomerEditText) v).getText().toString().length() > 0) {
 							h = Integer.parseInt(((IjoomerEditText) v).getText().toString().split(":")[0]);
 							m = Integer.parseInt(((IjoomerEditText) v).getText().toString().split(":")[1]);
 						}
-						IjoomerUtilities.getTimeDialog(h, m, new CustomClickListner() {
+						IjoomerUtilities.getTimeDialog("", new CustomClickListner() {
 
 							@Override
 							public void onClick(String value) {
@@ -214,15 +213,16 @@ public class FilterVIew {
 				});
 				edtStartTime.setOnClickListener(new OnClickListener() {
 
+					@SuppressWarnings("unused")
 					@Override
 					public void onClick(final View v) {
-						int h = 0;
-						int m = 0;
+						int h;
+						int m;
 						if (((IjoomerEditText) v).getText().toString() != null && ((IjoomerEditText) v).getText().toString().length() > 0) {
 							h = Integer.parseInt(((IjoomerEditText) v).getText().toString().split(":")[0]);
 							m = Integer.parseInt(((IjoomerEditText) v).getText().toString().split(":")[1]);
 						}
-						IjoomerUtilities.getTimeDialog(h, m, new CustomClickListner() {
+						IjoomerUtilities.getTimeDialog("", new CustomClickListner() {
 
 							@Override
 							public void onClick(String value) {
@@ -298,22 +298,6 @@ public class FilterVIew {
 					});
 				}
 				invalidateView();
-
-				mapView = ((SmartActivity) mContext).getMapView();
-
-				if (mapView != null) {
-					detector = new GestureDetector(new MapGesture());
-					mapView.setOnTouchListener(new OnTouchListener() {
-
-						@Override
-						public boolean onTouch(View paramView, MotionEvent ev) {
-							if (ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_UP) {
-								detector.onTouchEvent(ev);
-							}
-							return false;
-						}
-					});
-				}
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
@@ -454,6 +438,7 @@ public class FilterVIew {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void invalidateView() {
 
 		if (filterItems.get(currentSelectedItemIndex).isAllowMultipleSelection()) {
@@ -504,33 +489,5 @@ public class FilterVIew {
 			lstFilterData.setAdapter(getFilterListAdapter());
 		}
 		invalidateView();
-	}
-
-	private class MapGesture extends SimpleOnGestureListener {
-		private boolean singleTap = false;
-
-		@Override
-		public boolean onSingleTapConfirmed(MotionEvent e) {
-			singleTap = true;
-			return super.onSingleTapConfirmed(e);
-		}
-
-		@Override
-		public void onLongPress(MotionEvent e) {
-			if (singleTap) {
-				singleTap = true;
-
-				GeoPoint geoPoint = mapView.getProjection().fromPixels((int) e.getX(), (int) e.getY());
-//				IjoomerUtilities.getFilteringMapAddressDialog((double) (geoPoint.getLatitudeE6() / 1E6), (double) (geoPoint.getLongitudeE6() / 1E6), new CustomClickListner() {
-//
-//					@Override
-//					public void onClick(String value) {
-//						// IjoomerTextView tv;
-//						((SmartActivity) mContext).ting(value);
-//					}
-//				});
-			}
-			super.onLongPress(e);
-		}
 	}
 }

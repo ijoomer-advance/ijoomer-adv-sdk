@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?background"
-    android:orientation="vertical"
-    android:weightSum="4" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/lnrAddressSearch"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="3dp" >
 
         <com.ijoomer.customviews.IjoomerEditText
             android:id="@+id/editSearch"
+            style="?edittext_h3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/jom_friend_member_search"
             android:singleLine="true" />
 
         <ImageView
@@ -30,17 +28,18 @@
             android:adjustViewBounds="true"
             android:padding="2dp"
             android:scaleType="fitXY"
-            android:src="@drawable/jom_search_icon" />
+            android:src="@drawable/ijoomer_search_icon" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:orientation="vertical" >
 
         <fragment
-            android:name="com.ijoomer.map.IjoomerMapFragment"
+            android:id="@+id/maps"
+            android:name="pl.mg6.android.maps.extensions.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -48,8 +47,7 @@
     <LinearLayout
         android:id="@+id/lnrLstMapAddress"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.5"
+        android:layout_height="250dp"
         android:orientation="vertical" >
 
         <RelativeLayout

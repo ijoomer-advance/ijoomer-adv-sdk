@@ -1,22 +1,25 @@
 package com.ijoomer.customviews;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.widget.DatePicker;
 
-public class IjoomerDataPickerView extends DatePickerDialog {
+import java.util.Calendar;
 
-	int year;
-	int month;
-	int day;
-	Context mContext;
+/**
+ * This Class Contains All Method Related To IjoomerDataPickerView.
+ * 
+ * @author tasol
+ * 
+ */
+public class IjoomerDataPickerView extends DatePickerDialog{
 
+	private int year;
+	private int month;
+	private int day;
 	boolean isBithDate;
+	private final String format = "EEE, MMM dd, yyyy";
 
 	public IjoomerDataPickerView(Context context, int theme, OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth, boolean isBithDate) {
 		super(context, theme, callBack, year, monthOfYear, dayOfMonth);
@@ -24,7 +27,6 @@ public class IjoomerDataPickerView extends DatePickerDialog {
 		this.month = monthOfYear;
 		this.day = dayOfMonth;
 		this.isBithDate = isBithDate;
-		mContext = context;
 	}
 
 	public IjoomerDataPickerView(Context context, OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth, boolean isBithDate) {
@@ -33,34 +35,31 @@ public class IjoomerDataPickerView extends DatePickerDialog {
 		this.month = monthOfYear;
 		this.day = dayOfMonth;
 		this.isBithDate = isBithDate;
-		mContext = context;
 	}
 
 	@Override
 	public void onDateChanged(final DatePicker view, final int year, final int month, final int day) {
 
 		if (this.isBithDate) {
-			Calendar c = GregorianCalendar.getInstance();
+			Calendar c = Calendar.getInstance();
 			c.set(year, month, day);
 			c.add(Calendar.YEAR, 18);
 
-			if (c.get(Calendar.YEAR) > (new Date().getYear() + 1900)) {
-				super.onDateChanged(view, this.year, this.month, this.day);
-
-				((Activity) mContext).runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						IjoomerDataPickerView.this.updateDate(IjoomerDataPickerView.this.year, IjoomerDataPickerView.this.month, IjoomerDataPickerView.this.day);
-
-					}
-				});
+			if (c.get(Calendar.YEAR) > (Calendar.getInstance().get(Calendar.YEAR))) {
+				view.init(IjoomerDataPickerView.this.year, IjoomerDataPickerView.this.month, IjoomerDataPickerView.this.day, IjoomerDataPickerView.this);
+				Calendar calendar = Calendar.getInstance();
+				calendar.set(IjoomerDataPickerView.this.year, IjoomerDataPickerView.this.month, IjoomerDataPickerView.this.day);
+				setTitle(DateFormat.format(format, calendar));
 			} else {
 				this.year = year;
 				this.month = month;
 				this.day = day;
-				super.onDateChanged(view, year, month, day);
+				view.init(year, month, day, IjoomerDataPickerView.this);
+				Calendar calendar = Calendar.getInstance();
+				calendar.set(year, month, day);
+				setTitle(DateFormat.format(format, calendar));
 			}
 		}
 	}
+
 }

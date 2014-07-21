@@ -1,9 +1,11 @@
 package com.ijoomer.common.classes;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,9 +24,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -33,13 +36,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore.MediaColumns;
-import android.support.v4.view.ViewPager.LayoutParams;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -59,34 +63,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.androidquery.AQuery;
-import com.facebook.FacebookRequestError;
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.RequestAsyncTask;
-import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionDefaultAudience;
-import com.facebook.SessionLoginBehavior;
-import com.facebook.internal.Utility;
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.ijoomer.caching.IjoomerCaching;
+import com.ijoomer.caching.IjoomerCachingConstants;
 import com.ijoomer.common.configuration.IjoomerApplicationConfiguration;
 import com.ijoomer.common.configuration.IjoomerGlobalConfiguration;
-import com.ijoomer.custom.interfaces.FacebookLoginHandller;
+import com.ijoomer.components.jbolochat.JBoloChatManager;
+import com.ijoomer.components.jomsocial.JomProfileActivity;
 import com.ijoomer.custom.interfaces.IjoomerSharedPreferences;
 import com.ijoomer.customviews.IjoomerButton;
 import com.ijoomer.customviews.IjoomerCheckBox;
 import com.ijoomer.customviews.IjoomerEditText;
-import com.ijoomer.customviews.IjoomerHorizontalScroll;
 import com.ijoomer.customviews.IjoomerTextView;
+import com.ijoomer.menubuilder.MenuDrawer;
 import com.ijoomer.oauth.IjoomerOauth;
+import com.ijoomer.src.IjoomerHomeActivity;
 import com.ijoomer.src.IjoomerLoginActivity;
+import com.ijoomer.src.IjoomerMenuActivity;
 import com.ijoomer.src.IjoomerSplashActivity;
 import com.ijoomer.src.R;
 import com.ijoomer.weservice.IjoomerWebService;
@@ -95,59 +94,216 @@ import com.smart.android.framework.SmartAndroidActivity;
 import com.smart.framework.AlertMagnatic;
 import com.smart.framework.CustomAlertNeutral;
 import com.smart.framework.ItemView;
+import com.smart.framework.SmartApplication;
 import com.smart.framework.SmartListAdapterWithHolder;
 import com.smart.framework.SmartListItem;
 
+/**
+ * This Class Contains All Method Related To IjoomerSuperMaster.
+ * 
+ * @author tasol
+ * 
+ */
 public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements IjoomerSharedPreferences {
 
-	private static final int SWIPE_MIN_DISTANCE = 50;
-	private static final int SWIPE_THRESHOLD_VELOCITY = 100;
-	private GestureDetector gDetector;
-	private String imgPath;
-	private String[] PERMISSIONS = new String[] { "publish_actions", "email" };
-	private Session facebookSession;
-	private boolean isFacebookShare;
-	private boolean isFacebookLogin;
-	private FacebookLoginHandller facebookLoginTarget;
-
-	private String facebookSharingName;
-	private String facebookSharingCaption;
-	private String facebookSharingDescription;
-	private String facebookSharingLink;
-	private String facebookSharingPicture;
-	private String facebookSharingMessage;
 	private AQuery androidQuery;
-	private static boolean isSideMenuOpen = false;
+
 	private ArrayList<SmartListItem> listDataSideMenu = new ArrayList<SmartListItem>();
 
-	private Session.OpenRequest openRequest = null;
-	SeekBar proSeekBar;
-
-	private static final int FB_SHARE = 111;
-	private static final int FB_CONNECT = 222;
-
 	private static String screenCaption;
+	private final String MENUITEM = "menuitem";
+	private final String TAB = "tab";
+	private final String TAB_ACTIVE = "tab_active";
+	private final String ITEMVIEW = "itemview";
+	private final String ITEMDATA = "itemdata";
+	private final String ITEMCAPTION = "itemcaption";
+	private final String ICON = "icon";
+	private String imgPath;
+	private static boolean isSideMenuOpen = false;
+	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	private GoogleCloudMessaging gcm;
 
-	public String getScreenCaption() {
-		return screenCaption;
-	}
-
-	public void setScreenCaption(String screenCaption) {
-		this.screenCaption = screenCaption;
-	}
-
+	/**
+	 * Constructor
+	 */
 	public IjoomerSuperMaster() {
+		IjoomerCachingConstants.unNormalizeFields = CoreCachingConstants.getUnnormlizeFields();
 		if (getSmartApplication().readSharedPreferences().getString(SP_LOGIN_REQ_OBJECT, "").length() > 0) {
 			setOptionMenu(R.menu.ijoomer_menu);
 		} else {
 			setOptionMenu(0);
 		}
-		IjoomerUtilities.mSmartIphoneActivity = this;
+		IjoomerUtilities.mSmartAndroidActivity = this;
 		setApplicationOrientation(SCREEN_ORIENTATION_PORTRAIT);
-		IjoomerApplicationConfiguration.setDefaultConfiguration();
+		IjoomerApplicationConfiguration.setDefaultConfiguration(this);
 		androidQuery = new AQuery(this);
 	}
 
+	/**
+	 * Overrides method
+	 */
+
+	@Override
+	public void loadHeaderComponents() {
+		try {
+			getScreenRootView().getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+
+					Rect r = new Rect();
+					getScreenRootView().getWindowVisibleDisplayFrame(r);
+
+					final FrameLayout f = (FrameLayout) findViewById(123);
+					int heightDiff = getScreenRootView().getRootView().getHeight() - (r.bottom - r.top);
+					if (heightDiff > 100) {
+						getFooterView().setVisibility(View.GONE);
+						getBottomAdvertiseView().setVisibility(View.GONE);
+						f.setVisibility(View.VISIBLE);
+
+						f.setOnTouchListener(new OnTouchListener() {
+
+							@Override
+							public boolean onTouch(View v, MotionEvent event) {
+								if (isKeyboardHideOnOutsideTouch()) {
+
+									hideSoftKeyboard();
+									return true;
+								} else {
+									return false;
+								}
+							}
+						});
+					} else {
+						if (getFooterView().getVisibility() == View.GONE && f.getVisibility() == View.VISIBLE && !isSideMenuOpen) {
+							getBottomAdvertiseView().setVisibility(View.VISIBLE);
+							FrameLayout ff = (FrameLayout) findViewById(123);
+							ff.setVisibility(View.GONE);
+							ff.setOnTouchListener(null);
+
+							try {
+								if (IjoomerGlobalConfiguration.hasTabBar(IjoomerSuperMaster.this, IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName()))) {
+									getFooterView().setVisibility(View.VISIBLE);
+								} else {
+									if (!IjoomerScreenHolder.aliasScreens.containsKey(getClass().getSimpleName()) && IjoomerMenus.getInstance().getTabBarData() != null) {
+										getFooterView().setVisibility(View.VISIBLE);
+									} else {
+										getFooterView().setVisibility(View.GONE);
+									}
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			});
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.ic_menu_logout) {
+			logout();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+        if(getString(R.string.http_access_allow).equals("true")){
+            AQuery.setAuthHeader(getB64Auth(SmartApplication.REF_SMART_APPLICATION.readSharedPreferences().getString(SP_HTTP_ACCESSS_USERNAME,""),SmartApplication.REF_SMART_APPLICATION.readSharedPreferences().getString(SP_HTTP_ACCESSS_PASSWORD,"")));
+        }
+		IjoomerCachingConstants.unNormalizeFields = CoreCachingConstants.getUnnormlizeFields();
+		enableGCM();
+
+		try {
+			applySideMenu();
+			applyTabMenu();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			if (IjoomerApplicationConfiguration.isReloadRequired()) {
+				IjoomerApplicationConfiguration.setDefaultConfiguration(this);
+				IjoomerApplicationConfiguration.setReloadRequired(true);
+			} else {
+				IjoomerApplicationConfiguration.setDefaultConfiguration(this);
+			}
+			IjoomerUtilities.mSmartAndroidActivity = this;
+			isSideMenuOpen = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+    private String getB64Auth (String userName,String password) {
+        String source=userName+":"+ password;
+        String ret="Basic "+ Base64.encodeToString(source.getBytes(), Base64.URL_SAFE | Base64.NO_WRAP);
+        return ret;
+    }
+
+	@Override
+	public View setBottomAdvertisement() {
+		// return IjoomerAdManager.newInstance().getBottomAdvertisement(this);
+		return null;
+	}
+
+	@Override
+	public View setTopAdvertisement() {
+		return null;
+	}
+
+	@Override
+	public void setOnLoadAdvertisement() {
+		IjoomerAdManager.getInstance().getOnLoadAdvertisement(this);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	@Override
+	public void onBackPressed() {
+		final int drawerState = mMenuDrawer.getDrawerState();
+		if (drawerState == MenuDrawer.STATE_OPEN || drawerState == MenuDrawer.STATE_OPENING) {
+			mMenuDrawer.closeMenu();
+			return;
+		}
+		super.onBackPressed();
+	}
+
+	/**
+	 * This method used to get screen caption.
+	 * 
+	 * @return represented {@link String}
+	 */
+	public String getScreenCaption() {
+		return screenCaption;
+	}
+
+	/**
+	 * This method used to set screen caption.
+	 * 
+	 * @param screenCaption
+	 *            represented screen caption
+	 */
+	@SuppressWarnings("static-access")
+	public void setScreenCaption(String screenCaption) {
+		this.screenCaption = screenCaption;
+	}
+
+	/**
+	 * This method used to set image uri.
+	 * 
+	 * @return represented {@link Uri}
+	 */
 	public Uri setImageUri() {
 		// Store image in dcim
 		File file = new File(Environment.getExternalStorageDirectory() + "/DCIM/", "image" + new Date().getTime() + ".png");
@@ -156,13 +312,25 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return imgUri;
 	}
 
+	/**
+	 * This method used to get Image path.
+	 * 
+	 * @return
+	 */
 	public String getImagePath() {
-
 		return imgPath;
 	}
 
+	/**
+	 * This method used to get absolute path from uri.
+	 * 
+	 * @param uri
+	 *            represented uri
+	 * @return represented {@link String}
+	 */
 	public String getAbsolutePath(Uri uri) {
 		String[] projection = { MediaColumns.DATA };
+		@SuppressWarnings("deprecation")
 		Cursor cursor = managedQuery(uri, projection, null, null, null);
 		if (cursor != null) {
 			int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
@@ -172,6 +340,13 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 			return null;
 	}
 
+	/**
+	 * This method used to decode file from string path.
+	 * 
+	 * @param path
+	 *            represented path
+	 * @return represented {@link Bitmap}
+	 */
 	public Bitmap decodeFile(String path) {
 		try {
 			// Decode image size
@@ -191,11 +366,19 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 			o2.inSampleSize = scale;
 			return BitmapFactory.decodeFile(path, o2);
 		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 		return null;
 
 	}
 
+	/**
+	 * This method used to decode file from uri path.
+	 * 
+	 * @param path
+	 *            represented path
+	 * @return represented {@link Bitmap}
+	 */
 	public Bitmap decodeFile(Uri path) {
 		try {
 			// Decode image size
@@ -217,375 +400,123 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 			o2.inSampleSize = scale;
 			return BitmapFactory.decodeFile(getAbsolutePath(path), o2);
 		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 		return null;
 
 	}
 
-	public void facebookLogout() {
-		try {
-			Session.getActiveSession().closeAndClearTokenInformation();
-			facebookSession = null;
-		} catch (Throwable e) {
-		}
-	}
-
+	/**
+	 * This method used to logout from twitter.
+	 */
 	public void twitterLogout() {
 		getSmartApplication().writeSharedPreferences(SP_TWITTER_TOKEN, null);
 		getSmartApplication().writeSharedPreferences(SP_TWITTER_SECRET_TOKEN, null);
 	}
 
-	@Override
-	public void loadHeaderComponents() {
-		applySideMenu();
-		try {
-			getScreenRootView().getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-				@Override
-				public void onGlobalLayout() {
+	/**
+	 * This method used to logout from app.
+	 */
+	public void logout() {
+		IjoomerUtilities.getConfirmDialog(getString(R.string.logout), getString(R.string.logout_message), getString(R.string.yes), getString(R.string.no), true, new AlertMagnatic() {
 
-					Rect r = new Rect();
-					getScreenRootView().getWindowVisibleDisplayFrame(r);
+			@Override
+			public void PositiveMethod(DialogInterface dialog, int id) {
 
-					final FrameLayout f = (FrameLayout) findViewById(123);
-					int heightDiff = getScreenRootView().getRootView().getHeight() - (r.bottom - r.top);
-					if (heightDiff > 100) {
-						// getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-						// getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-						getFooterView().setVisibility(View.GONE);
-						getBottomAdvertiseView().setVisibility(View.GONE);
-						f.setVisibility(View.VISIBLE);
+				final SeekBar progressBar = IjoomerUtilities.getLoadingDialog(getString(R.string.loging_out));
+				IjoomerOauth.getInstance(IjoomerSuperMaster.this).logout(new WebCallListener() {
 
-						f.setOnTouchListener(new OnTouchListener() {
+					@Override
+					public void onProgressUpdate(int progressCount) {
+						progressBar.setProgress(progressCount);
+					}
 
-							@Override
-							public boolean onTouch(View v, MotionEvent event) {
-								hideSoftKeyboard();
-								return true;
-							}
-						});
-					} else {
-						if (getFooterView().getVisibility() == View.GONE && f.getVisibility() == View.VISIBLE && !isSideMenuOpen) {
-							// getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-							// getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-							getBottomAdvertiseView().setVisibility(View.VISIBLE);
-							FrameLayout ff = (FrameLayout) findViewById(123);
-							ff.setVisibility(View.GONE);
-							ff.setOnTouchListener(null);
+					@Override
+					public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
+						if (responseCode == 200) {
+							getSmartApplication().writeSharedPreferences(SP_PASSWORD, null);
+							getSmartApplication().writeSharedPreferences(SP_ISLOGOUT, true);
+							getSmartApplication().writeSharedPreferences(SP_LOGIN_REQ_OBJECT, null);
+							getSmartApplication().writeSharedPreferences(SP_ISFACEBOOKLOGIN, false);
+							
+							twitterLogout();
 
 							try {
-								if (IjoomerGlobalConfiguration.hasTabBar(IjoomerSuperMaster.this, IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName()))) {
-									getFooterView().setVisibility(View.VISIBLE);
-								} else {
-									if (!IjoomerScreenHolder.aliasScreens.containsKey(getClass().getSimpleName()) && IjoomerMenus.getInstance().getTabBarData() != null) {
-										getFooterView().setVisibility(View.VISIBLE);
-									} else {
-										getFooterView().setVisibility(View.GONE);
-									}
+								Session.getActiveSession().closeAndClearTokenInformation();
+								
+								if(IjoomerGlobalConfiguration.isEnableJbolo()){
+									JBoloChatManager.getInstance(IjoomerSuperMaster.this).stopPolling();
+								}
+							} catch (Throwable e) {
+								e.printStackTrace();
+							}
+							
+							Intent intent = new Intent("clearStackActivity");
+							intent.setType("text/plain");
+							sendBroadcast(intent);
+							IjoomerWebService.cookies = null;
+							
+							loadNew(IjoomerLoginActivity.class, IjoomerSuperMaster.this, true);
+						} else {
+							IjoomerUtilities.getCustomOkDialog(getString(R.string.logout), getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())),
+									getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+
+								@Override
+								public void NeutralMethod() {
 
 								}
-							} catch (Exception e) {
-							}
+							});
 						}
-					}
-				}
-			});
-		} catch (Throwable e) {
-		}
-
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.ic_menu_logout) {
-			logout();
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	public void logout() {
-		IjoomerUtilities.getConfirmDialog(getString(R.string.logout), getString(R.string.logout_message), getString(R.string.yes), getString(R.string.no), true,
-				new AlertMagnatic() {
-
-					@Override
-					public void PositiveMathod(DialogInterface dialog, int id) {
-						final SeekBar progressBar = IjoomerUtilities.getLoadingDialog(getString(R.string.loging_out));
-						IjoomerOauth.getInstance(IjoomerSuperMaster.this).logout(new WebCallListener() {
-
-							@Override
-							public void onProgressUpdate(int progressCount) {
-								progressBar.setProgress(progressCount);
-							}
-
-							@Override
-							public void onCallComplete(int responseCode, String errorMessage, ArrayList<HashMap<String, String>> data1, Object data2) {
-								if (responseCode == 200) {
-									getSmartApplication().writeSharedPreferences(SP_PASSWORD, null);
-									getSmartApplication().writeSharedPreferences(SP_ISLOGOUT, false);
-									getSmartApplication().writeSharedPreferences(SP_ISLOGOUT, true);
-									getSmartApplication().writeSharedPreferences(SP_LOGIN_REQ_OBJECT, null);
-									twitterLogout();
-									getSmartApplication().writeSharedPreferences(SP_ISFACEBOOKLOGIN, false);
-									facebookLogout();
-
-									Intent intent = new Intent("clearStackActivity");
-									intent.setType("text/plain");
-									sendBroadcast(intent);
-									IjoomerWebService.cookies = null;
-
-									loadNew(IjoomerLoginActivity.class, IjoomerSuperMaster.this, true);
-								} else {
-									IjoomerUtilities.getCustomOkDialog(getString(R.string.logout),
-											getString(getResources().getIdentifier("code" + responseCode, "string", getPackageName())), getString(R.string.ok),
-											R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
-
-												@Override
-												public void NeutralMathod() {
-
-												}
-											});
-								}
-							}
-						});
-					}
-
-					@Override
-					public void NegativeMathod(DialogInterface dialog, int id) {
-
 					}
 				});
-
-	}
-
-	public void facebookSharing(final String name, final String caption, final String description, final String link, final String picture, final String message) {
-		facebookSharingName = name;
-		facebookSharingCaption = caption;
-		facebookSharingDescription = description;
-		facebookSharingLink = link;
-		facebookSharingPicture = picture;
-		facebookSharingMessage = message;
-
-		isFacebookLogin = false;
-		isFacebookShare = true;
-		facebookSession = Session.getActiveSession();
-		String applicationId = Utility.getMetadataApplicationId(getBaseContext());
-
-		if (facebookSession == null || facebookSession.getState().isClosed()) {
-			Session session = new Session.Builder(getBaseContext()).setApplicationId(applicationId).build();
-			Session.setActiveSession(session);
-			facebookSession = session;
-		}
-
-		if (!facebookSession.isOpened()) {
-			openRequest = new Session.OpenRequest(this);
-
-			if (openRequest != null) {
-				openRequest.setRequestCode(FB_SHARE);
-				openRequest.setPermissions(Arrays.asList(PERMISSIONS[0]));
-				openRequest.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
-				facebookSession.openForPublish(openRequest);
-
-			}
-		} else {
-			postData();
-		}
-
-	}
-
-	public void loginWithFacebook(final FacebookLoginHandller target) {
-		facebookLoginTarget = target;
-		isFacebookLogin = true;
-		isFacebookShare = false;
-		facebookSession = Session.getActiveSession();
-		String applicationId = Utility.getMetadataApplicationId(getBaseContext());
-
-		if (facebookSession == null || facebookSession.getState().isClosed()) {
-			Session session = new Session.Builder(getBaseContext()).setApplicationId(applicationId).build();
-			Session.setActiveSession(session);
-			facebookSession = session;
-		}
-
-		if (!facebookSession.isOpened()) {
-			openRequest = new Session.OpenRequest(this);
-
-			if (openRequest != null) {
-				openRequest.setRequestCode(FB_CONNECT);
-				openRequest.setDefaultAudience(SessionDefaultAudience.FRIENDS);
-				openRequest.setPermissions(Arrays.asList(PERMISSIONS[1]));
-				openRequest.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
-				facebookSession.openForRead(openRequest);
-
 			}
 
-		} else {
-			facebookUserData();
-		}
-	}
+			@Override
+			public void NegativeMethod(DialogInterface dialog, int id) {
 
-	private void facebookUserData() {
-
-		Bundle postParams = new Bundle();
-		postParams
-				.putString(
-						"q",
-						"select name,about_me,birthday_date,current_address,education,email,first_name,hometown_location,is_minor,last_name,middle_name,pic,pic_big,pic_cover,pic_small,pic_square,political,quotes,relationship_status,religion,sex,sports,status,timezone,tv,uid,username,verified,website,work from user where uid=me()");
-
-		Request.Callback callback = new Request.Callback() {
-			public void onCompleted(Response response) {
-				hideProgressDialog();
-				JSONObject json = null;
-				try {
-					json = response.getGraphObject().getInnerJSONObject().getJSONArray("data").getJSONObject(0);
-				} catch (Throwable e1) {
-					e1.printStackTrace();
-				}
-				FacebookRequestError error = response.getError();
-				if (error != null) {
-					json = new JSONObject();
-					try {
-						json.put("errorMessage", error.getErrorMessage());
-						try {
-							facebookLoginTarget.loginStatus(response.getConnection().getResponseCode(), json);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				} else {
-					try {
-						facebookLoginTarget.loginStatus(response.getConnection().getResponseCode(), json);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
 			}
-		};
-
-		Request request = new Request(facebookSession, "fql", postParams, HttpMethod.GET, callback);
-
-		RequestAsyncTask task = new RequestAsyncTask(request);
-		task.execute();
-		showProgressDialog(getString(R.string.facebook_user_data_fetching), this);
+		});
 
 	}
 
-	private void postData() {
-
-		Bundle postParams = new Bundle();
-		postParams.putString("name", facebookSharingName == null ? "" : facebookSharingName);
-		postParams.putString("caption", facebookSharingCaption == null ? "" : facebookSharingCaption);
-		postParams.putString("description", facebookSharingDescription == null ? "" : facebookSharingDescription);
-		postParams.putString("link", facebookSharingLink == null ? "" : facebookSharingLink);
-		postParams.putString("picture", facebookSharingPicture == null ? "" : facebookSharingPicture);
-		postParams.putString("message", facebookSharingMessage == null ? "" : facebookSharingMessage);
-
-		Request.Callback callback = new Request.Callback() {
-
-			public void onCompleted(Response response) {
-				hideProgressDialog();
-				FacebookRequestError error = response.getError();
-				if (error != null) {
-					IjoomerUtilities.getCustomOkDialog(getString(R.string.facebook_share_title), error.getErrorMessage(), getString(R.string.ok), R.layout.ijoomer_ok_dialog,
-							new CustomAlertNeutral() {
-
-								@Override
-								public void NeutralMathod() {
-
-								}
-							});
-				} else {
-					IjoomerUtilities.getCustomOkDialog(getString(R.string.facebook_share_title), getString(R.string.facebook_share_success), getString(R.string.ok),
-							R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
-
-								@Override
-								public void NeutralMathod() {
-
-								}
-							});
-				}
-			}
-		};
-
-		Request request = new Request(facebookSession, "me/feed", postParams, HttpMethod.POST, callback);
-
-		RequestAsyncTask task = new RequestAsyncTask(request);
-		task.execute();
-
-		showProgressDialog(getString(R.string.facebook_wall_posting), this);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		try {
-			if (resultCode == RESULT_OK) {
-				if (requestCode == FB_CONNECT || requestCode == FB_SHARE) {
-					Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-					if (facebookSession.isOpened()) {
-
-						if (isFacebookLogin) {
-							facebookUserData();
-						}
-						if (isFacebookShare) {
-							postData();
-						}
-					}
-				}
-			} else {
-				Session.getActiveSession().closeAndClearTokenInformation();
-				facebookSession = null;
-			}
-		} catch (Exception e) {
-		}
-
-	}
-
+	/**
+	 * This method used to hide soft keyboard.
+	 */
 	public void hideSoftKeyboard() {
 		try {
 			InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
 			inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+	/**
+	 * This method used to show soft keyboard.
+	 */
+	public void showSoftKeyboard() {
 		try {
-			applyTabMenu();
+			InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+			inputMethodManager.toggleSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.SHOW_FORCED, 0);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		try {
-			if (IjoomerApplicationConfiguration.isReloadRequired()) {
-				IjoomerApplicationConfiguration.setDefaultConfiguration();
-				IjoomerApplicationConfiguration.setReloadRequired(true);
-			} else {
-				IjoomerApplicationConfiguration.setDefaultConfiguration();
-			}
-			IjoomerUtilities.mSmartIphoneActivity = this;
-			isSideMenuOpen = false;
-		} catch (Exception e) {
-		}
-
 	}
 
-	@Override
-	public View setBottomAdvertisement() {
-
-		return null;
-	}
-
-	@Override
-	public View setTopAdvertisement() {
-
-		return null;
-	}
-
+	/**
+	 * This method used to do ellipsize to textview.
+	 * 
+	 * @param tv
+	 *            represented TextView do ellipsize
+	 * @param maxLine
+	 *            represented max line to show
+	 */
 	public void doEllipsize(final IjoomerTextView tv, final int maxLine) {
 		ViewTreeObserver vto = tv.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onGlobalLayout() {
 
@@ -604,6 +535,16 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		});
 	}
 
+	/**
+	 * This method used to convert json to map.
+	 * 
+	 * @param object
+	 *            represented json object
+	 * @return represented {@link Map<String, String>}
+	 * @throws JSONException
+	 *             represented {@link JSONException}
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<String, String> jsonToMap(JSONObject object) throws JSONException {
 		Map<String, String> map = new HashMap();
 		Iterator keys = object.keys();
@@ -614,6 +555,15 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return map;
 	}
 
+	/**
+	 * This method used to convert json to Object.
+	 * 
+	 * @param json
+	 *            represented json object
+	 * @return represented {@link Object}
+	 * @throws JSONException
+	 *             represented {@link JSONException}
+	 */
 	private Object fromJson(Object json) throws JSONException {
 		if (json == JSONObject.NULL) {
 			return null;
@@ -626,6 +576,16 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		}
 	}
 
+	/**
+	 * This method used to convert json array to List.
+	 * 
+	 * @param array
+	 *            represented json array
+	 * @return represented {@link List}
+	 * @throws JSONException
+	 *             represented {@link JSONException}
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private List toList(JSONArray array) throws JSONException {
 		List list = new ArrayList();
 		int size = array.length();
@@ -635,9 +595,10 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return list;
 	}
 
+	/**
+	 * This method used to show side menu.
+	 */
 	public void showSideMenu() {
-
-		gDetector = new GestureDetector(new MyGesture());
 
 		ArrayList<HashMap<String, String>> sideMenuData;
 		sideMenuData = IjoomerGlobalConfiguration.getSideMenu(this, IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName()));
@@ -646,11 +607,7 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		}
 
 		IjoomerMenus.getInstance().setSideMenuData(sideMenuData);
-		final LinearLayout sideMenu = (LinearLayout) findViewById(108);
-		final IjoomerHorizontalScroll hScrollView = (IjoomerHorizontalScroll) findViewById(100);
 		final View sideMenuView = LayoutInflater.from(this).inflate(R.layout.ijoomer_sidemenu, null);
-
-		sideMenu.addView(sideMenuView, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		final ListView sideMenuList = (ListView) sideMenuView.findViewById(R.id.sideMenuList);
 		prepareList(sideMenuData);
@@ -665,54 +622,15 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 				launchActivity(obj);
 			}
 		});
-		if (!isSideMenuOpen) {
-
-			hScrollView.post(new Runnable() {
-
-				@Override
-				public void run() {
-					hScrollView.fullScroll(ScrollView.FOCUS_LEFT);
-					FrameLayout f = (FrameLayout) findViewById(123);
-					f.setVisibility(View.VISIBLE);
-					f.setOnTouchListener(new OnTouchListener() {
-
-						@Override
-						public boolean onTouch(View v, MotionEvent event) {
-
-							if (gDetector.onTouchEvent(event)) {
-
-								hScrollView.post(new Runnable() {
-
-									@Override
-									public void run() {
-										hScrollView.fullScroll(ScrollView.FOCUS_RIGHT);
-										FrameLayout f = (FrameLayout) findViewById(123);
-										f.setVisibility(View.GONE);
-									}
-								});
-								isSideMenuOpen = false;
-							}
-							return true;
-						}
-					});
-				}
-			});
-			isSideMenuOpen = true;
-		} else {
-			FrameLayout f = (FrameLayout) findViewById(123);
-			f.setVisibility(View.GONE);
-			hScrollView.post(new Runnable() {
-
-				@Override
-				public void run() {
-					hScrollView.fullScroll(ScrollView.FOCUS_RIGHT);
-				}
-			});
-			isSideMenuOpen = false;
-		}
+		mMenuDrawer.setMenuView(sideMenuView);
 	}
 
+	/**
+	 * This method used to show tab bar.
+	 */
+	@Override
 	public void showTabBar() {
+
 		try {
 			boolean flag = false;
 			boolean isMoreSelected = true;
@@ -726,43 +644,50 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 			}
 
 			IjoomerMenus.getInstance().setTabBarData(menuData);
-			JSONArray tabItems = new JSONArray(menuData.get(0).get("menuitem"));
+			JSONArray tabItems = new JSONArray(menuData.get(0).get(MENUITEM));
 
 			LayoutInflater inflater = LayoutInflater.from(this);
 
 			LinearLayout tabbar = new LinearLayout(this);
-			tabbar.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+			tabbar.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 			tabbar.setGravity(Gravity.CENTER);
-			((ViewGroup) getFooterView().getChildAt(0))
-					.addView(tabbar, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+			((ViewGroup) getFooterView().getChildAt(0)).removeAllViews();
+			((ViewGroup) getFooterView().getChildAt(0)).addView(tabbar, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 			int tabLength = tabItems.length() > 5 ? 5 : tabItems.length();
 
+			if (tabLength <= 0) {
+				getFooterView().setVisibility(View.GONE);
+				return;
+			}
 			if (tabItems.length() > 5) {
 				for (int i = 0; i < tabLength; i++) {
 					JSONObject item = tabItems.getJSONObject(i);
-					ArrayList<HashMap<String, String>> tabData = IjoomerGlobalConfiguration.getTabIcons(this, item.getString("itemview"));
-					if (tabData != null && tabData.size() > 0) {
-						item.put("tab", tabData.get(0).get("tab"));
-						item.put("tab_active", tabData.get(0).get("tab_active"));
+					if (!item.has(TAB) && !item.has(TAB_ACTIVE)) {
+						ArrayList<HashMap<String, String>> tabData = IjoomerGlobalConfiguration.getTabIcons(this, item.getString(ITEMVIEW));
+						if (tabData != null && tabData.size() > 0) {
+							item.put(TAB, tabData.get(0).get(TAB));
+							item.put(TAB_ACTIVE, tabData.get(0).get(TAB_ACTIVE));
+						}
 					}
 
 					LinearLayout lnrItem = (LinearLayout) inflater.inflate(R.layout.ijoomer_tab_item, null);
 					lnrItem.setId(i);
 					lnrItem.setTag(item);
-					((IjoomerTextView) lnrItem.getChildAt(1)).setText(item.getString("itemcaption"));
+					if (IjoomerApplicationConfiguration.tabbarWithoutCaption)
+						((IjoomerTextView) lnrItem.getChildAt(1)).setVisibility(View.GONE);
+					if (IjoomerApplicationConfiguration.tabbarWithoutImage)
+						((ImageView) lnrItem.getChildAt(0)).setVisibility(View.GONE);
+					((IjoomerTextView) lnrItem.getChildAt(1)).setText(item.getString(ITEMCAPTION));
 
 					lnrItem.setOnClickListener(new OnClickListener() {
 
+						@SuppressWarnings("unchecked")
 						@Override
 						public void onClick(View v) {
 
 							try {
 								JSONObject obj = (JSONObject) v.getTag();
-								final String className = IjoomerScreenHolder.originalScreens.get(obj.getString("itemview"));
-
-								if (!className.equals(IjoomerSuperMaster.this.getClass().getName())) {
-									launchActivity(obj);
-								}
+								launchActivity(obj);
 							} catch (Exception e) {
 								ArrayList<Object> moreData = (ArrayList<Object>) v.getTag();
 								showMorePopup(moreData, v);
@@ -772,46 +697,84 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 					});
 					tabbar.addView(lnrItem, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
 
-					String screenName = IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName());
+					String itemId = null;
+					String intentItemId = null;
 
+					try {
+						itemId = new JSONObject(item.getString(ITEMDATA)).toString();
+					} catch (Exception e) {
+						itemId = null;
+					}
+
+					try {
+						intentItemId = new JSONObject(getIntent().getStringExtra("IN_OBJ")).getString(ITEMDATA);
+					} catch (Exception e) {
+						intentItemId = null;
+					}
+
+					if (itemId == null && (intentItemId == null || intentItemId.length() <= 0)) {
+						itemId = item.getString(ITEMVIEW);
+						intentItemId = IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName()) == null ? IjoomerMenus.getInstance().getSelectedScreenName() : IjoomerScreenHolder.aliasScreens
+								.get(getClass().getSimpleName());
+					} else {
+
+						if (itemId == null) {
+							itemId = item.getString(ITEMVIEW);
+						}
+
+						if (intentItemId == null) {
+							intentItemId = IjoomerMenus.getInstance().getSelectedScreenName();
+						}
+					}
 					if (i == (tabLength - 1)) {
 						((IjoomerTextView) lnrItem.getChildAt(1)).setText(getString(R.string.more));
 						if (isMoreSelected) {
-							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(IjoomerGlobalConfiguration.getMoreIcon(this).get(0).get("tab_active"), true, true,
-									getDeviceWidth(), 0);
+							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(IjoomerGlobalConfiguration.getMoreIcon(this).get(0).get(TAB_ACTIVE), true, true, getDeviceWidth(), 0);
+
 						} else {
-							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(IjoomerGlobalConfiguration.getMoreIcon(this).get(0).get("tab"), true, true, getDeviceWidth(),
-									0);
+							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(IjoomerGlobalConfiguration.getMoreIcon(this).get(0).get(TAB), true, true, getDeviceWidth(), 0);
+
 						}
 						ArrayList<Object> moreData = new ArrayList<Object>();
 						int size = tabItems.length();
 						for (int j = i; j < size; j++) {
 							JSONObject moreItem = tabItems.getJSONObject(j);
-							if ((screenName != null && moreItem.getString("itemview").equals(screenName))) {
-								IjoomerMenus.getInstance().setSelectedScreenName(moreItem.getString("itemview"));
-							} else if (flag && (moreItem.getString("itemview").equals(IjoomerMenus.getInstance().getSelectedScreenName()))) {
-								IjoomerMenus.getInstance().setSelectedScreenName(moreItem.getString("itemview"));
+
+							if ((itemId != null && moreItem.getString(ITEMVIEW).equals(intentItemId))) {
+								IjoomerMenus.getInstance().setSelectedScreenName(intentItemId);
+							} else if (flag && (moreItem.getString(ITEMVIEW).equals(IjoomerMenus.getInstance().getSelectedScreenName()))) {
+								IjoomerMenus.getInstance().setSelectedScreenName(intentItemId);
 							}
 
-							ArrayList<HashMap<String, String>> moreTabData = IjoomerGlobalConfiguration.getTabIcons(this, moreItem.getString("itemview"));
-							if (moreTabData != null && moreTabData.size() > 0) {
-								moreItem.put("tab", moreTabData.get(0).get("tab"));
-								moreItem.put("tab_active", moreTabData.get(0).get("tab_active"));
+							if (!moreItem.has(TAB) && !moreItem.has(TAB_ACTIVE)) {
+								ArrayList<HashMap<String, String>> moreTabData = IjoomerGlobalConfiguration.getTabIcons(this, moreItem.getString(ITEMVIEW));
+								if (moreTabData != null && moreTabData.size() > 0) {
+									moreItem.put(TAB, moreTabData.get(0).get(TAB));
+									moreItem.put(TAB_ACTIVE, moreTabData.get(0).get(TAB_ACTIVE));
+								}
 							}
 							moreData.add(moreItem);
 						}
 						lnrItem.setTag(moreData);
 					} else {
-						if ((screenName != null && item.getString("itemview").equals(screenName))) {
-							IjoomerMenus.getInstance().setSelectedScreenName(item.getString("itemview"));
-							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString("tab_active"), true, true, getDeviceWidth(), 0);
-							isMoreSelected = false;
-						} else if (flag && (item.getString("itemview").equals(IjoomerMenus.getInstance().getSelectedScreenName()))) {
-							IjoomerMenus.getInstance().setSelectedScreenName(item.getString("itemview"));
-							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString("tab_active"), true, true, getDeviceWidth(), 0);
-							isMoreSelected = false;
-						} else {
-							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString("tab"), true, true, getDeviceWidth(), 0);
+						try {
+							if (intentItemId.equals(itemId)) {
+								IjoomerMenus.getInstance().setSelectedScreenName(intentItemId);
+								androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString(TAB_ACTIVE), true, true, getDeviceWidth(), 0);
+								isMoreSelected = false;
+							} else if (flag && (intentItemId.equals(itemId))) {
+								IjoomerMenus.getInstance().setSelectedScreenName(item.getString(ITEMVIEW));
+								androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString(TAB_ACTIVE), true, true, getDeviceWidth(), 0);
+								isMoreSelected = false;
+							} else {
+								androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString(TAB), true, true, getDeviceWidth(), 0);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							try {
+								androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString(TAB), true, true, getDeviceWidth(), 0);
+							} catch (Exception e2) {
+							}
 						}
 					}
 
@@ -819,16 +782,55 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 			} else {
 				for (int i = 0; i < tabLength; i++) {
 					JSONObject item = tabItems.getJSONObject(i);
-					ArrayList<HashMap<String, String>> tabData = IjoomerGlobalConfiguration.getTabIcons(this, item.getString("itemview"));
-					if (tabData != null && tabData.size() > 0) {
-						item.put("tab", tabData.get(0).get("tab"));
-						item.put("tab_active", tabData.get(0).get("tab_active"));
+					if (!item.has(TAB) && !item.has(TAB_ACTIVE)) {
+						ArrayList<HashMap<String, String>> tabData = IjoomerGlobalConfiguration.getTabIcons(this, item.getString(ITEMVIEW));
+						if (tabData != null && tabData.size() > 0) {
+							item.put(TAB, tabData.get(0).get(TAB));
+							item.put(TAB_ACTIVE, tabData.get(0).get(TAB_ACTIVE));
+						}
 					}
 
 					LinearLayout lnrItem = (LinearLayout) inflater.inflate(R.layout.ijoomer_tab_item, null);
 					lnrItem.setId(i);
 					lnrItem.setTag(item);
-					((IjoomerTextView) lnrItem.getChildAt(1)).setText(item.getString("itemcaption"));
+					if (IjoomerApplicationConfiguration.tabbarWithoutCaption)
+						((IjoomerTextView) lnrItem.getChildAt(1)).setVisibility(View.GONE);
+					if (IjoomerApplicationConfiguration.tabbarWithoutImage)
+						((ImageView) lnrItem.getChildAt(0)).setVisibility(View.GONE);
+
+					((IjoomerTextView) lnrItem.getChildAt(1)).setText(item.getString(ITEMCAPTION));
+
+					String itemId = null;
+					String intentItemId = null;
+
+					try {
+						itemId = new JSONObject(item.getString(ITEMDATA)).toString();
+					} catch (Exception e) {
+						e.printStackTrace();
+						itemId = null;
+					}
+
+					try {
+						intentItemId = new JSONObject(getIntent().getStringExtra("IN_OBJ")).getString(ITEMDATA);
+					} catch (Exception e) {
+						e.printStackTrace();
+						intentItemId = null;
+					}
+
+					if (itemId == null && (intentItemId == null || intentItemId.length() <= 0)) {
+						itemId = item.getString(ITEMVIEW);
+						intentItemId = IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName()) == null ? IjoomerMenus.getInstance().getSelectedScreenName() : IjoomerScreenHolder.aliasScreens
+								.get(getClass().getSimpleName());
+					} else {
+
+						if (itemId == null) {
+							itemId = item.getString(ITEMVIEW);
+						}
+
+						if (intentItemId == null) {
+							intentItemId = IjoomerMenus.getInstance().getSelectedScreenName();
+						}
+					}
 
 					lnrItem.setOnClickListener(new OnClickListener() {
 
@@ -837,38 +839,42 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 							JSONObject obj = (JSONObject) v.getTag();
 
 							try {
-								final String className = IjoomerScreenHolder.originalScreens.get(obj.getString("itemview"));
-
-								if (!className.equals(IjoomerSuperMaster.this.getClass().getName())) {
-									launchActivity(obj);
-								}
+								launchActivity(obj);
 							} catch (Exception e) {
+								e.printStackTrace();
 							}
 						}
 					});
 					tabbar.addView(lnrItem, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-
-					String screenName = IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName());
-					if ((screenName != null && item.getString("itemview").equals(screenName))) {
-						IjoomerMenus.getInstance().setSelectedScreenName(item.getString("itemview"));
-						androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString("tab_active"), true, true, getDeviceWidth(), 0);
-					} else if (flag && (item.getString("itemview").equals(IjoomerMenus.getInstance().getSelectedScreenName()))) {
-						IjoomerMenus.getInstance().setSelectedScreenName(item.getString("itemview"));
-						androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString("tab_active"), true, true, getDeviceWidth(), 0);
-					} else {
-						androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString("tab"), true, true, getDeviceWidth(), 0);
+					try {
+						if (intentItemId.equals(itemId)) {
+							IjoomerMenus.getInstance().setSelectedScreenName(intentItemId);
+							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString(TAB_ACTIVE), true, true, getDeviceWidth(), 0);
+						} else if (flag && (intentItemId.equals(itemId))) {
+							IjoomerMenus.getInstance().setSelectedScreenName(intentItemId);
+							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString(TAB_ACTIVE), true, true, getDeviceWidth(), 0);
+						} else {
+							androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString(TAB), true, true, getDeviceWidth(), 0);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						androidQuery.id((ImageView) lnrItem.getChildAt(0)).image(item.getString(TAB), true, true, getDeviceWidth(), 0);
 					}
 
 				}
 
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 
+	/**
+	 * List adapter for side menu.
+	 * 
+	 * @return represented {@link SmartListAdapterWithHolder}
+	 */
 	private SmartListAdapterWithHolder getSideMenuListAdapter() {
 		SmartListAdapterWithHolder listAdapterWithHolder = new SmartListAdapterWithHolder(this, R.layout.ijoomer_sidemenu_listitem, listDataSideMenu, new ItemView() {
 
@@ -878,13 +884,20 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 				holder.txtMenuItemCaption = (IjoomerTextView) v.findViewById(R.id.txtMenuItemCaption);
 
 				final JSONObject obj = (JSONObject) item.getValues().get(0);
-				try {
-					holder.txtMenuItemCaption.setText(obj.getString("itemcaption"));
 
-					if (obj.has("icon")) {
-						androidQuery.id(holder.imgMenuItemicon).image(obj.getString("icon"), true, true, getDeviceWidth(), 0);
+				if (obj.has("logout")) {
+					holder.txtMenuItemCaption.setText(getString(R.string.logout));
+					holder.imgMenuItemicon.setImageResource(R.drawable.logout);
+				} else {
+					try {
+						holder.txtMenuItemCaption.setText(obj.getString(ITEMCAPTION));
+
+						if (obj.has(ICON)) {
+							androidQuery.id(holder.imgMenuItemicon).image(obj.getString(ICON), true, true, getDeviceWidth(), 0);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
 				}
 
 				return v;
@@ -899,21 +912,32 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return listAdapterWithHolder;
 	}
 
+	/**
+	 * This method used to prepare list for side menu.
+	 * 
+	 * @param data
+	 *            represented side menu list
+	 */
 	private void prepareList(ArrayList<HashMap<String, String>> data) {
 		listDataSideMenu.clear();
 		int size = data.size();
 		if (data != null && size > 0) {
-
 			for (int i = 0; i < size; i++) {
-
 				try {
-					JSONArray array = new JSONArray(data.get(i).get("menuitem"));
+					JSONArray array = new JSONArray(data.get(i).get(MENUITEM));
 					int len = array.length();
 					for (int j = 0; j < len; j++) {
 						JSONObject objItem = array.getJSONObject(j);
-						ArrayList<HashMap<String, String>> iconData = IjoomerGlobalConfiguration.getSideMenuIcon(this, objItem.getString("itemview"));
-						if (iconData != null && iconData.size() > 0) {
-							objItem.put("icon", iconData.get(0).get("icon"));
+
+						if (objItem.getString(ITEMVIEW).equals("Login") && (getSmartApplication().readSharedPreferences().getString(SP_LOGIN_REQ_OBJECT, null)) != null) {
+							objItem.put("logout", "logout");
+						}
+
+						if (!objItem.has(ICON)) {
+							ArrayList<HashMap<String, String>> iconData = IjoomerGlobalConfiguration.getSideMenuIcon(this, objItem.getString(ITEMVIEW));
+							if (iconData != null && iconData.size() > 0) {
+								objItem.put(ICON, iconData.get(0).get(ICON));
+							}
 						}
 						SmartListItem item = new SmartListItem();
 						item.setItemLayout(R.layout.ijoomer_sidemenu_listitem);
@@ -923,12 +947,15 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 						listDataSideMenu.add(item);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
-
 	}
 
+	/**
+	 * This method used to apply side menu.
+	 */
 	public void applySideMenu() {
 		try {
 			if (IjoomerGlobalConfiguration.hasSideMenu(this, IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName()))) {
@@ -944,30 +971,78 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 
 					@Override
 					public void onClick(View v) {
-						showSideMenu();
+						mMenuDrawer.toggleMenu(true);
 
 					}
 				});
+				showSideMenu();
 			} else {
-
 				if (!IjoomerScreenHolder.aliasScreens.containsKey(getClass().getSimpleName()) && IjoomerMenus.getInstance().getSideMenuData() != null) {
-
 					((LinearLayout) getHeaderView().findViewById(R.id.lnrSideMenu)).setVisibility(View.VISIBLE);
 					((ImageView) getHeaderView().findViewById(R.id.imgSideMenu)).setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
-							showSideMenu();
+							mMenuDrawer.toggleMenu(true);
 						}
 					});
+					showSideMenu();
 				} else {
 					((LinearLayout) getHeaderView().findViewById(R.id.lnrSideMenu)).setVisibility(View.GONE);
+					mMenuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_NONE);
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			mMenuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_NONE);
 		}
 	}
 
+	public void applySideMenu(String screenName) {
+		try {
+			if (IjoomerGlobalConfiguration.hasSideMenu(this, IjoomerScreenHolder.aliasScreens.get(screenName))) {
+				ArrayList<HashMap<String, String>> sideMenuData;
+				sideMenuData = IjoomerGlobalConfiguration.getSideMenu(this, IjoomerScreenHolder.aliasScreens.get(screenName));
+				if (sideMenuData == null || sideMenuData.size() <= 0) {
+					sideMenuData = IjoomerMenus.getInstance().getSideMenuData();
+				}
+
+				IjoomerMenus.getInstance().setSideMenuData(sideMenuData);
+				((LinearLayout) getHeaderView().findViewById(R.id.lnrSideMenu)).setVisibility(View.VISIBLE);
+				((ImageView) getHeaderView().findViewById(R.id.imgSideMenu)).setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						mMenuDrawer.toggleMenu(true);
+
+					}
+				});
+				showSideMenu();
+			} else {
+				if (!IjoomerScreenHolder.aliasScreens.containsKey(screenName) && IjoomerMenus.getInstance().getSideMenuData() != null) {
+					((LinearLayout) getHeaderView().findViewById(R.id.lnrSideMenu)).setVisibility(View.VISIBLE);
+					((ImageView) getHeaderView().findViewById(R.id.imgSideMenu)).setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							mMenuDrawer.toggleMenu(true);
+						}
+					});
+					showSideMenu();
+				} else {
+					((LinearLayout) getHeaderView().findViewById(R.id.lnrSideMenu)).setVisibility(View.GONE);
+					mMenuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_NONE);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			mMenuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_NONE);
+		}
+	}
+
+	/**
+	 * This method used to apply tab menu.
+	 */
 	public void applyTabMenu() {
 		try {
 			if (IjoomerGlobalConfiguration.hasTabBar(this, IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName()))) {
@@ -981,11 +1056,21 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
 
-	private void showMorePopup(ArrayList<Object> moreData, View v) {
+	/**
+	 * This method used to show more pop menu.
+	 * 
+	 * @param moreData
+	 *            represented {@link Object} list
+	 * @param v
+	 *            represented view
+	 */
+	@SuppressWarnings("deprecation")
+	public void showMorePopup(ArrayList<Object> moreData, View v) {
 
 		ArrayList<SmartListItem> listData = new ArrayList<SmartListItem>();
 		int size = moreData.size();
@@ -1011,9 +1096,9 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		popup.setAnimationStyle(R.style.animation);
 		popup.setContentView(layout);
 		popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-		popup.setWidth(getWindowManager().getDefaultDisplay().getWidth() / 2);
+		popup.setWidth(getDeviceWidth() / 2);
 		popup.setFocusable(true);
-		popup.setBackgroundDrawable(new BitmapDrawable());
+		popup.setBackgroundDrawable(new BitmapDrawable(getResources()));
 		popup.showAtLocation(layout, Gravity.RIGHT | Gravity.BOTTOM, 0, r.bottom);
 		if (popup.isShowing())
 
@@ -1025,21 +1110,26 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 					JSONObject obj = (JSONObject) listAdapter.getItem(arg2).getValues().get(0);
 
 					try {
-						final String className = IjoomerScreenHolder.originalScreens.get(obj.getString("itemview"));
-
-						if (!className.equals(IjoomerSuperMaster.this.getClass().getName())) {
-							launchActivity(obj);
-						} else {
-							popup.dismiss();
-						}
+						launchActivity(obj);
+						popup.dismiss();
 					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			});
 
 	}
 
-	private SmartListAdapterWithHolder getMoreMenuListAdapter(ArrayList<SmartListItem> moreListData) {
+	/**
+	 * List adapter more list
+	 * 
+	 * @param moreListData
+	 *            represented {@link SmartListItem} list
+	 * @return represented {@link SmartListAdapterWithHolder}
+	 */
+	@Override
+	public SmartListAdapterWithHolder getMoreMenuListAdapter(ArrayList<SmartListItem> moreListData) {
+
 		SmartListAdapterWithHolder listAdapterWithHolder = new SmartListAdapterWithHolder(this, R.layout.ijoomer_more_menu_listitem, moreListData, new ItemView() {
 
 			@Override
@@ -1048,16 +1138,47 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 				holder.txtMenuItemCaption = (IjoomerTextView) v.findViewById(R.id.txtMenuItemCaption);
 
 				final JSONObject obj = (JSONObject) item.getValues().get(0);
-				try {
-					holder.txtMenuItemCaption.setText(obj.getString("itemcaption"));
+				String itemId = null;
+				String intentItemId = null;
 
-					if (obj.getString("itemview").equals(IjoomerMenus.getInstance().getSelectedScreenName())) {
-						androidQuery.id(holder.imgMenuItemicon).image(obj.getString("tab_active"), true, true, getDeviceWidth(), 0);
+				try {
+					itemId = new JSONObject(obj.getString(ITEMDATA)).toString();
+				} catch (Exception e) {
+					e.printStackTrace();
+					itemId = null;
+				}
+
+				try {
+					intentItemId = new JSONObject(getIntent().getStringExtra("IN_OBJ")).getString(ITEMDATA);
+				} catch (Exception e) {
+					e.printStackTrace();
+					intentItemId = null;
+				}
+
+				try {
+					holder.txtMenuItemCaption.setText(obj.getString(ITEMCAPTION));
+					if (itemId == null && (intentItemId == null || intentItemId.length() <= 0)) {
+						itemId = obj.getString(ITEMVIEW);
+						intentItemId = IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName()) == null ? IjoomerMenus.getInstance().getSelectedScreenName()
+								: IjoomerScreenHolder.aliasScreens.get(getClass().getSimpleName());
 					} else {
-						androidQuery.id(holder.imgMenuItemicon).image(obj.getString("tab"), true, true, getDeviceWidth(), 0);
+
+						if (itemId == null) {
+							itemId = obj.getString(ITEMVIEW);
+						}
+
+						if (intentItemId == null) {
+							intentItemId = IjoomerMenus.getInstance().getSelectedScreenName();
+						}
 					}
 
+					if (itemId.equals(intentItemId)) {
+						androidQuery.id(holder.imgMenuItemicon).image(obj.getString(TAB_ACTIVE), true, true, getDeviceWidth(), 0);
+					} else {
+						androidQuery.id(holder.imgMenuItemicon).image(obj.getString(TAB), true, true, getDeviceWidth(), 0);
+					}
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
 				return v;
@@ -1072,41 +1193,26 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return listAdapterWithHolder;
 	}
 
+	/**
+	 * This method used to get slide menu difference.
+	 * 
+	 * @param varient
+	 *            represented variant
+	 * @return represented {@link Integer}
+	 */
 	public int getSlideDifference(int varient) {
 		Resources resources = getResources();
 		DisplayMetrics metrics = resources.getDisplayMetrics();
 		return ((metrics.densityDpi * varient) / 160);
 	}
 
-	@Override
-	public void onBackPressed() {
-		if (isSideMenuOpen) {
-			showSideMenu();
-		} else {
-			super.onBackPressed();
-		}
-	}
-
-	private class MyGesture extends SimpleOnGestureListener {
-
-		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
-
-			return true;
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-				return true;
-			}
-			return false;
-
-		}
-
-	}
-
+	/**
+	 * This method used to get privacy code from privacy.
+	 * 
+	 * @param privacy
+	 *            represented privacy name
+	 * @return represented {@link String}
+	 */
 	public String getPrivacyCode(String privacy) {
 
 		ArrayList<String> list = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.wall_post_type)));
@@ -1123,6 +1229,13 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return "0";
 	}
 
+	/**
+	 * This method used to get privacy from privacy code.
+	 * 
+	 * @param privacy
+	 *            represented privacy code
+	 * @return represented {@link String}
+	 */
 	public String getPrivacyString(String privacy) {
 
 		ArrayList<String> list = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.wall_post_type)));
@@ -1139,6 +1252,13 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return list.get(0);
 	}
 
+	/**
+	 * This method used to get privacy index from privacy name or code.
+	 * 
+	 * @param privacy
+	 *            represented privacy code or name
+	 * @return represented {@link Integer}
+	 */
 	public int getPrivacyIndex(String privacy) {
 
 		ArrayList<String> list = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.wall_post_type)));
@@ -1155,6 +1275,13 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return 0;
 	}
 
+	/**
+	 * This method used to get privacy from at index.
+	 * 
+	 * @param privacyAtIndex
+	 *            represented privacy index at
+	 * @return represented {@link String}
+	 */
 	public String getPrivacyStringAtIndex(int privacyAtIndex) {
 
 		ArrayList<String> list = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.wall_post_type)));
@@ -1162,6 +1289,13 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return list.get(privacyAtIndex);
 	}
 
+	/**
+	 * This method used to get privacy code from at index.
+	 * 
+	 * @param privacyAtIndex
+	 *            represented privacy index at
+	 * @return represented {@link String}
+	 */
 	public String getPrivacyCodeAtIndex(int privacyAtIndex) {
 
 		ArrayList<String> list = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.wall_post_type)));
@@ -1180,6 +1314,9 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		return "0";
 	}
 
+	/**
+	 * This method used to show UrlSettingDialog.
+	 */
 	public void showUrlSettingDialog() {
 		final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
 		dialog.setContentView(R.layout.ijoomer_urlsetting_dialog);
@@ -1192,31 +1329,6 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 
 		IjoomerButton btnYes = (IjoomerButton) dialog.findViewById(R.id.btnYes);
 		IjoomerButton btnNo = (IjoomerButton) dialog.findViewById(R.id.btnNo);
-
-		dialog.setOnDismissListener(new OnDismissListener() {
-
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				Intent intent = new Intent("clearStackActivity");
-				intent.setType("text/plain");
-				sendBroadcast(intent);
-				IjoomerWebService.cookies = null;
-				loadNew(IjoomerSplashActivity.class, IjoomerSuperMaster.this, true);
-
-			}
-		});
-		dialog.setOnCancelListener(new OnCancelListener() {
-
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				Intent intent = new Intent("clearStackActivity");
-				intent.setType("text/plain");
-				sendBroadcast(intent);
-				IjoomerWebService.cookies = null;
-				loadNew(IjoomerSplashActivity.class, IjoomerSuperMaster.this, true);
-
-			}
-		});
 
 		btnTestConnection.setOnClickListener(new OnClickListener() {
 
@@ -1261,18 +1373,18 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 										return true;
 									}
 								} catch (Throwable e) {
+									e.printStackTrace();
 									runOnUiThread(new Runnable() {
 										public void run() {
 											try {
 												progressBar.setProgress(100);
-												IjoomerUtilities.getCustomOkDialog("Test failure", "Unknown Host !", getString(R.string.ok), R.layout.ijoomer_ok_dialog,
-														new CustomAlertNeutral() {
+												IjoomerUtilities.getCustomOkDialog("Test failure", "Unknown Host !", getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
 
-															@Override
-															public void NeutralMathod() {
-																dialog.dismiss();
-															}
-														});
+													@Override
+													public void NeutralMethod() {
+													}
+												});
+
 											} catch (Exception e) {
 												e.printStackTrace();
 											}
@@ -1283,14 +1395,12 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 								runOnUiThread(new Runnable() {
 									public void run() {
 										progressBar.setProgress(100);
-										IjoomerUtilities.getCustomOkDialog("Test failure", "No Internet Connection!", getString(R.string.ok), R.layout.ijoomer_ok_dialog,
-												new CustomAlertNeutral() {
+										IjoomerUtilities.getCustomOkDialog("Test failure", "No Internet Connection!", getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
 
-													@Override
-													public void NeutralMathod() {
-														dialog.dismiss();
-													}
-												});
+											@Override
+											public void NeutralMethod() {
+											}
+										});
 
 									}
 								});
@@ -1315,34 +1425,36 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 										if (responseCode == 200) {
 											try {
 												String[] extentions = getStringArray(((JSONObject) data2).getString("extensions"));
-												String str = "Installd Components :\n";
+												String str = "Installed Components :\n";
 												int size = extentions.length;
-												for (int i = 0; i < size; i++) {
+												for (int i = 0; i < size - 1; i++) {
 													str += extentions[i] + " , ";
 												}
-												IjoomerUtilities.getCustomOkDialog("Test Successful", str, getString(R.string.ok), R.layout.ijoomer_ok_dialog,
-														new CustomAlertNeutral() {
+												str += extentions[size - 1];
+												IjoomerUtilities.getCustomOkDialog("Test Successful", str, getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
 
-															@Override
-															public void NeutralMathod() {
-																IjoomerApplicationConfiguration.setDomainName(domain);
-																dialog.dismiss();
-															}
-														});
+													@Override
+													public void NeutralMethod() {
+														IjoomerApplicationConfiguration.setDomainName(domain);
+														new IjoomerCaching(IjoomerSuperMaster.this).resetDataBase();
+														getSmartApplication().writeSharedPreferences(SP_ICON_PRELOADER, false);
+														goAhed();
+													}
+												});
 											} catch (Exception e) {
+												e.printStackTrace();
 											}
 										} else {
 											IjoomerUtilities
-													.getCustomOkDialog(
-															"Test failure",
-															"Sorry <b>Ijoomer Advance </b> not configure on your website, for more info visit :<br> <a href=\"http://www.ijoomer.com\"><b>www.ijoomer.com</b></a> !",
-															getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
+											.getCustomOkDialog(
+													"Test failure",
+													"Sorry <b>Ijoomer Advance </b> not configure on your website, for more info visit :<br> <a href=\"http://www.ijoomer.com\"><b>www.ijoomer.com</b></a> !",
+													getString(R.string.ok), R.layout.ijoomer_ok_dialog, new CustomAlertNeutral() {
 
-																@Override
-																public void NeutralMathod() {
-																	dialog.dismiss();
-																}
-															});
+														@Override
+														public void NeutralMethod() {
+														}
+													});
 										}
 									}
 								});
@@ -1357,13 +1469,13 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 			}
 		});
 
-		// edtDomain.setText(IjoomerApplicationConfiguration.getDomainName());
 		btnNo.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View paramView) {
-				dialog.dismiss();
+				dialog.cancel();
 				getSmartApplication().writeSharedPreferences(SP_URL_SETTING, true);
+				goAhed();
 			}
 		});
 		btnYes.setOnClickListener(new OnClickListener() {
@@ -1378,135 +1490,300 @@ public abstract class IjoomerSuperMaster extends SmartAndroidActivity implements
 		dialog.show();
 	}
 
+	/**
+	 * This method used to string array from string with (,) separated.
+	 * 
+	 * @param value
+	 *            represented value
+	 * @return represented {@link String} array
+	 */
 	public String[] getStringArray(final String value) {
 		try {
-			final JSONArray temp = new JSONArray(value);
-			int length = temp.length();
-			if (length > 0) {
-				final String[] recipients = new String[length];
-				for (int i = 0; i < length; i++) {
-					recipients[i] = temp.getString(i).equalsIgnoreCase("null") ? "1" : temp.getString(i);
+			if (value.length() > 0) {
+				final JSONArray temp = new JSONArray(value);
+				int length = temp.length();
+				if (length > 0) {
+					final String[] recipients = new String[length];
+					for (int i = 0; i < length; i++) {
+						recipients[i] = temp.getString(i).equalsIgnoreCase("null") ? "1" : temp.getString(i);
+					}
+					return recipients;
 				}
-				return recipients;
+			} else {
+				return null;
 			}
 		} catch (Exception e) {
-		}
-		return null;
-
-	}
-
-	public View getAdvertisement(String addId) {
-
-		if (addId != null && addId.trim().length() > 0) {
-			LinearLayout addLayout = new LinearLayout(this);
-			addLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-			AdView adView = new AdView(this, AdSize.SMART_BANNER, addId);
-			addLayout.addView(adView);
-			AdRequest req = new AdRequest();
-			req.addTestDevice(AdRequest.TEST_EMULATOR);
-			adView.loadAd(new AdRequest());
-			return addLayout;
-		} else {
+			e.printStackTrace();
 			return null;
 		}
-
+		return null;
 	}
 
+	/**
+	 * This method used to get advertisement.
+	 * 
+	 * @param addId
+	 *            represented add id
+	 * @return represented {@link View}
+	 */
+	// public View getAdvertisement(String addId) {
+	//
+	// if (addId != null && addId.trim().length() > 0) {
+	// LinearLayout addLayout = new LinearLayout(this);
+	// addLayout.setLayoutParams(new
+	// LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+	// LinearLayout.LayoutParams.WRAP_CONTENT));
+	// AdView adView = new AdView(this);
+	// adView.setAdUnitId(addId);
+	// adView.setAdSize(AdSize.BANNER);
+	// addLayout.addView(adView);
+	// AdRequest.Builder builder = new AdRequest.Builder();
+	// builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+	// adView.loadAd(builder.build());
+	// return addLayout;
+	// } else {
+	// return null;
+	// }
+	//
+	// }
+
+	/**
+	 * This method used to launch activity.
+	 * 
+	 * @param obj
+	 *            represented json object predefined activity
+	 */
 	public void launchActivity(JSONObject obj) {
 		try {
 
-			setScreenCaption(obj.getString("itemcaption"));
-			final String className = IjoomerScreenHolder.originalScreens.get(obj.getString("itemview"));
+			setScreenCaption(obj.getString(ITEMCAPTION));
+			final String className = IjoomerScreenHolder.originalScreens.get(obj.getString(ITEMVIEW));
 
 			IjoomerMenus.getInstance().setTabBarData(null);
 			IjoomerMenus.getInstance().setSideMenuData(null);
 
 			final Intent intent = new Intent();
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			if (!(this.getClass().getName().equalsIgnoreCase(className)))
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.setClassName(IjoomerSuperMaster.this, className);
 			intent.putExtra("IN_USERID", "0");
-			if (obj.getString("itemview").equals("Registration")) {
+			if (obj.getString(ITEMVIEW).equals("Login") && (getSmartApplication().readSharedPreferences().getString(SP_LOGIN_REQ_OBJECT, "")).length() > 0) {
 				logout();
-			} else if (obj.getString("itemview").equals("IcmsSingleArticle")) {
-				HashMap<String, String> value = new HashMap<String, String>();
-				try {
-					value.put("articleid", new JSONObject(obj.getString("itemdata")).getString("id") + "");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+				return;
+			} else if (obj.getString(ITEMVIEW).equals("Registration")) {
+				logout();
+				return;
+			}
+
+			else if (obj.getString(ITEMVIEW).equals("Web")) {
 				try {
 					intent.setClassName(IjoomerSuperMaster.this, className);
-					intent.putExtra("IN_ARTICLE_ID", value.get("articleid"));
+					intent.putExtra("url", new JSONObject(obj.getString(ITEMDATA)).getString("url") + "");
 					startActivity(intent);
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
-
-			} else if (obj.getString("itemview").equals("IcmsAllCategory")) {
-				HashMap<String, String> value = new HashMap<String, String>();
-				try {
-					value.put("title", getString(R.string.categorylist));
-					value.put("categoryid", new JSONObject(obj.getString("itemdata")).getString("id") + "");
-				} catch (JSONException e) {
-					value.put("categoryid", "0");
-					e.printStackTrace();
-				}
-
-				try {
-					intent.setClassName(IjoomerSuperMaster.this, className);
-					intent.putExtra("IN_PARENTCATEGORY", value);
-					startActivity(intent);
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
-			} else if (obj.getString("itemview").equals("IcmsSingleCategory")) {
-				HashMap<String, String> value = new HashMap<String, String>();
-				try {
-					value.put("title", getString(R.string.singlecategory));
-					value.put("categoryid", new JSONObject(obj.getString("itemdata")).getString("id") + "");
-				} catch (JSONException e) {
-					value.put("categoryid", "0");
-					e.printStackTrace();
-				}
-
-				try {
-
-					intent.setClassName(IjoomerSuperMaster.this, className);
-					intent.putExtra("IN_PARENTCATEGORY", value);
-					startActivity(intent);
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
-			} else if (obj.getString("itemview").equals("IcmsCategoryBlog")) {
-				HashMap<String, String> value = new HashMap<String, String>();
-				try {
-					value.put("categoryblogid", new JSONObject(obj.getString("itemdata")).getString("id") + "");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				try {
-					intent.setClassName(IjoomerSuperMaster.this, className);
-					intent.putExtra("IN_CATEGORYBLOG_ID", value.get("categoryblogid"));
-					startActivity(intent);
-				} catch (Throwable e) {
-					e.printStackTrace();
-				}
-
-			} else if (obj.getString("itemview").equals("Web")) {
-				try {
-					intent.setClassName(IjoomerSuperMaster.this, className);
-					intent.putExtra("url", new JSONObject(obj.getString("itemdata")).getString("url") + "");
-					startActivity(intent);
+					return;
 				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			intent.putExtra("IN_OBJ", obj.toString());
+			startActivity(intent);
+			if ((!(this instanceof IjoomerHomeActivity)) && (!(this instanceof IjoomerMenuActivity))) {
+				finish();
+			}
+		} catch (Exception e) {
+			tong(getString(R.string.sdk_error));
+			e.printStackTrace();
+		}
+	}
 
+	/**
+	 * This method used to restart app splash activity and clear all activity
+	 * from task.
+	 */
+	private void goAhed() {
+		Intent intent = new Intent("clearStackActivity");
+		intent.setType("text/plain");
+		sendBroadcast(intent);
+		IjoomerWebService.cookies = null;
+		loadNew(IjoomerSplashActivity.class, IjoomerSuperMaster.this, true);
+	}
+
+	/**
+	 * This method used to enable GCM.
+	 */
+	public void enableGCM() {
+
+		try {
+			if (checkPlayServices()) {
+				gcm = GoogleCloudMessaging.getInstance(this);
+				String regid = getRegistrationId();
+
+				if (regid.isEmpty()) {
+					registerInBackground();
 				}
 			} else {
-				intent.setClassName(IjoomerSuperMaster.this, className);
-				startActivity(intent);
+				Log.i("GCM", "No valid Google Play Services APK found.");
 			}
-			finish();
+
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String getRegistrationId() {
+
+		String registrationId = getSmartApplication().readSharedPreferences().getString(SP_GCM_REGID, "");
+		if (registrationId.isEmpty()) {
+			return "";
+		}
+		// Check if app was updated; if so, it must clear the registration ID
+		// since the existing regID is not guaranteed to work with the new
+		// app version.
+		int registeredVersion = getSmartApplication().readSharedPreferences().getInt(SP_GCM_REGID, Integer.MIN_VALUE);
+		int currentVersion = getAppVersion();
+		if (registeredVersion != currentVersion) {
+			return "";
+		}
+		return registrationId;
+	}
+
+	private int getAppVersion() {
+		try {
+			PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			return packageInfo.versionCode;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return 0;
+	}
+
+	private boolean checkPlayServices() {
+		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+		if (resultCode != ConnectionResult.SUCCESS) {
+			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+				if (!getSmartApplication().readSharedPreferences().getBoolean(SP_GCM_ERROR_DIALOG, false)) {
+					GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+					getSmartApplication().writeSharedPreferences(SP_GCM_ERROR_DIALOG, true);
+				}
+			} else {
+				Log.i("GCM", "This device is not supported.");
+				finish();
+			}
+			return false;
+		}
+		return true;
+	}
+
+	private void registerInBackground() {
+		new AsyncTask<Void, Void, Void>() {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+
+				try {
+					if (gcm == null) {
+						gcm = GoogleCloudMessaging.getInstance(IjoomerSuperMaster.this);
+					}
+					String regid = gcm.register(IjoomerApplicationConfiguration.getGCMProjectId());
+
+					storeRegistrationId(regid);
+				} catch (Exception ex) {
+
+				}
+				return null;
+			}
+		}.execute();
+	}
+
+	private void storeRegistrationId(String regId) {
+		int appVersion = getAppVersion();
+		getSmartApplication().writeSharedPreferences(SP_GCM_REGID, regId);
+		getSmartApplication().writeSharedPreferences(SP_GCM_APP_VERSION, appVersion);
+
+	}
+
+	/**
+	 * This method used to add fragment to given layout id.
+	 * 
+	 * @param layoutId
+	 *            represented layout id
+	 * @param fragment
+	 *            represented fragment
+	 */
+	public void addFragment(int layoutId, Fragment fragment) {
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.replace(layoutId, fragment);
+		ft.commit();
+	}
+
+	@Override
+	public void initTheme() {
+	}
+
+	public Uri getVideoPlayURI(String videoUrl) {
+
+		String video_id = "";
+		if (videoUrl != null && videoUrl.trim().length() > 0) {
+			System.out.println("VIDEOURL"+videoUrl);
+			//String expression = "(?:http|https|)(?::\\/\\/|)(?:www.|)(?:youtu\\.be\\/|youtube\\.com(?:\\/embed\\/|\\/v\\/|\\/watch\\?v=|\\/ytscreeningroom\\?v=|\\/feeds\\/api\\/videos\\/|\\/user\\S*[^\\w\\-\\s]|\\S*[^\\w\\-\\s]))([\\w\\-]{11})[a-z0-9;:@?&%=+\\/\\$_.-]*";
+			String expression = "(?:http|https|)(?::\\/\\/|)(?:www.|m.)(?:youtu\\.be\\/|youtube\\.com(?:\\/embed\\/|\\/v\\/|\\/watch\\?v=|\\/ytscreeningroom\\?v=|\\/feeds\\/api\\/videos\\/|\\/user\\S*[^\\w\\-\\s]|\\S*[^\\w\\-\\s]))([\\w\\-]{11})[a-z0-9;:@?&%=+\\/\\$_.-]*";
+			CharSequence input = videoUrl;
+			Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+			Matcher matcher = pattern.matcher(input);
+			if (matcher.matches()) {
+				System.out.println("DATA"+matcher.group(1));
+				String groupIndex1 = matcher.group(1);
+				if (groupIndex1 != null && groupIndex1.length() == 11)
+					video_id = groupIndex1;
+			}
+		}
+
+		System.out.println("VIDEOID"+video_id);
+		if (video_id.trim().length() > 0) {
+			return Uri.parse("ytv://" + video_id);
+		} else {
+			return Uri.parse("mp4://" + videoUrl);
+		}
+	}
+
+	@SuppressWarnings("resource")
+	public void exportDatabse(String databaseName) {
+		try {
+			File sd = Environment.getExternalStorageDirectory();
+			File data = Environment.getDataDirectory();
+
+			if (sd.canWrite()) {
+				String currentDBPath = "//data//" + getPackageName() + "//databases//" + databaseName + "";
+				String backupDBPath = "backupname.db";
+				File currentDB = new File(data, currentDBPath);
+				File backupDB = new File(sd, backupDBPath);
+
+				if (currentDB.exists()) {
+					FileChannel src = new FileInputStream(currentDB).getChannel();
+					FileChannel dst = new FileOutputStream(backupDB).getChannel();
+					dst.transferFrom(src, 0, src.size());
+					src.close();
+					dst.close();
+				}
+			}
+		} catch (Exception e) {
+
+		}
+	}
+
+	/**
+	 * This method used to goto user profile.
+	 * 
+	 * @param userID
+	 *            represented user id
+	 */
+	public void gotoProfile(final String userID) {	
+		try {
+			loadNew(JomProfileActivity.class, this, false, "IN_USERID", userID);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
 	}
 }

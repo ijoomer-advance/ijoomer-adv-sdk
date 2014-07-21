@@ -1,122 +1,94 @@
 package com.ijoomer.common.classes;
 
-import android.app.Activity;
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 
 import com.ijoomer.custom.interfaces.IjoomerKeys;
+import com.ijoomer.custom.interfaces.IjoomerSharedPreferences;
+import com.smart.framework.SmartActivity;
+import com.smart.framework.SmartApplication;
 
-public class IjoomerRequestDataProvider implements IjoomerKeys {
+/**
+ * This Class Contains All Method Related To IjoomerRequestDataProvider.
+ * 
+ * @author tasol
+ * 
+ */
+public class IjoomerRequestDataProvider implements IjoomerKeys,
+		IjoomerSharedPreferences {
 
-	public static LocationManager mlocManager;
-	private static String longitude;
-	private static String latitude;
-	public static IjoomerLocationManager mLIjoomerLocationManager;
+	private String longitude;
+	private String latitude;
 
-	public String getLatitude() {
-		if (latitude != null) {
-			return latitude;
-		}
-		Location loc = mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (loc == null) {
-			loc = mlocManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			if (loc != null) {
-				return "" + loc.getLatitude();
-			}
-		} else {
-			return "" + loc.getLatitude();
-		}
-		return "0";
-	}
-
-	public void setLatitude(String latitide) {
-		IjoomerRequestDataProvider.latitude = latitide;
-	}
-
-	public String getLongitude() {
-		if (longitude != null) {
-			return longitude;
-		}
-		Location loc = mlocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (loc == null) {
-			loc = mlocManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			if (loc != null) {
-				return "" + loc.getLongitude();
-			}
-		} else {
-			return "" + loc.getLongitude();
-		}
-		return "0";
-	}
-
-	public void setLongitude(String longitude) {
-		IjoomerRequestDataProvider.longitude = longitude;
-	}
-
+	/**
+	 * Constructor
+	 * 
+	 * @param mContext
+	 */
 	public IjoomerRequestDataProvider(Context mContext) {
-
-		if (mlocManager == null) {
-			try {
-				mlocManager = (LocationManager) mContext.getSystemService(Activity.LOCATION_SERVICE);
-				mLIjoomerLocationManager = new IjoomerLocationManager();
-				((Activity) mContext).runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						try {
-
-							mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLIjoomerLocationManager);
-						} catch (Throwable e) {
-							e.printStackTrace();
-						}
-						try {
-							mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLIjoomerLocationManager);
-						} catch (Throwable e) {
-							e.printStackTrace();
-						}
-
-					}
-				});
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
+		try {
+			setLatitude(((SmartActivity) mContext).getLatitude());
+			setLongitude(((SmartActivity) mContext).getLongitude());
+		} catch (Throwable e) {
+			setLatitude("0");
+			setLongitude("0");
 		}
-
 	}
 
+	/**
+	 * This method used to get latitude of login user.
+	 * 
+	 * @return represented {@link String}
+	 */
+	public String getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * This method used to set Latitude of login user.
+	 * 
+	 * @param latitide
+	 *            represented latitude
+	 */
+	public void setLatitude(String latitide) {
+		this.latitude = latitide;
+	}
+
+	/**
+	 * This method used to get longitude of login user.
+	 * 
+	 * @return represented {@link String}
+	 */
+	public String getLongitude() {
+		return longitude;
+	}
+
+	/**
+	 * This method used to set longitude of login user.
+	 * 
+	 * @param latitide
+	 *            represented longitude
+	 */
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	/**
+	 * This method use to get Device UDID.
+	 * 
+	 * @param mContext
+	 *            represented {@link Context}
+	 * @return represented {@link String}
+	 */
 	public String getDeviceUDID(Context mContext) {
-		TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		String udid = SmartApplication.REF_SMART_APPLICATION
+				.readSharedPreferences().getString(SP_GCM_REGID, "");
+		if (udid.length() > 0) {
+			return udid;
+		}
+		TelephonyManager telephonyManager = (TelephonyManager) mContext
+				.getSystemService(Context.TELEPHONY_SERVICE);
 		return telephonyManager.getDeviceId();
 	}
 
-	private class IjoomerLocationManager implements LocationListener {
-
-		@Override
-		public void onLocationChanged(Location location) {
-			setLatitude("" + location.getLatitude());
-			setLongitude("" + location.getLongitude());
-			System.out.println("Latitude : " + location.getLatitude());
-			mlocManager.removeUpdates(mLIjoomerLocationManager);
-		}
-
-		@Override
-		public void onProviderDisabled(String provider) {
-
-		}
-
-		@Override
-		public void onProviderEnabled(String provider) {
-
-		}
-
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-
-		}
-
-	}
 }

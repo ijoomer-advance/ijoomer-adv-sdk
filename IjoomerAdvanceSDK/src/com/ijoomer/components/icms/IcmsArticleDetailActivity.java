@@ -1,7 +1,8 @@
 package com.ijoomer.components.icms;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import org.json.JSONObject;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +12,9 @@ import android.widget.TextView;
 
 import com.ijoomer.src.R;
 
+
 /**
- * Activity class for IcmsArticleDetail view
+ * This Class Contains All Method Related To IcmsArticleDetailActivity.
  * 
  * @author tasol
  * 
@@ -21,11 +23,12 @@ public class IcmsArticleDetailActivity extends IcmsMasterActivity {
 
 	private ViewPager viewPager;
 
-	ArrayList<String> IN_ARTICLE_ID_ARRAY;
+	private ArrayList<String> IN_ARTICLE_ID_ARRAY;
 	private ArticleDetailAdapter adapter;
 
-	String IN_ARTICLE_TITLE, IN_ARTICLE_ID;
-	int IN_ARTICLE_INDEX;
+	private String IN_ARTICLE_ID;
+	private int IN_ARTICLE_INDEX;
+	private JSONObject IN_OBJ;
 
 	/**
 	 * Overrides method
@@ -57,12 +60,21 @@ public class IcmsArticleDetailActivity extends IcmsMasterActivity {
 
 	}
 
+	/**
+	 * Class methods
+	 */
+
+	/**
+	 * This method used to get intent data.
+	 */
 	private void getIntentData() {
 		try {
-			IN_ARTICLE_ID = getIntent().getStringExtra("IN_ARTICLE_ID");
+			IN_OBJ = new JSONObject(getIntent().getStringExtra("IN_OBJ"));
+			IN_ARTICLE_ID = new JSONObject(IN_OBJ.getString(ITEMDATA)).getString("id");
 		} catch (Exception e) {
 
 		}
+		
 		if (IN_ARTICLE_ID == null) {
 			try {
 				IN_ARTICLE_INDEX = Integer.parseInt(getIntent().getStringExtra("IN_ARTICLE_INDEX"));
@@ -78,7 +90,7 @@ public class IcmsArticleDetailActivity extends IcmsMasterActivity {
 	}
 
 	/**
-	 * Custom class Adapter
+	 * Inner class
 	 */
 	private class ArticleDetailAdapter extends FragmentStatePagerAdapter {
 
@@ -98,7 +110,10 @@ public class IcmsArticleDetailActivity extends IcmsMasterActivity {
 
 		@Override
 		public int getCount() {
-			return IN_ARTICLE_ID_ARRAY.size();
+			if (IN_ARTICLE_ID_ARRAY != null)
+				return IN_ARTICLE_ID_ARRAY.size();
+			else
+				return 0;
 		}
 	}
 

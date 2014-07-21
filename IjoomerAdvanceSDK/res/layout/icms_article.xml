@@ -1,57 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?background"
+    style="?icms_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!-- <LinearLayout -->
-    <!-- android:id="@+id/icmsLnrSearch" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_margin="10dp" -->
-    <!-- android:visibility="gone" > -->
-
-
-    <!-- <com.ijoomer.customviews.IjoomerEditText -->
-    <!-- android:id="@+id/icmsEditSearch" -->
-    <!-- style="?textview_h3" -->
-    <!-- android:layout_width="0dp" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_gravity="center_vertical" -->
-    <!-- android:layout_marginLeft="5dp" -->
-    <!-- android:layout_weight="1" -->
-    <!-- android:background="@drawable/jom_friend_member_search" -->
-    <!-- android:hint="@string/search_articles" -->
-    <!-- android:singleLine="true" /> -->
-
-
-    <!-- <ImageView -->
-    <!-- android:id="@+id/icmsImgSearch" -->
-    <!-- android:layout_width="wrap_content" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_gravity="center_vertical" -->
-    <!-- android:adjustViewBounds="true" -->
-    <!-- android:padding="2dp" -->
-    <!-- android:scaleType="fitXY" -->
-    <!-- android:src="@drawable/jom_search_icon" /> -->
-    <!-- </LinearLayout> -->
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:src="@drawable/icms_article_title_bar_top" />
-
-    <ListView
-        android:id="@+id/icmsListArticle"
+    <LinearLayout
+        android:id="@+id/lnrFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@android:color/transparent"
-        android:cacheColorHint="@null"
-        android:divider="@drawable/icms_articlelist_separator_line"
-        android:smoothScrollbar="true" >
-    </ListView>
+        android:layout_height="match_parent" >
+    </LinearLayout>
 
 </LinearLayout>

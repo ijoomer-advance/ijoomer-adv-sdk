@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?background"
     android:orientation="vertical" >
 
     <ScrollView
@@ -120,7 +120,31 @@
                     style="?spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lnrTermsNCondition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:visibility="gone" >
+
+                    <com.ijoomer.customviews.IjoomerCheckBox
+                        android:id="@+id/chkTermsNCondition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/checkbox_selector" />
+
+                    <com.ijoomer.customviews.IjoomerTextView
+                        android:id="@+id/txtTermsNCondition"
+                        style="?textview_h2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="3dp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

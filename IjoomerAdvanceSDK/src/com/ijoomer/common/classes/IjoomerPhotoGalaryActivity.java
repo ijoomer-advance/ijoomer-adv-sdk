@@ -18,45 +18,47 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
 import com.ijoomer.customviews.IjoomerButton;
 import com.ijoomer.customviews.IjoomerCheckBox;
 import com.ijoomer.src.R;
 
+/**
+ * This Class Contains All Method Related To IjoomerPhotoGalaryActivity.
+ * 
+ * @author tasol
+ * 
+ */
 public class IjoomerPhotoGalaryActivity extends Activity {
 
-	private int count;
-	// private Bitmap[] thumbnails;
-	private boolean[] thumbnailsselection;
-	private String[] arrPath;
 	private ImageAdapter imageAdapter;
-	private AQuery aQuery;
-	private int ids[];
 
-	/** Called when the activity is first created. */
+	private String[] arrPath;
+	private boolean[] thumbnailsselection;
+	private int ids[];
+	private int count;
+
+	
+	/**
+	 * Overrides methods
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ijoomer_photo_gallery);
 
-		aQuery = new AQuery(this);
 		final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
 		final String orderBy = MediaStore.Images.Media._ID;
+		@SuppressWarnings("deprecation")
 		Cursor imagecursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
 		int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
 		this.count = imagecursor.getCount();
-		// this.thumbnails = new Bitmap[this.count];
 		this.arrPath = new String[this.count];
 		ids = new int[count];
 		this.thumbnailsselection = new boolean[this.count];
 		for (int i = 0; i < this.count; i++) {
 			imagecursor.moveToPosition(i);
 			ids[i] = imagecursor.getInt(image_column_index);
-			// int id = imagecursor.getInt(image_column_index);
 			int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
-			// thumbnails[i] =
-			// MediaStore.Images.Thumbnails.getThumbnail(getApplicationContext().getContentResolver(),
-			// id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
 			arrPath[i] = imagecursor.getString(dataColumnIndex);
 		}
 		GridView imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
@@ -80,13 +82,7 @@ public class IjoomerPhotoGalaryActivity extends Activity {
 				if (cnt == 0) {
 					Toast.makeText(getApplicationContext(), "Please select at least one image", Toast.LENGTH_LONG).show();
 				} else {
-					// for (int i = 0; i < count; i++) {
-					// thumbnails[i] = null;
-					// }
-					// thumbnails = null;
-					// Toast.makeText(getApplicationContext(),
-					// "You've selected Total " + cnt + " image(s).",
-					// Toast.LENGTH_LONG).show();
+
 					Log.d("SelectedImages", selectImages);
 					Intent i = new Intent();
 					i.putExtra("data", selectImages);
@@ -96,7 +92,47 @@ public class IjoomerPhotoGalaryActivity extends Activity {
 			}
 		});
 	}
+	@Override
+	public void onBackPressed() {
+		setResult(Activity.RESULT_CANCELED);
+		super.onBackPressed();
 
+	}
+	
+	/**
+	 * Class method
+	 */
+	
+	/**
+	 * This method used to set bitmap.
+	 * @param iv represented ImageView 
+	 * @param id represented id
+	 */
+	
+	private void setBitmap(final ImageView iv, final int id) {
+
+		new AsyncTask<Void, Void, Bitmap>() {
+
+			@Override
+			protected Bitmap doInBackground(Void... params) {
+
+				return MediaStore.Images.Thumbnails.getThumbnail(getApplicationContext().getContentResolver(), id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
+			}
+
+			@Override
+			protected void onPostExecute(Bitmap result) {
+				super.onPostExecute(result);
+				iv.setImageBitmap(result);
+			}
+		}.execute();
+	}
+
+	
+	/**
+	 * List adapter
+	 * @author tasol
+	 */
+	
 	public class ImageAdapter extends BaseAdapter {
 		private LayoutInflater mInflater;
 
@@ -159,8 +195,6 @@ public class IjoomerPhotoGalaryActivity extends Activity {
 			});
 			try {
 				setBitmap(holder.imageview, ids[position]);
-//				holder.imageview.setImageBitmap(MediaStore.Images.Thumbnails.getThumbnail(getApplicationContext().getContentResolver(), ids[position],
-//						MediaStore.Images.Thumbnails.MICRO_KIND, null));
 			} catch (Throwable e) {
 			}
 			holder.IjoomerCheckBox.setChecked(thumbnailsselection[position]);
@@ -169,34 +203,15 @@ public class IjoomerPhotoGalaryActivity extends Activity {
 		}
 	}
 
+	
+	/**
+	 * Inner class
+	 * @author tasol
+	 */
 	class ViewHolder {
 		ImageView imageview;
 		IjoomerCheckBox IjoomerCheckBox;
 		int id;
 	}
 
-	@Override
-	public void onBackPressed() {
-		setResult(Activity.RESULT_CANCELED);
-		super.onBackPressed();
-
-	}
-
-	private void setBitmap(final ImageView iv, final int id) {
-
-		new AsyncTask<Void, Void, Bitmap>() {
-
-			@Override
-			protected Bitmap doInBackground(Void... params) {
-
-				return MediaStore.Images.Thumbnails.getThumbnail(getApplicationContext().getContentResolver(), id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
-			}
-
-			@Override
-			protected void onPostExecute(Bitmap result) {
-				super.onPostExecute(result);
-				iv.setImageBitmap(result);
-			}
-		}.execute();
-	}
 }

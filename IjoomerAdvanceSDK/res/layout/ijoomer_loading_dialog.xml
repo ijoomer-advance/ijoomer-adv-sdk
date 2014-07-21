@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ijoomer.src"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
@@ -28,7 +29,8 @@
 
                 <com.ijoomer.customviews.IjoomerGifView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:gif_image="@drawable/ijoomer_loading_gif" />
 
                 <com.ijoomer.customviews.IjoomerTextView
                     android:id="@+id/txtTitle"

@@ -7,10 +7,19 @@ import com.smart.framework.SmartApplication;
 import com.smart.framework.SmartApplicationConfiguration;
 import com.smart.framework.SmartVersionHandler;
 
+/**
+ * This Class Contains All Method Related To ApplicationConfiguration.
+ * 
+ * @author tasol
+ * NOTE : currently this class not used,future development
+ */
 public class ApplicationConfiguration implements SmartApplicationConfiguration, SmartVersionHandler {
 
 	private String appName = "";
 
+	/**
+	 * Overrides methods
+	 */
 	@Override
 	public String AppName(SmartApplication smartApplication) {
 		appName = smartApplication.getResources().getString(R.string.app_name);
@@ -24,7 +33,7 @@ public class ApplicationConfiguration implements SmartApplicationConfiguration, 
 
 	@Override
 	public boolean IsCrashHandlerEnabled() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -39,8 +48,7 @@ public class ApplicationConfiguration implements SmartApplicationConfiguration, 
 
 	@Override
 	public String SecurityKey() {
-		// return "1001e01d524213588a7b4d0579cdf";
-		return "ac2e2b5a414f6f9a059706e13ddc41b";
+		 return "901f15a565f8eac8265bacede4b1c17";
 
 	}
 

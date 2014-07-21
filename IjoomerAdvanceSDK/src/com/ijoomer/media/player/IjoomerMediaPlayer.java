@@ -281,7 +281,7 @@ public class IjoomerMediaPlayer extends Activity {
 		lLinLayout.setGravity(Gravity.CENTER);
 		lLinLayout.setBackgroundColor(Color.BLACK);
 
-		LayoutParams lLinLayoutParms = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+		LayoutParams lLinLayoutParms = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		lLinLayout.setLayoutParams(lLinLayoutParms);
 
 		this.setContentView(lLinLayout);
@@ -290,8 +290,8 @@ public class IjoomerMediaPlayer extends Activity {
 		lRelLayout.setId(2);
 		lRelLayout.setGravity(Gravity.CENTER);
 		lRelLayout.setBackgroundColor(Color.BLACK);
-		android.widget.RelativeLayout.LayoutParams lRelLayoutParms = new android.widget.RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-				ViewGroup.LayoutParams.FILL_PARENT);
+		android.widget.RelativeLayout.LayoutParams lRelLayoutParms = new android.widget.RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.MATCH_PARENT);
 		lRelLayout.setLayoutParams(lRelLayoutParms);
 		lLinLayout.addView(lRelLayout);
 
@@ -476,7 +476,6 @@ public class IjoomerMediaPlayer extends Activity {
 				if (isCancelled())
 					return;
 
-				// TODO: add listeners for finish of video
 				mVideoView.setOnCompletionListener(new OnCompletionListener() {
 
 					public void onCompletion(MediaPlayer pMp) {
