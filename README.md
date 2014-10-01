@@ -1,6 +1,5 @@
-ijoomer-adv-joomla/master
----------
-<h1>Welcome to IjoomerAdvance SDK </h1>
+Welcome to IjoomerAdvance SDK
+=====
 
 iJoomer Advance is an SDK which can be integrated into an existing project as well as be used as a stand-alone project. This SDK can be used as a CMS (Joomla CMS) as well as a Social Network (JomSocial component of Joomla). 
 
