@@ -48,19 +48,6 @@ public abstract class IjoomerLoginMaster extends IjoomerSuperMaster {
 
 	public IjoomerLoginMaster() {
 		super();
-		setOptionMenu(R.menu.ijoomer_setting);
-	}
-
-	
-	/**
-	 * Overrides method
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.ic_menu_setting) {
-			showUrlSettingDialog();
-		}
-		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override

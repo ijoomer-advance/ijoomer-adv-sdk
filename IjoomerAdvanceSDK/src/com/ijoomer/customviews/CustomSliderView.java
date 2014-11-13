@@ -376,8 +376,6 @@ public class CustomSliderView extends FrameLayout implements OnTouchListener {
 	 		
 		    private class EventData{
 		    	public float x;
-		    	public float y;
-				public float pressure;
 		    }
 	    
 		    public class DefaultValues {
@@ -401,8 +399,6 @@ public class CustomSliderView extends FrameLayout implements OnTouchListener {
 	    	 	mTouchXPositionAfterResized = event.getX();
 	    	 	eventData = new EventData();
 	    		eventData.x = event.getX(pointerIndex);
-	    		eventData.y = event.getY(pointerIndex);
-	    		eventData.pressure = event.getPressure(pointerIndex) * pressureAmplification;
 	    		eventDataMap.put(new Integer(pointerId), eventData);
 	    		
 	    	 	return true;
@@ -414,8 +410,6 @@ public class CustomSliderView extends FrameLayout implements OnTouchListener {
 		    	 	isMultiTouch = true;
 		    	 	eventData = new EventData();
 		    		eventData.x = event.getX(pointerIndex);
-		    		eventData.y = event.getY(pointerIndex);
-		    		eventData.pressure = event.getPressure(pointerIndex) * pressureAmplification;
 		    		eventDataMap.put(new Integer(pointerId), eventData);
 		    		return true;
 		    	case MotionEvent.ACTION_MOVE:
@@ -427,9 +421,6 @@ public class CustomSliderView extends FrameLayout implements OnTouchListener {
 			    		{
 			        		EventData moveEventData = eventDataMap.get(new Integer(curPointerId));
 			        		moveEventData.x = event.getX(i);
-			        		moveEventData.y = event.getY(i);
-			        		moveEventData.pressure = event.getPressure(i) * pressureAmplification;
-			        		
 			        		try{
 				        		float calculateDistance = downX < event.getX() ?  event.getX() - downX : downX - event.getX();
 				        		if((int)(calculateDistance) > MIN_DISTANCE ){
@@ -449,8 +440,6 @@ public class CustomSliderView extends FrameLayout implements OnTouchListener {
 						}
 		    		eventData = new EventData();
 		    		eventData.x = event.getX(pointerIndex);
-		    		eventData.y = event.getY(pointerIndex);
-		    		eventData.pressure = event.getPressure(pointerIndex) * pressureAmplification;
 		    	
 		    		eventDataMap.put(new Integer(pointerId), eventData);
 		    		 mTouchXPosition=event.getX();

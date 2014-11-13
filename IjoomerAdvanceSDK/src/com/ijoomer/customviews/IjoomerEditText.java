@@ -5,7 +5,6 @@ import java.util.Map;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.KeyListener;
@@ -111,11 +110,6 @@ public class IjoomerEditText extends EditText implements KeyListener {
 			}
 		}
 		return builder;
-	}
-
-	@Override
-	public int getInputType() {
-		return InputType.TYPE_CLASS_TEXT;
 	}
 
 	@Override

@@ -91,8 +91,6 @@ public class JomMessageDetailsActivity extends JomMasterActivity implements JomT
 
     @Override
     public void setActionListeners() {
-
-
         voiceMessager.setMessageHandler(new MessageHandler() {
 
             @Override

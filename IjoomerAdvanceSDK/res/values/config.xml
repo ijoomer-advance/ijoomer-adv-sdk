@@ -3,7 +3,6 @@
 
     <string name="facebook_app_id">431844313570473</string>
     <string name="domain_name">http://www.ijoomer.com/ijoomeradv/</string>
-    <!-- <string name="domain_name">http://matiz.websitewelcome.com/~tasolglo/dev/jo3.3_js3.2/</string> -->
     <string name="twitter_consumer_key">ACGuGZRQI4rASvX4uHgDw</string>
     <string name="twitter_secret_key">n2zv5dXGbvav3FCb63sk3rIYH8zz74is69dUkINlsgg</string>
     <string name="date_format">yyyy-MM-dd</string>
@@ -17,7 +16,7 @@
     <string name="tabbar_without_caption">false</string>
     <string name="tabbar_without_image">false</string>
     <string name="gms_version">4030500</string>
-    <string name="map_api_key">AIzaSyCIaTtlpoTfT1PB4mu3zvx_UhTAQGIlQVY</string>
+    <string name="map_api_key">AIzaSyCBfb_CHZulS4oc14wCVY6QA68_Jm118rY </string>
     <string name="show_youtube_video_title">true</string>
     <string name="show_youtube_video_description">true</string>
     <string name="show_youtube_video_views">true</string>

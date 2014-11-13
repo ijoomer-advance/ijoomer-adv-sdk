@@ -294,11 +294,9 @@ public class K2MainSingleFragment extends SmartFragment implements K2TagHolder {
 															}
 															adapter = getListAdapterItems();
 															gridView.setAdapter(adapter);
-                                                            gridView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 															txtk2CatalogCategoryNoItem.setVisibility(View.GONE);
 														} else {
 															gridView.setAdapter(null);
-															gridView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 															txtk2CatalogCategoryNoItem.setVisibility(View.VISIBLE);
 														}
 														if (!provider.hasNextPage()) {
@@ -399,11 +397,9 @@ public class K2MainSingleFragment extends SmartFragment implements K2TagHolder {
 													txtk2CatalogCategoryNoItem.setVisibility(View.GONE);
 													adapter = getListAdapterItems();
 													gridView.setAdapter(adapter);
-                                                    gridView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
 												} else {
 													gridView.setAdapter(null);
-													gridView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 													txtk2CatalogCategoryNoItem.setVisibility(View.VISIBLE);
 												}
 												if (!provider.hasNextPage()) {

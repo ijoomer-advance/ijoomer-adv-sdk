@@ -330,6 +330,8 @@ public abstract class JomMasterActivity extends IjoomerSuperMaster implements Jo
 						pbrPopup.setVisibility(View.GONE);
 						textnocontent.setVisibility(View.VISIBLE);
 					}
+				} else{
+					pbrPopup.setVisibility(View.GONE);
 				}
 			}
 		});
