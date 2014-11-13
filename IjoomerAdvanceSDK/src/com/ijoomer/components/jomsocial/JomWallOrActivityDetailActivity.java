@@ -58,7 +58,7 @@ public class JomWallOrActivityDetailActivity extends JomMasterActivity {
 
 	private LinearLayout lnrWallOrActivityDetailContentImage;
 	private RelativeLayout lnrWallOrActivityContentCoverPhoto;
-	private LinearLayout lnrWallOrActivityDetailContentVideo;
+	private RelativeLayout lnrWallOrActivityDetailContentVideo;
 	private LinearLayout lnrWallOrActivityDetailContentView;
 	private LinearLayout lnrWallOrActivityDetailsWriteComment;
 	private LinearLayout lnrContentImageScrollable;
@@ -112,7 +112,7 @@ public class JomWallOrActivityDetailActivity extends JomMasterActivity {
 		lnrContentImageScrollable = (LinearLayout) headerView.findViewById(R.id.lnrContentImageScrollable);
 		lnrWallOrActivityContentCoverPhoto = (RelativeLayout) findViewById(R.id.lnrWallOrActivityContentCoverPhoto);
 		imgWallOrActvityCoverPhoto = (ImageView) findViewById(R.id.imgWallOrActvityCoverPhoto);
-		lnrWallOrActivityDetailContentVideo = (LinearLayout) headerView.findViewById(R.id.lnrWallOrActivityDetailContentVideo);
+		lnrWallOrActivityDetailContentVideo = (RelativeLayout) headerView.findViewById(R.id.lnrWallOrActivityDetailContentVideo);
 		txtWallOrActvityDetailUserName = (IjoomerTextView) headerView.findViewById(R.id.txtWallOrActvityDetailUserName);
 		txtWallOrActvityDetailDate = (IjoomerTextView) headerView.findViewById(R.id.txtWallOrActvityDetailDate);
 		txtWallOrActvityDetailTitle = (IjoomerTextView) headerView.findViewById(R.id.txtWallOrActvityDetailTitle);

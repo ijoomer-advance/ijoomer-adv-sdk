@@ -84,32 +84,6 @@ public interface IjoomerSharedPreferences {
 	public static String SP_JBOLO_CHAT_GROUP_CHAT = "jboloChatGroupChat";
 
 	/**
-	 * JReview Config
-	 */
-	public static String SP_JREVIEWARTICLEPHOTOUPLOADSIZE = "jreviewarticlephotoUploadSize";
-	public static String SP_JREVIEWARTICLEVIDEOUPLOADSIZE = "jreviewarticlevideoUploadSize";
-	public static String SP_JREVIEWARTICLEAUDIOUPLOADSIZE = "jreviewarticleaudioUploadSize";
-	public static String SP_JREVIEWARTICLEATTACHMENTUPLOADSIZE = "jreviewarticleattachmentUploadSize";
-	public static String SP_JREVIEWARTICLEPHOTOUPLOADLIMIT = "jreviewarticlephotoUploadLimit";
-	public static String SP_JREVIEWARTICLEVIDEOUPLOADLIMIT = "jreviewarticlevideoUploadLimit";
-	public static String SP_JREVIEWARTICLEAUDIOUPLOADLIMIT = "jreviewarticleaudioUploadLimit";
-	public static String SP_JREVIEWARTICLEATTACHMENTUPLOADLIMIT = "jreviewarticleattachmentUploadLimit";
-	public static String SP_JREVIEWALLOWSEARCHBYAUTHOR = "allowsearchbyauthor";
-	public static String SP_JREVIEWPHOTOENABLE = "jreviewphotoenable";
-	public static String SP_JREVIEWVIDEOENABLE = "jreviewvideoenable";
-	public static String SP_JREVIEWAUDIOENABLE = "jreviewaudioenable";
-	public static String SP_JREVIEWATTACHMENTENABLE = "jreviewattachmentenable";
-	public static String SP_JREVIEWFAVOURITEENABLE = "jreviewfavouriteenable";
-	public static String SP_JREVIEWPAGELIMIT = "jreviewpagelimit";
-	public static String SP_JREVIEWTOTALARTICLES = "jreviewtotalarticles";
-	public static String SP_JREVIEWATTACHMENTUPLOADENABLE = "jreviewattachmentuploadenable";
-	public static String SP_JREVIEWPHOTOUPLOADENABLE = "jreviewphotouploadenable";
-	public static String SP_JREVIEWVIDEOUPLOADENABLE = "jreviewvideouploadenable";
-	public static String SP_JREVIEWAUDIOUPLOADENABLE = "jreviewaudiouploadenable";
-	public static String SP_JREVIEWADDLISTINGENABLE = "jreviewaddlistingenable";
-	public static String SP_JREVIEWEDITLISTINGENABLE = "jrevieweditlistingenable";
-
-	/**
 	 *Plugins Weahter 
 	 */
 	public static String SP_LOCATION_ID = "locationID";

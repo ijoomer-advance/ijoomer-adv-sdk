@@ -52,6 +52,7 @@ public class IjoomerScreenHolder {
 			put("DisplayAsMenu", "com.ijoomer.src.IjoomerMenuActivity");
 			put("easyBlogCategory", "com.ijoomer.components.easyblog.EasyBlogAllCategoryActivity");
 			put("easyBlogAllItems", "com.ijoomer.components.easyblog.EasyBlogEntriesActivity");
+			
 			put("AllDirectories", "com.ijoomer.components.jReview.JReviewAllDirectoriesActivity");
 			put("JreviewsFavourite", "com.ijoomer.components.jReview.JReviewFavouriteArticlesActivity");
 			put("JreviewsSearch", "com.ijoomer.components.jReview.JReviewSearchActivity");
