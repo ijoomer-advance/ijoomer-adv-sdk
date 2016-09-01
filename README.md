@@ -1,3 +1,5 @@
+# We are not maitaining new version in this repository anymore. To download latest versions please visit [iJoomer](http://www.iJoomer.com)
+
 Welcome to IjoomerAdvance SDK
 =====
 
